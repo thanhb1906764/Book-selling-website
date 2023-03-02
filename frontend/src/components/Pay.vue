@@ -1,49 +1,3 @@
-<script>
-
-import axios from 'axios'
-
-export default {
-  data() {
-    return {
-    //   selectedCity: 'Chọn Tỉnh',
-    selectedCity: '01',
-      addresses: [],
-      options: [
-        { text: 'One', value: 'A' },
-        { text: 'Two', value: 'B' },
-        { text: 'Three', value: 'C' }
-      ]
-    }
-  },
-  mounted() {
-    axios
-      .get('https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json')
-      .then((response) => {
-        this.addresses = response.data
-        console.log(this.addresses[0])
-        // console.log(this.getCity().Districts[0].Wards[0])
-        // console.log(this.getCity)
-
-      })
-  },
-  computed: {
-    getCity() {
-        // if(this.selectedCity !== '') {
-        //     return (this.addresses.filter(city => city.Id === this.selectedCity))
-        // }
-        // return (true) ? this.addresses[0] : this.addresses
-            
-    }
-  }
-}
-
-const car = { 
-    manyCars: { a: "Saab", b: "Jeep" }, 7: "Mazda",
-    part: [1, 3, 5, {d: [ {33: 3}]}]
-};
-
-</script>
-
 <template>
     <div class="container">
         <div class="row container">
@@ -68,13 +22,6 @@ const car = {
                                 <li class="nav-item">
                                     <small><a class="nav-link active" href="#">Thông tin vận chuyển</a></small>
                                 </li>
-                                <li class="nav-item">
-                                    <small><a class="nav-link disabled user-select-none" aria-current="page"
-                                            href="#">></a></small>
-                                </li>
-                                <li class="nav-item">
-                                    <small><a class="nav-link" href="#">Phương thức thanh toán</a></small>
-                                </li>
 
                             </ul>
 
@@ -92,20 +39,15 @@ const car = {
                 </div>
 
                 <!-- Thẻ, chứa thông tin người dùng (Tên, email, nút đăng xuất) -->
-                <!-- <div class="container">
-                        <div class="fs-6 row">
-                            <div >
-                                <img class="col-2" src="../assets/account_circle_FILL0_wght400_GRAD0_opsz48.svg">
-                            </div>
+                <div class="container">
+                    <ul class="list-group px-2">
+                        <li class="list-group-item fw-bolder">
+                            <div class="btn px-0 border border-0">Khánh (0330006710)</div>
+                            <a href="#" class="btn btn-outline-danger mx-2">Đăng xuất</a>
+                        </li>
+                    </ul>
+                </div>
 
-
-                            <div class="col-10 align-middle">
-                                <div>Phan Trung Thành (thanhb1906764@student.ctu.edu.vn)</div>
-                                                                                            <div><button class="btn btn-outline-danger">Đăng xuất</button></div>                        
-                                                                                        </div>
-
-                                                                                    </div>
-                                                                                </div> -->
 
 
 
@@ -145,7 +87,7 @@ const car = {
 
 
                         <!-- Chọn Tỉnh, Quận, Huyện theo Select -->
-                        <!-- <div class="d-flex">
+                        <div class="d-flex">
                             <div class="form-group form-floating mb-2 me-1 col">
                                 <select class="form-select" aria-label="Default select example">
                                     <option selected>Chọn Tỉnh</option>
@@ -175,47 +117,24 @@ const car = {
                                 </select>
                                 <label class="fs-6" for="floatingInput">Phường/Xã</label>
                             </div>
-                        </div> -->
-
-
-
-                        <div class="d-flex">
-
-                            <div class="form-group form-floating mb-2 me-1 col">
-                                <select id="ab" v-model="selectedCity" class="form-select" aria-label="Default select example">
-                                    <!-- <option selected value="Chọn Tỉnh">Chọn Tỉnh</option> -->
-                                    <option id="city" v-for="address in addresses" :value="address.Id">{{ address.Name }}, <p></p></option>
-                                </select>
-                                <label class="fs-6" for="floatingInput">Tỉnh/Thành Phố</label>
-                            </div>
-
-                            <div class="form-group form-floating mb-2 me-1 col">
-                                <select class="form-select" aria-label="Default select example">
-                                    <!-- <option selected>Chọn Quận/Huyện</option> -->
-                                    <option v-for="district in getCity">{{ district }}</option>
-                                </select>
-                                <label class="fs-6" for="floatingInput">Quận/Huyện</label>
-                            </div>
-
-                            <div class="form-group form-floating mb-2 col">
-                                <select class="form-select" aria-label="Default select example">
-                                    <option selected>Chọn Phường/Xã</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
-                                <label class="fs-6" for="floatingInput">Phường/Xã</label>
-                            </div>
-
                         </div>
 
 
+                        <!-- Chọn phương thức thanh toán -->
+                        <div class="form-group form-floating mb-2">
+                            <select required class="form-select" aria-label="">
+                                <option selected value="payment">---</option>
+                                <option value="cash">Thanh toán khi nhận hàng</option>
+                                <option value="bankTransfer">Chuyển khoản</option>
+                            </select>
+                            <label class="fs-6" for="payment">Phương thức thanh toán</label>
+                        </div>
 
 
                         <!-- Nút Giỏ hàng và Chọn phương thức thanh toán -->
                         <div class="d-flex justify-content-between">
                             <a class="btn btn-outline-primary">Giỏ hàng</a>
-                            <button class="btn btn-primary">Chọn phương thức thanh toán</button>
+                            <button class="btn btn-primary">Đặt hàng</button>
                         </div>
 
                     </div>
@@ -239,12 +158,16 @@ const car = {
                                         <img src="../assets/4_5f9624b1ec774721962320840ac57f15_medium.jpg" width="60"
                                             class="rounded" alt="...">
                                         <span
-                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">999+</span>
+                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">1</span>
                                     </div>
                                 </td>
                                 <td class="align-middle" style="width: 70%;">Kaguya - Cuộc chiến tỏ tình - Tập 4 (Tặng Kèm 1
                                     Trong 2 Mẫu Thẻ Học Sinh)</td>
-                                <td class="align-middle" style="width: 10%;">999...đ</td>
+                                <td class="align-middle" style="width: 10%;">
+                                    <div class="text-decoration-line-through text-muted">40000đ</div>
+                                    <hr />
+                                    <div class="text-danger fw-bolder">36000đ</div>
+                                </td>
                             </tr>
 
                             <tr style="font-size: 12px;">
@@ -258,7 +181,11 @@ const car = {
                                 </td>
                                 <td class="align-middle" style="width: 70%;">Kaguya - Cuộc chiến tỏ tình - Tập 10 (Tặng Kèm
                                     1 Trong 2 Clear File)</td>
-                                <td class="align-middle" style="width: 10%;">36000đ</td>
+                                <td class="align-middle" style="width: 10%;">
+                                    <div class="text-decoration-line-through text-muted">40000đ</div>
+                                    <hr />
+                                    <div class="text-danger fw-bolder">36000đ</div>
+                                </td>
                             </tr>
 
                         </tbody>
@@ -269,17 +196,28 @@ const car = {
 
                 <!-- Mã giảm giá  -->
 
+                <!-- Giá gốc -->
+                <!-- <div class="container">
 
+                    <div class="d-flex justify-content-between py-2">
+                        <small class="text-secondary">Giá gốc</small>
+                        <small class="">36000đ</small>
+                    </div>
+
+                </div> -->
+
+
+                <!-- <hr /> -->
                 <!-- Tạm tính, Phi Ship -->
                 <div class="container">
 
                     <div class="d-flex justify-content-between py-2">
-                        <small class="text-secondary">Tạm tính</small>
-                        <small class="">36000đ</small>
+                        <small class="text-secondary">Tính tạm</small>
+                        <small class="">72000đ</small>
                     </div>
                     <div class="d-flex justify-content-between">
                         <small class="text-secondary">Phí Ship</small>
-                        <small class="">10000đ</small>
+                        <small class="">30000đ</small>
                     </div>
 
                 </div>
@@ -291,7 +229,7 @@ const car = {
 
                     <div class="d-flex justify-content-between">
                         <div class="text-secondary fs-6">Tổng tiền</div>
-                        <div class="fw-bolder">46000đ</div>
+                        <div class="fw-bolder">102000đ</div>
                     </div>
 
                 </div>
