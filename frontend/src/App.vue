@@ -14,6 +14,8 @@ import AddressVue from './components/Address.vue';
 // import SelectAddress from './components/SelectAddress.vue';
 import Book_Details from './components/Book_Details.vue';
 
+import Test from './components/Test.vue';
+
 </script>
 
 <template style="display:block;">
@@ -26,12 +28,12 @@ import Book_Details from './components/Book_Details.vue';
 
     <!-- <SelectAddress /> -->
     <!-- <Book_Details /> -->
-
+    <!-- <Test /> -->
 
 
     <!-- <Cart /> -->
-    <!-- <Pay /> -->
-    <AddressVue />
+    <Pay />
+    <!-- <AddressVue /> -->
     <LoginFormUser />
     <!-- <RegisterAdmin /> -->
     <RegisterUser />
