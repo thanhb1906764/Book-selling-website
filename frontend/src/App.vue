@@ -1,48 +1,47 @@
 <script setup>
 import HeaderVue from './components/Header.vue'
 import FooterVue from './components/Footer.vue';
-import LoginFormUser from './components/LoginFormUser.vue';
+import LoginUser from './components/LoginUser.vue'
 import RegisterUser from './components/RegisterUser.vue';
-import Manage from './components/Manage.vue';
-import ManageUser from './components/ManageUser.vue';
 import Cart from './components/Cart.vue';
 import Pay from './components/Pay.vue';
-import RegisterAdmin from './components/RegisterAdmin.vue';
 
-
-import AddressVue from './components/Address.vue';
-// import SelectAddress from './components/SelectAddress.vue';
+import LoginAdmin from './components/LoginAdmin.vue';
 import Book_Details from './components/Book_Details.vue';
-
-import Test from './components/Test.vue';
 
 </script>
 
-<template style="display:block;">
+<template class="html" style="display:block;">
+  <html>
   <header>
     <HeaderVue />
   </header>
 
   <main>
-
-
-    <!-- <SelectAddress /> -->
-    <!-- <Book_Details /> -->
-    <!-- <Test /> -->
-
-
     <!-- <Cart /> -->
-    <Pay />
-    <!-- <AddressVue /> -->
-    <LoginFormUser />
-    <!-- <RegisterAdmin /> -->
-    <RegisterUser />
-    <!-- <Manage /> -->
-    <!-- <ManageUser /> -->
+    <!-- <Pay /> -->
+    <!-- <LoginUser /> -->
+    <!-- <RegisterUser /> -->
+
+    <!-- <Book_Details /> -->
+
+
+    <LoginAdmin />
   </main>
   <footer>
     <FooterVue />
   </footer>
+
+  </html>
 </template>
 
-<style scoped></style>
+<style scoped>
+.html {
+  width: 100%;
+  height: 100%;
+  background:
+    linear-gradient(217deg, #fd5588, rgba(255, 0, 0, 0) 70.71%),
+    linear-gradient(127deg, #fffefa, rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, #ffb07e, rgba(0, 0, 255, 0) 70.71%);
+}
+</style>
