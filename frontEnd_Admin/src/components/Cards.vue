@@ -1,7 +1,7 @@
 <template>
     <v-hover v-slot="{ isHovering, props }" open-delay="200">
         <v-tooltip :text="book.name"></v-tooltip>
-        <v-card class="mx-auto" width="14rem" :elevation="isHovering ? 16 : 2" :class="{ 'on-hover': isHovering }"
+        <v-card class="mx-auto" width="17rem" :elevation="isHovering ? 16 : 2" :class="{ 'on-hover': isHovering }"
             v-bind="props">
 
             <span class="badge text-bg-danger text-uppercase"
@@ -14,7 +14,6 @@
             <v-img src="https://cdn0.fahasa.com/media/catalog/product/8/9/8935244878882.jpg" cover></v-img>
 
             <v-card-title class="py-2" style="text-overflow: ellipsis;">{{ book.name }}</v-card-title>
-
             <v-card-subtitle class="">
                 <span>0 đánh giá</span>
             </v-card-subtitle>
@@ -22,7 +21,7 @@
             <v-card-text class="py-3">
                 <div v-if="book.originalPrice !== book.price">
                     <div class="card-text" style=" display: flex;align-items: center;">
-                        <h4 style="font-weight: 700;color: orange; ">{{ book.price.toLocaleString('vi-VN', {
+                        <h4 class="fw-bold" style="color: orange; ">{{ book.price.toLocaleString('vi-VN', {
                             style: 'currency', currency:
                                 'VND'
                         }) }}</h4>
@@ -32,7 +31,8 @@
                         }) }}</h6>
 
                     </div>
-                    <testTime :time="book.promotionTime" @messageSent="handleMessage" />
+                    <testTime class="text-center" :time="book.promotionTime" @messageSent="handleMessage" />
+
                 </div>
                 <div v-else>
                     <h4 class="fw-bold mb-0" style="color: red;">{{ book.price.toLocaleString('vi-VN', {
@@ -62,7 +62,9 @@ import { useDataStore } from "../stores/dataStores";
 import testTime from '../components/testTime.vue'
 import { Countdown } from 'vue3-flip-countdown'
 export default {
-
+    components: {
+        testTime, Countdown
+    },
     data() {
         return {
             time: moment(new Date(), "YYYY-MM-DD HH:mm:ss")
