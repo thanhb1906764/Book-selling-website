@@ -8,17 +8,17 @@
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
                 aria-label="Slide 3"></button>
         </div>
-        <div class="carousel-inner">
+        <div class="carousel-inner rounded-3 border">
             <div class="carousel-item active">
-                <img src="https://cdn0.fahasa.com/media/catalog/product/8/9/8936067607352.jpg" class="d-block w-100"
+                <img src="https://cdn0.fahasa.com/media/catalog/product/i/m/image_110063.jpg" class="d-block w-100 "
                     alt="...">
             </div>
             <div class="carousel-item">
-                <img src="https://cdn0.fahasa.com/media/flashmagazine/images/page_images/toan_nang_cao_boi_duong_hoc_sinh_gioi_lop_2/2022_09_27_16_58_13_5-390x510.jpg"
+                <img src="https://cdn0.fahasa.com/media/catalog/product/i/m/image_110063.jpg"
                     class="d-block w-100" alt="...">
             </div>
             <div class="carousel-item">
-                <img src="https://cdn0.fahasa.com/media/flashmagazine/images/page_images/toan_nang_cao_boi_duong_hoc_sinh_gioi_lop_2/2022_09_27_16_58_13_3-390x510.jpg"
+                <img src="https://cdn0.fahasa.com/media/catalog/product/i/m/image_110063.jpg"
                     class="d-block w-100" alt="...">
             </div>
         </div>

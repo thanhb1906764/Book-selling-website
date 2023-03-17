@@ -32,40 +32,17 @@ export default {
 
 
 <template>
-    <div id="app">
-        <!-- <Nav></Nav> -->
-        <!-- <div class="container-sm" style="background-color: #FFFBE6 ;"> -->
-        <!-- <Product_Management /> -->
-        <!-- <BookDetails></BookDetails> -->
-        <!-- <UploadsFile /> -->
-        <!-- <Catalog_management /> -->
-        <!-- <PromotionVue /> -->
-        <!-- <PromotionForm /> -->
-        <!-- <Account_Clients /> -->
-        <!-- <Book_Receipt /> -->
-        <!-- <Order_Management /> -->
-        <!-- <Receipt_List /> -->
-        <!-- <ChartsVue /> -->
-        <!-- <Statistical /> -->
-        <!-- <TestTime /> -->
-        <!-- <router-view /> -->
-        <!-- </div> -->
+    <header>
+        <HeaderVue />
+    </header>
+    <main class="container py-2">
+        <!-- <HomePage /> -->
+        <router-view />
+    </main>
 
-        <div class="bg-light">
-            <header>
-                <HeaderVue />
-            </header>
-            <main>
-                <!-- <HomePage /> -->
-                <router-view class="bg-light" style="background-color: #FFFBE6;" />
-            </main>
-
-            <footer>
-                <FooterVue />
-            </footer>
-        </div>
-
-    </div>
+    <footer>
+        <FooterVue />
+    </footer>
 </template>
 
 <style scoped>

@@ -28,6 +28,18 @@ const routes = [
         component: () => import("@/views/LoginAdmin.vue"),
         // props: true
     },
+    {
+        path: "/Test",
+        name: "Test",
+        component: () => import("@/views/Test.vue"),
+        // props: true
+    },
+    {
+        path: "/Products/:id",
+        name: "BookDetails",
+        component: () => import("@/views/BookDetails.vue"),
+        // props: true
+    },
 
 
 
