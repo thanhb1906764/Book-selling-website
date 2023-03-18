@@ -3,7 +3,8 @@ import { defineStore } from 'pinia'
 
 export const useDataStore = defineStore('data', {
     state: () => ({
-        Books: [
+        Books: [],
+        TBooks: [
             { id: "12as", name: 'Đất nhân tâmzzzzzzzzzzxxxxx', author: "vvv", price: 5000, gene: ["aaa", 'aab'], originalPrice: 5000, promotionTime: null, publisher: "123", tag: 'Hot', number: 5, numberPage: 100, size: "12x13", supplier: "ppp", publishing_year: "2001", des: "...", receiptDate: '2023-02-15T19:46' },
             { id: "12as1", name: 'conan2', author: "vvv12", price: 2200, gene: ["aaa"], originalPrice: 2200, promotionTime: null, publisher: "123", tag: 'New', number: 2, numberPage: 100, size: "12x13", supplier: "popo", publishing_year: "1988", des: "...", receiptDate: '2023-01-15T19:46' },
             { id: "12as13a", name: 'Doraemon', author: "zzz", price: 1000, gene: ["bbb"], originalPrice: 1000, promotionTime: null, publisher: "123", tag: 'Hot', number: 5, numberPage: 100, size: "12x13", supplier: "ppp", publishing_year: "2001", des: "...", receiptDate: '2023-03-15T19:46' },
@@ -113,6 +114,11 @@ export const useDataStore = defineStore('data', {
     },
 
     actions: {
+        setBooks(data) {
+            this.$patch((state) => {
+                state.Books = data;
+            })
+        },
         updateBook(id) {
             this.$patch((state) => {
                 for (var book of state.Books) {
@@ -133,6 +139,15 @@ export const useDataStore = defineStore('data', {
                         break;
                     }
                 }
+            })
+        }, getAPIGenes(data) {
+            this.$patch((state) => {
+                state.Genes = data
+            })
+        },
+        setGenreSelected(data) {
+            this.$patch((state) => {
+                state.genreSelected = data
             })
         },
     }

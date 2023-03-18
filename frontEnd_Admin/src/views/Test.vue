@@ -1,7 +1,8 @@
 <template>
+    <div>{{ Books }}</div>
     <router-link :to="{
         name: 'BookDetails',
-        params: { id: 'ab' },
+        params: { id: '123' },
     }">
         <div class="card" style="width: 18rem;">
             <img src="..." class="card-img-top" alt="...">
@@ -15,10 +16,12 @@
 
 <script>
 import BooksService from '@/services/books.service'
+import { useDataStore } from '../stores/dataStores';
 
 export default {
     components: {
-        BooksService
+        BooksService,
+        useDataStore
     },
     data() {
 
@@ -30,7 +33,7 @@ export default {
         async retrieveBook() {
             try {
                 this.Books = await BooksService.getAll();
-                console.log(this.Books);
+                useDataStore().setBooks(this.Books)
             } catch (error) {
                 console.log(error);
             }

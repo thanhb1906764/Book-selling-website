@@ -55,7 +55,7 @@
             </div>
             <div class="container-fluid px-0 py-2">
                 <v-row class="p-2 m-0" :equal="{ sm: true, md: false }">
-                    <v-col v-for="item in bookList" :key="item.id" class="d-flex align-center justify-center">
+                    <v-col v-for="item in Books" :key="item.id" class="d-flex align-center justify-center">
                         <Cards :book="item" />
                     </v-col>
                 </v-row>
@@ -63,7 +63,7 @@
         </div>
 
         <!--Sản phẩm HOT -->
-        <div id="hot">
+        <!-- <div id="hot">
             <div class="p-2 fw-semibold fs-5" style="background-color: #eb0200;">
                 <a href="#" class="text-white text-decoration-none">Sản Phẩm HOT</a>
             </div>
@@ -74,10 +74,10 @@
                     </v-col>
                 </v-row>
             </div>
-        </div>
+        </div> -->
 
         <!-- Sản phẩm mới - New  -->
-        <div id="new">
+        <!-- <div id="new">
             <div class="p-2 fw-semibold fs-5" style="background-color:  #e7f0fe;">
                 <a href="#" class="text-dark text-decoration-none">Sản Phẩm Mới</a>
             </div>
@@ -88,10 +88,10 @@
                     </v-col>
                 </v-row>
             </div>
-        </div>
+        </div> -->
 
         <!-- Sản phẩm -->
-        <div id="product">
+        <!-- <div id="product">
             <div class="p-2 fw-semibold fs-5" style="background-color:  #e7f0fe;">
                 <a href="#" class="text-dark text-decoration-none">Sản Phẩm</a>
             </div>
@@ -102,23 +102,28 @@
                     </v-col>
                 </v-row>
             </div>
-        </div>
+        </div> -->
 
     </div>
 </template>
 
 <script>
 import Cards from '../components/Cards.vue';
-import { useDataStore } from '../stores/dataStores';
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiApps } from '@mdi/js'
 import moment from 'moment';
+
+import BooksService from '@/services/books.service'
+import { useDataStore } from '../stores/dataStores';
 export default {
     components: {
-        Cards, SvgIcon
+        Cards, SvgIcon,
+        BooksService,
+        useDataStore
     },
     data() {
         return {
+            Books: [],
             bookList: useDataStore().getBooks,
             geneList: useDataStore().getGenes,
             tagList: useDataStore().getTagList,
@@ -131,6 +136,14 @@ export default {
         }
     },
     methods: {
+        async retrieveBook() {
+            try {
+                this.Books = await BooksService.getAll();
+                useDataStore().setBooks(this.Books)
+            } catch (error) {
+                console.log(error);
+            }
+        },
         search() {
             if (this.$refs.search.value === '') {
                 if (this.flag == 0) {
@@ -283,6 +296,9 @@ export default {
                 }
             }, 1000)
         }
+
+        this.retrieveBook()
+
     }
 }
 </script>

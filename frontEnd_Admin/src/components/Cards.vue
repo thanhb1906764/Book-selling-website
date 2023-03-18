@@ -1,58 +1,56 @@
 <template>
-    <v-hover v-slot="{ isHovering, props }" open-delay="200">
-        <v-tooltip :text="book.name"></v-tooltip>
-        <v-card class="mx-auto" width="17rem" :elevation="isHovering ? 16 : 2" :class="{ 'on-hover': isHovering }"
-            v-bind="props">
+    <router-link :to="{
+        name: 'BookDetails',
+        params: { id: book._id },
+    }">
+        <v-hover v-slot="{ isHovering, props }" open-delay="200">
 
-            <span class="badge text-bg-danger text-uppercase"
-                style="position: absolute;z-index: 2;  margin: 5px; max-height: 30px;">
-                <h6 v-if="book.price !== book.originalPrice">Sale</h6>
-                <h6 v-else-if="!checkMonth(book.receiptDate)">New</h6>
-                <!-- <h6>Hot</h6> -->
-            </span>
+            <v-tooltip :text="book.bookName"></v-tooltip>
 
-            <v-img src="https://cdn0.fahasa.com/media/catalog/product/8/9/8935244878882.jpg" cover></v-img>
+            <v-card class="mx-auto" width="17rem" :elevation="isHovering ? 16 : 2" :class="{ 'on-hover': isHovering }"
+                v-bind="props">
 
-            <v-card-title class="py-2" style="text-overflow: ellipsis;">{{ book.name }}</v-card-title>
-            <v-card-subtitle class="">
-                <span>0 đánh giá</span>
-            </v-card-subtitle>
+                <span class="badge text-bg-danger text-uppercase"
+                    style="position: absolute;z-index: 2;  margin: 5px; max-height: 30px;">
+                    <h6 v-if="book.bookPrice !== book.originalPrice">Sale</h6>
+                    <h6 v-else-if="!checkMonth(book.receiptDate)">New</h6>
+                </span>
 
-            <v-card-text class="py-3">
-                <div v-if="book.originalPrice !== book.price">
-                    <div class="card-text" style=" display: flex;align-items: center;">
-                        <h4 class="fw-bold" style="color: orange; ">{{ book.price.toLocaleString('vi-VN', {
-                            style: 'currency', currency:
-                                'VND'
-                        }) }}</h4>
-                        <h6 style=" text-decoration: line-through;">{{ book.originalPrice.toLocaleString('vi-VN', {
-                            style: 'currency', currency:
-                                'VND'
-                        }) }}</h6>
+                <v-img src="https://cdn0.fahasa.com/media/catalog/product/8/9/8935244878882.jpg"></v-img>
+                <!-- <img src="https://cdn0.fahasa.com/media/catalog/product/8/9/8935244878882.jpg" width="270"> -->
+
+                <v-card-title class="py-2" style="text-overflow: ellipsis;">{{ book.bookName }}</v-card-title>
+
+                <!-- Số lượng đánh giá sao của Book  -->
+                <v-card-subtitle class=""><span>0 đánh giá</span></v-card-subtitle>
+
+                <v-card-text class="py-3">
+                    <div v-if="book.originalPrice !== book.bookPrice">
+                        <div class="card-text" style=" display: flex;align-items: center;">
+                            <h4 class="fw-bold" style="color: orange; ">{{ book.bookPrice.toLocaleString('vi-VN', {
+                                style: 'currency', currency:
+                                    'VND'
+                            }) }}</h4>
+                            <h6 style=" text-decoration: line-through;">{{ book.originalPrice.toLocaleString('vi-VN', {
+                                style: 'currency', currency:
+                                    'VND'
+                            }) }}</h6>
+
+                        </div>
+                        <!-- <testTime class="text-center" :time="book.promotionTime" @messageSent="handleMessage" /> -->
 
                     </div>
-                    <testTime class="text-center" :time="book.promotionTime" @messageSent="handleMessage" />
+                    <div v-else>
+                        <h4 class="fw-bold mb-0" style="color: red;">{{ book.bookPrice.toLocaleString('vi-VN', {
+                            style: 'currency',
+                            currency: 'VND'
+                        }) }}</h4>
+                    </div>
+                </v-card-text>
+            </v-card>
 
-                </div>
-                <div v-else>
-                    <h4 class="fw-bold mb-0" style="color: red;">{{ book.price.toLocaleString('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND'
-                    }) }}</h4>
-                </div>
-            </v-card-text>
-
-            <!-- <v-card-actions>
-                <v-btn color="orange">
-                    Chỉnh sửa
-                </v-btn>
-
-                <v-btn color="red">
-                    Xóa
-                </v-btn>
-            </v-card-actions> -->
-        </v-card>
-    </v-hover>
+        </v-hover>
+    </router-link>
 </template>
 
 <script>

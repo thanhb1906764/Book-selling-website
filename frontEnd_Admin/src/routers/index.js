@@ -4,6 +4,8 @@ import { createWebHistory, createRouter } from "vue-router";
 
 const routes = [
 
+
+    // kiz
     {
         path: "/",
         name: "HomePage",
@@ -42,8 +44,15 @@ const routes = [
     },
 
 
+    // Phu
+    {
+        path: "/acc",
+        name: "acc",
+        component: () => import("@/views/Account.vue"),
+    },
 
 
+    // Thanh
     {
         path: "/Products",
         name: "Products",
