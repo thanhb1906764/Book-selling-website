@@ -12,6 +12,7 @@ const ordersRouter = require("./app/routes/orders.route");
 const promotionsRouter = require("./app/routes/promotions.route");
 const suppliersRouter = require("./app/routes/suppliers.route");
 const receiptsRouter = require("./app/routes/receipts.route");
+const imagesRouter = require('./app/routes/images.route');
 const ApiError = require("./app/api-error");
 const multer = require('multer')
 const app = express();
@@ -33,6 +34,7 @@ app.use("/api/Users", usersRouter);
 app.use("/api/Promotions", promotionsRouter);
 app.use("/api/Receipts", receiptsRouter);
 app.use("/api/Suppliers", suppliersRouter);
+app.use("/api/Images", imagesRouter);
 app.use('/uploads', express.static('uploads'))
 
 
