@@ -113,6 +113,7 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiApps } from '@mdi/js'
 import moment from 'moment';
 
+import ImagesService from '@/services/images.service'
 import BooksService from '@/services/books.service'
 import { useDataStore } from '../stores/dataStores';
 export default {
@@ -124,6 +125,8 @@ export default {
     data() {
         return {
             Books: [],
+            Images: [],
+
             bookList: useDataStore().getBooks,
             geneList: useDataStore().getGenes,
             tagList: useDataStore().getTagList,
@@ -136,6 +139,8 @@ export default {
         }
     },
     methods: {
+
+        // kiz
         async retrieveBook() {
             try {
                 this.Books = await BooksService.getAll();
@@ -144,6 +149,18 @@ export default {
                 console.log(error);
             }
         },
+        async retrieveImage() {
+            try {
+                this.Images = await ImagesService.getAll();
+                console.log(this.Images)
+                useDataStore().setImages(this.Images)
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+
+
         search() {
             if (this.$refs.search.value === '') {
                 if (this.flag == 0) {
@@ -296,8 +313,9 @@ export default {
                 }
             }, 1000)
         }
+        this.retrieveImage();
+        this.retrieveBook();
 
-        this.retrieveBook()
 
     }
 }

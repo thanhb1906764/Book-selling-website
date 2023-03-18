@@ -4,6 +4,7 @@ import { defineStore } from 'pinia'
 export const useDataStore = defineStore('data', {
     state: () => ({
         Books: [],
+        Images: [],
         TBooks: [
             { id: "12as", name: 'Đất nhân tâmzzzzzzzzzzxxxxx', author: "vvv", price: 5000, gene: ["aaa", 'aab'], originalPrice: 5000, promotionTime: null, publisher: "123", tag: 'Hot', number: 5, numberPage: 100, size: "12x13", supplier: "ppp", publishing_year: "2001", des: "...", receiptDate: '2023-02-15T19:46' },
             { id: "12as1", name: 'conan2', author: "vvv12", price: 2200, gene: ["aaa"], originalPrice: 2200, promotionTime: null, publisher: "123", tag: 'New', number: 2, numberPage: 100, size: "12x13", supplier: "popo", publishing_year: "1988", des: "...", receiptDate: '2023-01-15T19:46' },
@@ -103,6 +104,10 @@ export const useDataStore = defineStore('data', {
     }),
 
     getters: {
+
+        // kiz
+        getImages: state => state.Images,
+
         getBooks: state => state.Books,
         getGenes: state => state.Genes,
         getPromotionList: state => state.promotionList,
@@ -114,11 +119,20 @@ export const useDataStore = defineStore('data', {
     },
 
     actions: {
+
+        // kiz
         setBooks(data) {
             this.$patch((state) => {
                 state.Books = data;
             })
         },
+        setImages(data) {
+            this.$patch((state) => {
+                state.Images = data;
+            })
+        },
+
+
         updateBook(id) {
             this.$patch((state) => {
                 for (var book of state.Books) {

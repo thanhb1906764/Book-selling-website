@@ -1,4 +1,5 @@
 <template>
+    <!-- <div>{{ imageList }}</div> -->
     <router-link :to="{
         name: 'BookDetails',
         params: { id: book._id },
@@ -16,15 +17,19 @@
                     <h6 v-else-if="!checkMonth(book.receiptDate)">New</h6>
                 </span>
 
-                <v-img src="https://cdn0.fahasa.com/media/catalog/product/8/9/8935244878882.jpg"></v-img>
+                <!-- <v-img src="https://cdn0.fahasa.com/media/catalog/product/8/9/8935244878882.jpg"></v-img> -->
                 <!-- <img src="https://cdn0.fahasa.com/media/catalog/product/8/9/8935244878882.jpg" width="270"> -->
+                <!-- <img src="../assets/logo.svg" width="270"> -->
+                <img :src="link" width="270">
+
+
 
                 <v-card-title class="py-2" style="text-overflow: ellipsis;">{{ book.bookName }}</v-card-title>
 
                 <!-- Số lượng đánh giá sao của Book  -->
                 <v-card-subtitle class=""><span>0 đánh giá</span></v-card-subtitle>
 
-                <v-card-text class="py-3">
+                <!-- <v-card-text class="py-3">
                     <div v-if="book.originalPrice !== book.bookPrice">
                         <div class="card-text" style=" display: flex;align-items: center;">
                             <h4 class="fw-bold" style="color: orange; ">{{ book.bookPrice.toLocaleString('vi-VN', {
@@ -37,16 +42,16 @@
                             }) }}</h6>
 
                         </div>
-                        <!-- <testTime class="text-center" :time="book.promotionTime" @messageSent="handleMessage" /> -->
+                        <testTime class="text-center" :time="book.promotionTime" @messageSent="handleMessage" />
 
-                    </div>
-                    <div v-else>
-                        <h4 class="fw-bold mb-0" style="color: red;">{{ book.bookPrice.toLocaleString('vi-VN', {
-                            style: 'currency',
-                            currency: 'VND'
-                        }) }}</h4>
-                    </div>
-                </v-card-text>
+                </div>
+                <div v-else>
+                    <h4 class="fw-bold mb-0" style="color: red;">{{ book.bookPrice.toLocaleString('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND'
+                    }) }}</h4>
+                </div>
+                </v-card-text> -->
             </v-card>
 
         </v-hover>
@@ -65,7 +70,9 @@ export default {
     },
     data() {
         return {
-            time: moment(new Date(), "YYYY-MM-DD HH:mm:ss")
+            link: null,
+            Images: [],
+            time: moment(new Date(), "YYYY-MM-DD HH:mm:ss"),
         }
     },
     props: {
@@ -97,7 +104,9 @@ export default {
         }
     },
     mounted() {
-
+        this.Images = useDataStore().getImages
+        this.link = this.Images[1].link
+        // console.log(this.Images);
     }
 }
 </script>
