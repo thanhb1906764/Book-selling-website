@@ -28,7 +28,7 @@ exports.create = async (req, res, next) => {
     }
 };
 
-exports.checkLogin = async (req, res, next) => {
+exports.Login = async (req, res, next) => {
     try {
         const usersService = new UsersService(MongoDB.client);
         const document = await usersService.check(req.body);
@@ -36,12 +36,12 @@ exports.checkLogin = async (req, res, next) => {
 
             // Load hash from your password DB.
             if (bcrypt.compareSync(req.body.password, document.password)) {
-                loggedIn = document.phone
-                return res.send("Login Successful as: " + loggedIn)
+                res.setHeader('X-Foo', 'bar');
+                res.cookie('cookie name', 'value');
+                return res.send(document)
             }
 
         }
-        // return res.send(document);
         return res.send("Password incorrect")
     }
     catch (error) {
@@ -52,7 +52,6 @@ exports.checkLogin = async (req, res, next) => {
 };
 
 exports.logout = async (req, res, next) => {
-    loggedIn = null
     res.redirect('/');
 }
 

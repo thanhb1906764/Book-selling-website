@@ -19,7 +19,7 @@ router.route('/:id')
     .delete(users.delete);
 
 router.route('/Login')
-    .post(users.checkLogin);
+    .post(users.Login);
 
 
 
