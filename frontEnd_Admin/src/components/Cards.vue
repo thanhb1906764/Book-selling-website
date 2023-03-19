@@ -19,8 +19,8 @@
 
                 <!-- <v-img src="https://cdn0.fahasa.com/media/catalog/product/8/9/8935244878882.jpg"></v-img> -->
                 <!-- <img src="https://cdn0.fahasa.com/media/catalog/product/8/9/8935244878882.jpg" width="270"> -->
-                <!-- <img src="../assets/logo.svg" width="270"> -->
-                <img :src="link" width="270">
+                <img src="../assets/logo.svg" width="270">
+                <!-- <img :src="link" width="270"> -->
 
 
 
@@ -29,14 +29,14 @@
                 <!-- Số lượng đánh giá sao của Book  -->
                 <v-card-subtitle class=""><span>0 đánh giá</span></v-card-subtitle>
 
-                <!-- <v-card-text class="py-3">
+                <v-card-text class="py-3">
                     <div v-if="book.originalPrice !== book.bookPrice">
                         <div class="card-text" style=" display: flex;align-items: center;">
-                            <h4 class="fw-bold" style="color: orange; ">{{ book.bookPrice.toLocaleString('vi-VN', {
+                            <h4 class="fw-bold" style="color: orange; ">{{ (book.bookPrice).toLocaleString('vi-VN', {
                                 style: 'currency', currency:
                                     'VND'
                             }) }}</h4>
-                            <h6 style=" text-decoration: line-through;">{{ book.originalPrice.toLocaleString('vi-VN', {
+                            <h6 style=" text-decoration: line-through;">{{ (book.originalPrice).toLocaleString('vi-VN', {
                                 style: 'currency', currency:
                                     'VND'
                             }) }}</h6>
@@ -44,14 +44,14 @@
                         </div>
                         <testTime class="text-center" :time="book.promotionTime" @messageSent="handleMessage" />
 
-                </div>
-                <div v-else>
-                    <h4 class="fw-bold mb-0" style="color: red;">{{ book.bookPrice.toLocaleString('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND'
-                    }) }}</h4>
-                </div>
-                </v-card-text> -->
+                    </div>
+                    <div v-else>
+                        <h4 class="fw-bold mb-0" style="color: red;">{{ (book.bookPrice).toLocaleString('vi-VN', {
+                            style: 'currency',
+                            currency: 'VND'
+                        }) }}</h4>
+                    </div>
+                </v-card-text>
             </v-card>
 
         </v-hover>
@@ -64,6 +64,7 @@ import moment from 'moment';
 import { useDataStore } from "../stores/dataStores";
 import testTime from '../components/testTime.vue'
 import { Countdown } from 'vue3-flip-countdown'
+import { number } from 'yup';
 export default {
     components: {
         testTime, Countdown
@@ -104,8 +105,8 @@ export default {
         }
     },
     mounted() {
-        this.Images = useDataStore().getImages
-        this.link = this.Images[1].link
+        // this.Images = useDataStore().getImages
+        // this.link = this.Images[1].link
         // console.log(this.Images);
     }
 }

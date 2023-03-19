@@ -2,57 +2,71 @@
     <div class="container shadow-sm rounded-3">
 
         <!-- Chi tiết sản phẩm  -->
-        <div class="" style="display: flex;
-                            ">
+        <div style="display: flex;">
+
             <div style="width: 30rem; padding: 10px;">
                 <Carousel_Img />
             </div>
+
             <div class="p-2" style="width: 60rem;">
-                <h4 class="fw-semibold">Toán Nâng Cao Lớp 2</h4>
+                <h4 class="fw-semibold">{{ Book.bookName }}</h4>
+
                 <div class="row gx-5">
-                    <p class="col">Nhà cung cấp: <strong><a class="text-decoration-none" href="#">NXB Đại Học Quốc Gia
-                                TP.HCM</a></strong></p>
-                    <p class="col">Nhà xuất bản: <strong>NXB Đại Học Quốc Gia TP.HCM</strong></p>
+                    <p class="col">
+                        Nhà cung cấp:
+                        <strong>
+                            <a class="text-decoration-none" href="#">{{ Book.supplisherName }}</a>
+                        </strong>
+                    </p>
+                    <p class="col">Nhà xuất bản: <strong>{{ Book.publisher }}</strong></p>
                 </div>
+
                 <div class="row gx-5">
-                    <p class="col">Tác giả: <strong>Huỳnh Quốc Hùng</strong></p>
+                    <p class="col">Tác giả: <strong>{{ Book.author }}</strong></p>
                 </div>
+
                 <div class="row gx-5">
-                    <p class="col">Kích cỡ: <strong>24 x 16</strong></p>
-                    <p class="col">Số trang: <strong>108</strong></p>
+                    <p class="col">Kích cỡ: <strong>{{ Book.size }}</strong></p>
+                    <p class="col">Số trang: <strong>{{ Book.quantityPage }}</strong></p>
                 </div>
+
                 <div style="display: flex; justify-content: start; align-items: center;">
-                    <h3 class="text-danger fw-bold">20000&#8363;</h3>
-                    <h6 class="text-decoration-line-through px-2 text-muted">25000&#8363;</h6>
+                    <h3 class="text-danger fw-bold">{{ Book.bookPrice }} &#8363;</h3>
+                    <h6 v-if="Book.bookPrice !== Book.originalPrice" class="text-decoration-line-through px-2 text-muted">
+                        {{ Book.originalPrice }} &#8363;</h6>
                     <h6><span class="badge bg-danger">New</span></h6>
                 </div>
+
                 <div class="row gx-5">
-                    <p>Số lượng sách còn lại: <strong>9</strong></p>
+                    <p>Số lượng sách còn lại: <strong>{{ Book.bookStock }}</strong></p>
                     <p>Đổi trả trong 30 ngày
                         <Modal />
                     </p>
                 </div>
+
                 <div class="row gx-5">
                     <p>Giao hàng đến
                         <span class="px-2">
                             <a class="text-decoration-none" href="#">Thay đổi</a>
                         </span>
                     </p>
-
                 </div>
+
                 <div style="display: flex; justify-content: start; align-items: center;">
                     <div class="px-0 fs-5 me-3">Số lượng</div>
                     <div class="btn-group" role="group" aria-label="Basic outlined">
                         <button type="button" class="btn btn-outline-primary">-</button>
-                        <input type="number" pattern="[0-9]*" class="btn border" step="1" min="1" value="1" max="99" />
+                        <input required type="number" pattern="[0-9]*" class="btn border" step="1" min="1" value="1"
+                            :max="Book.bookStock" />
                         <button type="button" class="btn btn-outline-primary">+</button>
                     </div>
                 </div>
 
                 <hr />
+
                 <div class="py-3">
-                    <button class="btn btn-danger">Mua Ngay</button>
-                    <span class="px-2"><a class="btn btn-outline-danger">
+                    <a href="/Pay" @click="" class="btn btn-danger">Mua Ngay</a>
+                    <span class="px-2"><a href="/Cart" class="btn btn-outline-danger">
                             <!-- <img src="../assets/add_shopping_cart_FILL0_wght400_GRAD0_opsz48.svg" width="20px"> -->
                             Thêm Vào Giỏ Hàng</a></span>
                 </div>
@@ -98,14 +112,45 @@ import Carousel_Img from '../components/Carousel_Img.vue';
 import Modal from '../components/Modal.vue';
 import Comments from '../components/Comments.vue';
 import CommentForm from '../components/CommentForm.vue';
+
+import BooksService from '@/services/books.service'
+import { useDataStore } from '../stores/dataStores';
+
 export default {
     components: {
         Carousel_Img, Modal, Comments, CommentForm
     },
+    props: {
+        id: { type: String, required: true },
+    },
     data() {
         return {
-            msg: 'Test'
+            Book: {}
         }
+    },
+    methods: {
+        async getBook() {
+            if (useDataStore().getBooks.length !== 0) {
+                this.Book = useDataStore().getBooks.filter(book => book._id === this.id)[0]
+                console.log(this.Books);
+            }
+            else {
+                try {
+                    this.Book = await BooksService.get(this.id);
+                    console.log(this.Book);
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+    },
+    mounted() {
+        console.log(this.Book);
+        console.log(this.id);
+    },
+    created() {
+        this.getBook()
     }
 }
 </script>
@@ -114,7 +159,7 @@ export default {
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
+    /* -webkit-appearance: none; */
     margin: 0;
 }
 </style>

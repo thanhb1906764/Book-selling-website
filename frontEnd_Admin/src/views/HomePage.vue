@@ -144,6 +144,7 @@ export default {
         async retrieveBook() {
             try {
                 this.Books = await BooksService.getAll();
+                this.Books = this.Books.filter(itemBook => (itemBook.bookPrice && itemBook.originalPrice))
                 useDataStore().setBooks(this.Books)
             } catch (error) {
                 console.log(error);
@@ -315,7 +316,6 @@ export default {
         }
         this.retrieveImage();
         this.retrieveBook();
-
 
     }
 }

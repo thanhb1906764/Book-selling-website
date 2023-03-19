@@ -40,7 +40,7 @@ const routes = [
         path: "/Products/:id",
         name: "BookDetails",
         component: () => import("@/views/BookDetails.vue"),
-        // props: true
+        props: true // props id products
     },
 
 
