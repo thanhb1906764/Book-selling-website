@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require('cookie-parser'); // kiz
 
 const booksRouter = require("./app/routes/books.route");
 const genresRouter = require("./app/routes/genres.route");
@@ -18,9 +19,7 @@ const multer = require('multer')
 const app = express();
 var fs = require('fs');
 
-// Xác thực xem người dùng đã đăng nhập chưa?
-global.loggedIn = null
-
+app.use(cookieParser()); // kiz
 app.use(cors());
 app.use(express.json());
 app.use("/api/Books", booksRouter);
@@ -76,6 +75,8 @@ app.post('/api/uploads', upload.array('uploadsImg', 3), async function (req, res
 )
 
 app.get("/", (req, res) => {
+    res.clearCookie()
+
     res.json({ message: "Welcome to BooksStore." });
 });
 

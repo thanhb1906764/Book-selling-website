@@ -2,6 +2,47 @@ const ApiError = require("../api-error");
 const MongoDB = require("../utils/mongodb.util");
 const CartsService = require("../services/carts.service");
 
+
+exports.add = async (req, res, next) => { // kiz
+    try {
+        // Lấy giỏ hàng từ req
+        const cart = JSON.parse(req.cookies.cart) || [];
+        // Chuyển cart thành mảng để xử lý
+        const arr = Object.values(cart)
+        // Thêm sản phẩm vào giỏ hàng tạm 
+        arr.push(req.params.id)
+        // Cập nhật vào giỏ hàng trong req 
+        res.cookie('cart', JSON.stringify(arr));
+
+        // Hiển thị vào trình duyệt 
+        return res.send(req.cookies.cart);
+    }
+    catch (error) {
+        return next(
+            // new ApiError(500, "An error occurred while add product to cart")
+            res.send(error)
+        );
+    }
+}
+
+exports.getCart = async (req, res, next) => { // kiz
+    try {
+        // Lấy giỏ hàng từ req
+        const cart = JSON.parse(req.cookies.cart) || [];
+        // Chuyển cart thành mảng để xử lý
+        const arr = Object.values(cart);
+
+        return res.send(arr);
+    }
+    catch (error) {
+        return next(
+            new ApiError(500, "An error occurred while add product to cart")
+        );
+    }
+}
+
+
+
 exports.create = async (req, res, next) => {
 
     try {
