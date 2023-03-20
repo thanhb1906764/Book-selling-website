@@ -82,18 +82,21 @@ app.all("/", (req, res) => {
 
 // Route để thiết lập cookie
 app.get('/set-cookie/:id', (req, res) => {
-    // const myArray = [req.params.id, { name: 'Jane', age: 30 }];
-    // res.cookie('cart', JSON.stringify(myArray));
-    // res.send(req.cookies.cart);
-
-    // Lấy giỏ hàng từ req
-    const cart = JSON.parse(req.cookies.cart) || [];
+    // Lấy giỏ hàng từ req 
+    let cart
+    if (req.cookies.cart === undefined) {
+        cart = []
+    }
+    else {
+        cart = JSON.parse(req.cookies.cart);
+    }
     // Chuyển cart thành mảng để xử lý
     const arr = Object.values(cart)
     // Thêm sản phẩm vào giỏ hàng tạm 
     arr.push(req.params.id)
     // Cập nhật vào giỏ hàng trong req 
     res.cookie('cart', JSON.stringify(arr));
+    // res.clearCookie('cart', { path: '/' })
 
     // Hiển thị vào trình duyệt 
     res.send(req.cookies.cart);
