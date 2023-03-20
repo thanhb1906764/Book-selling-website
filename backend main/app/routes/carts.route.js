@@ -5,14 +5,14 @@ const router = express.Router();
 
 router.route('/')
     .get(carts.findAll)
-    .post(carts.getCart)
-    // .post(carts.create)
+    .post(carts.create)
     .delete(carts.deleteAll);
 
 router.route('/:id')
-    .get(carts.findOne)
+    // .get(carts.findOne)
+    .get(carts.add)
     .put(carts.update)
-    .post(carts.add)
+    // .post(carts.add)
     .delete(carts.delete);
 
 router.route('/bookList/:id')

@@ -5,17 +5,21 @@ const CartsService = require("../services/carts.service");
 
 exports.add = async (req, res, next) => { // kiz
     try {
-        // Lấy giỏ hàng từ req
-        const cart = JSON.parse(req.cookies.cart) || [];
-        // Chuyển cart thành mảng để xử lý
-        const arr = Object.values(cart)
-        // Thêm sản phẩm vào giỏ hàng tạm 
-        arr.push(req.params.id)
-        // Cập nhật vào giỏ hàng trong req 
-        res.cookie('cart', JSON.stringify(arr));
+        // // Lấy giỏ hàng từ req
+        // const cart = JSON.parse(req.cookies.cart) || [];
+        // // Chuyển cart thành mảng để xử lý
+        // const arr = Object.values(cart)
+        // // Thêm sản phẩm vào giỏ hàng tạm 
+        // arr.push(req.params.id)
+        // // Cập nhật vào giỏ hàng trong req 
+        // res.cookie('cart', JSON.stringify(arr));
 
-        // Hiển thị vào trình duyệt 
-        return res.send(req.cookies.cart);
+        // // Hiển thị vào trình duyệt 
+        // return res.send(req.cookies.cart);
+
+
+        // test
+        return res.send(req.cookies)
     }
     catch (error) {
         return next(

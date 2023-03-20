@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require('cookie-parser'); // kiz
+const carts = require('./app/controllers/carts.controller'); // kiz
 
 const booksRouter = require("./app/routes/books.route");
 const genresRouter = require("./app/routes/genres.route");
@@ -74,11 +75,35 @@ app.post('/api/uploads', upload.array('uploadsImg', 3), async function (req, res
 
 )
 
-app.get("/", (req, res) => {
-    res.clearCookie()
-
+app.all("/", (req, res) => {
     res.json({ message: "Welcome to BooksStore." });
 });
+
+
+// Route để thiết lập cookie
+app.get('/set-cookie/:id', (req, res) => {
+    // const myArray = [req.params.id, { name: 'Jane', age: 30 }];
+    // res.cookie('cart', JSON.stringify(myArray));
+    // res.send(req.cookies.cart);
+
+    // Lấy giỏ hàng từ req
+    const cart = JSON.parse(req.cookies.cart) || [];
+    // Chuyển cart thành mảng để xử lý
+    const arr = Object.values(cart)
+    // Thêm sản phẩm vào giỏ hàng tạm 
+    arr.push(req.params.id)
+    // Cập nhật vào giỏ hàng trong req 
+    res.cookie('cart', JSON.stringify(arr));
+
+    // Hiển thị vào trình duyệt 
+    res.send(req.cookies.cart);
+});
+
+app.get('/read-cookies', (req, res) => {
+    const myArray = JSON.parse(req.cookies.cart);
+    res.send(myArray);
+});
+
 
 app.use((req, res, next) => {
     return next(new ApiError(404, "Resource not found"));
