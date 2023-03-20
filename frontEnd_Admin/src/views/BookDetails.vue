@@ -5,7 +5,7 @@
         <div style="display: flex;">
 
             <div style="width: 30rem; padding: 10px;">
-                <Carousel_Img />
+                <Carousel_Img :id="this.id" />
             </div>
 
             <div class="p-2" style="width: 60rem;">
@@ -114,6 +114,7 @@ import Comments from '../components/Comments.vue';
 import CommentForm from '../components/CommentForm.vue';
 
 import BooksService from '@/services/books.service'
+import ImagesService from '@/services/images.service'
 import { useDataStore } from '../stores/dataStores';
 
 export default {
@@ -125,19 +126,39 @@ export default {
     },
     data() {
         return {
-            Book: {}
+            Book: {},
+            ImgaeArray: {},
         }
     },
     methods: {
         async getBook() {
             if (useDataStore().getBooks.length !== 0) {
                 this.Book = useDataStore().getBooks.filter(book => book._id === this.id)[0]
-                console.log(this.Books);
+                // console.log(this.Books);
             }
             else {
                 try {
                     this.Book = await BooksService.get(this.id);
-                    console.log(this.Book);
+                    // console.log(this.Book);
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        },
+
+        // Lấy tất cả những image của sách  
+        async getImggeArray() {
+            if (useDataStore().getBooks.length !== 0) {
+                this.ImgaeArray = useDataStore().getImages.filter(image => image._idBook === this.id)
+                // console.log(this.ImgaeArray)
+            }
+            else {
+                try {
+                    this.ImgaeArray = await ImagesService.getAll();
+                    useDataStore().setImages(this.ImgaeArray);
+                    this.ImgaeArray = this.ImgaeArray.filter(image => image._idBook === this.id)
+                    // console.log(this.ImgaeArray)
                 }
                 catch (error) {
                     console.log(error);
@@ -146,11 +167,13 @@ export default {
         }
     },
     mounted() {
-        console.log(this.Book);
-        console.log(this.id);
+        // console.log(this.Book);
+        // console.log(this.id);
+        // console.log(this.ImgaeArray);
     },
     created() {
-        this.getBook()
+        this.getBook();
+        this.getImggeArray();
     }
 }
 </script>
@@ -159,7 +182,7 @@ export default {
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    /* -webkit-appearance: none; */
+    -webkit-appearance: none;
     margin: 0;
 }
 </style>

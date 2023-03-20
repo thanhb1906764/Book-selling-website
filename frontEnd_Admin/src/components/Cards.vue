@@ -8,8 +8,8 @@
 
             <v-tooltip :text="book.bookName"></v-tooltip>
 
-            <v-card class="mx-auto" width="17rem" :elevation="isHovering ? 16 : 2" :class="{ 'on-hover': isHovering }"
-                v-bind="props">
+            <v-card class="mx-auto text-center" width="17rem" :elevation="isHovering ? 16 : 2"
+                :class="{ 'on-hover': isHovering }" v-bind="props">
 
                 <span class="badge text-bg-danger text-uppercase"
                     style="position: absolute;z-index: 2;  margin: 5px; max-height: 30px;">
@@ -17,12 +17,8 @@
                     <h6 v-else-if="!checkMonth(book.receiptDate)">New</h6>
                 </span>
 
-                <!-- <v-img src="https://cdn0.fahasa.com/media/catalog/product/8/9/8935244878882.jpg"></v-img> -->
-                <!-- <img src="https://cdn0.fahasa.com/media/catalog/product/8/9/8935244878882.jpg" width="270"> -->
-                <img src="../assets/logo.svg" width="270">
-                <!-- <img :src="link" width="270"> -->
-
-
+                <!-- <v-img :src="link"></v-img> -->
+                <img class="text-center" :src="link" height="270">
 
                 <v-card-title class="py-2" style="text-overflow: ellipsis;">{{ book.bookName }}</v-card-title>
 
@@ -64,7 +60,7 @@ import moment from 'moment';
 import { useDataStore } from "../stores/dataStores";
 import testTime from '../components/testTime.vue'
 import { Countdown } from 'vue3-flip-countdown'
-import { number } from 'yup';
+import { bool, number } from 'yup';
 export default {
     components: {
         testTime, Countdown
@@ -105,9 +101,9 @@ export default {
         }
     },
     mounted() {
-        // this.Images = useDataStore().getImages
-        // this.link = this.Images[1].link
-        // console.log(this.Images);
+        this.Images = useDataStore().getImages
+        this.link = this.Images.filter(image => image._idBook === this.book._id)[0].linkImage
+        console.log(this.Images);
     }
 }
 </script>
