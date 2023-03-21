@@ -79,11 +79,10 @@ app.all("/", (req, res) => {
     res.json({ message: "Welcome to BooksStore." });
 });
 
-
+// kiz
 // Route để thiết lập cookie
-app.get('/cookies/set/:id', (req, res) => {
-
-    console.log('set');
+app.get('/cookies/set/:idBook/:quantityBook', (req, res) => {
+    // console.log('set');
     // Lấy giỏ hàng từ req 
     let cart
     if (req.cookies.cart === undefined) {
@@ -94,14 +93,28 @@ app.get('/cookies/set/:id', (req, res) => {
     }
     // Chuyển cart thành mảng để xử lý
     const arr = Object.values(cart)
-    // Thêm sản phẩm vào giỏ hàng tạm 
-    arr.push(req.params.id)
+    // Kiểm tra sản phẩm đã có trong giỏ hàng hay chưa?     
+    console.log(arr.find(item => item.idBook === req.params.idBook));
+    if ((arr.find(item => item.idBook === req.params.idBook)) === undefined) {
+        // Thêm sản phẩm vào giỏ hàng tạm nếu không có sản phẩm này trong giỏ
+        console.log('add' + req.params.idBook);
+        arr.push({
+            idBook: req.params.idBook,
+            quantityBook: req.params.quantityBook
+        })
+    }
+    else {
+        console.log('update');
+        // Cập nhật số lượng giỏ hàng nếu sản phẩm có trong giỏ 
+        let indexProduct = arr.findIndex(item => item.idBook === req.params.idBook)
+        arr[indexProduct].quantityBook = req.params.quantityBook
+    }
     // Cập nhật vào giỏ hàng trong req 
     res.cookie('cart', JSON.stringify(arr), {
         // domain: 'http://localhost:3000/cookies/',
         // encode
         // expires
-        // httpOnly: true,
+        httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7, // Sau 1 tuần cookie sẽ hết hạng
         // path
         // priority
