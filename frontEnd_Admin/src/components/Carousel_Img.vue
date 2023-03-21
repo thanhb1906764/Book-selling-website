@@ -9,7 +9,8 @@
                 aria-label="Slide 3"></button>
         </div> -->
         <div class="carousel-inner rounded-3 border">
-            <div v-for="item in ImgaeArray" :key="item._id" class="carousel-item active text-center">
+            <div v-for="item in ImgaeArray" :key="item._id" class="carousel-item active text-center" data-bs-interval="3000"
+                style="height: 400px; width: 400px;">
                 <img :src="item.linkImage" class="" height="450" alt="...">
             </div>
         </div>

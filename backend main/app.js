@@ -81,7 +81,9 @@ app.all("/", (req, res) => {
 
 
 // Route để thiết lập cookie
-app.get('/set-cookie/:id', (req, res) => {
+app.get('/cookies/set/:id', (req, res) => {
+
+    console.log('set');
     // Lấy giỏ hàng từ req 
     let cart
     if (req.cookies.cart === undefined) {
@@ -95,17 +97,40 @@ app.get('/set-cookie/:id', (req, res) => {
     // Thêm sản phẩm vào giỏ hàng tạm 
     arr.push(req.params.id)
     // Cập nhật vào giỏ hàng trong req 
-    res.cookie('cart', JSON.stringify(arr));
-    // res.clearCookie('cart', { path: '/' })
-
+    res.cookie('cart', JSON.stringify(arr), {
+        // domain: 'http://localhost:3000/cookies/',
+        // encode
+        // expires
+        // httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 7, // Sau 1 tuần cookie sẽ hết hạng
+        // path
+        // priority
+        secure: true,
+        // signed
+        sameSite: 'lax' // default là lax 
+    });
     // Hiển thị vào trình duyệt 
     res.send(req.cookies.cart);
 });
 
-app.get('/read-cookies', (req, res) => {
-    const myArray = JSON.parse(req.cookies.cart);
-    res.send(myArray);
+app.get('/cookies/read', (req, res) => {
+    console.log('read');
+
+    let cart
+    if (req.cookies.cart === undefined) {
+        cart = []
+    } else {
+        cart = JSON.parse(req.cookies.cart);
+    }
+    res.send(cart);
 });
+
+app.get('/cookies/clear', (req, res) => {
+    console.log('clear');
+
+    res.clearCookie('cart', { path: '/' })
+    res.send(req.cookies)
+})
 
 
 app.use((req, res, next) => {
