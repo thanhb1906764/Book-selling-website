@@ -66,7 +66,7 @@
 
                 <div class="py-3">
                     <a href="/Pay" @click="" class="btn btn-danger">Mua Ngay</a>
-                    <span @click="addProductToCart" class="px-2"><a class="btn btn-outline-danger">
+                    <span @click="addProductToCart" class="px-2"><a @click="notify" class="btn btn-outline-danger">
                             <!-- <img src="../assets/add_shopping_cart_FILL0_wght400_GRAD0_opsz48.svg" width="20px"> -->
                             Thêm Vào Giỏ Hàng</a></span>
                 </div>
@@ -117,6 +117,9 @@ import BooksService from '@/services/books.service'
 import ImagesService from '@/services/images.service'
 import { useDataStore } from '../stores/dataStores';
 import axios from 'axios'
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 
 export default {
     components: {
@@ -126,10 +129,23 @@ export default {
         id: { type: String, required: true },
     },
     data() {
+        const customId = 'custom-id';
+
+        const notify = () => {
+            toast("Đã Thêm Sản Phẩm Vào Giỏ Hàng", {
+                toastId: customId,
+                autoClose: 1500,
+                limit: 1,
+                type: toast.TYPE.SUCCESS,
+            }); // ToastOptions
+        }
+
         return {
             BookQuantity: 1,
             Book: {},
             ImgaeArray: {},
+            notify: notify,
+            customId: customId
         }
     },
     computed: {
