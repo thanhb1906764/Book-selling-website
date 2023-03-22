@@ -141,29 +141,6 @@
                                     }) }}</div>
                                 </td>
                             </tr>
-
-                            <tr style="font-size: 12px;">
-                                <td class="" style="width: 20%">
-                                    <div class="figure position-relative">
-                                        <img src="https://product.hstatic.net/200000343865/product/4_5f9624b1ec774721962320840ac57f15_master.jpg"
-                                            width="60" class="rounded" alt="...">
-                                        <span
-                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">1</span>
-                                    </div>
-                                </td>
-                                <td class="align-middle fw-bold" style="width: 70%;">Kaguya - Cuộc chiến tỏ tình - Tập 10
-                                    (Tặng Kèm
-                                    1 Trong 2 Clear File)</td>
-                                <td class="align-middle" style="width: 10%;">
-                                    <!-- <div class="text-decoration-line-through text-muted">40000đ</div>
-                                    <hr /> -->
-                                    <div class="text-danger fw-bolder">{{ (36000).toLocaleString('vi-VN', {
-                                        style: 'currency',
-                                        currency: 'VND'
-                                    }) }}</div>
-                                </td>
-                            </tr>
-
                         </tbody>
 
                     </table>
@@ -224,6 +201,38 @@
     </div>
 </template>
 
-<script setup>
-import AddressVue from '../components/Address.vue';
+<script>
+import AddressVue from '../components/Address.vue'
+
+export default {
+    components: {
+        AddressVue
+    },
+    data() {
+        return {
+            ImgaeArray: {},
+        }
+    },
+    methods: {
+
+        // Lấy tất cả những image của sách  
+        async getImggeArray() {
+            if (useDataStore().getBooks.length !== 0) {
+                this.ImgaeArray = useDataStore().getImages.filter(image => image._idBook === this.id)
+                // console.log(this.ImgaeArray)
+            }
+            else {
+                try {
+                    this.ImgaeArray = await ImagesService.getAll();
+                    useDataStore().setImages(this.ImgaeArray);
+                    this.ImgaeArray = this.ImgaeArray.filter(image => image._idBook === this.id)
+                    console.log(this.ImgaeArray)
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+    }
+}
 </script>

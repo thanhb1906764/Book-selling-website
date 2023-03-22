@@ -55,7 +55,7 @@
             </div>
             <div class="container-fluid px-0 py-2">
                 <v-row class="p-2 m-0" :equal="{ sm: true, md: false }">
-                    <v-col v-for="item in Books" :key="item.id" class="d-flex align-center justify-center">
+                    <v-col v-for="item in Books" :key="item._id" class="d-flex align-center justify-center">
                         <Cards :book="item" />
                     </v-col>
                 </v-row>

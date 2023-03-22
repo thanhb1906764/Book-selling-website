@@ -13,7 +13,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
+            <tr v-for="item in BookInCart" :key="item._id">
                 <th scope="row">
                     <a href="#">
                         <img class="imgCart border rounded"
@@ -22,50 +22,20 @@
                 </th>
                 <td class="align-middle">
                     <a href="#" class="text-decoration-none">
-                        <div class="fs-6 fw-bold text-danger">
-                            Kaguya - Cuộc chiến tỏ tình - Tập 10 (Tặng Kèm 1 Trong 2 Clear File)
-                        </div>
-
+                        <div class="fs-6 fw-bold text-danger">{{ item.bookName }}</div>
                     </a>
-                    <small>Khuyến mãi: 1017960497 - Giảm vô thời hạn 10% cho toàn bộ Sách Kim Đồng</small>
-                    <small class="d-block">Còn lại: 30</small>
+                    <!-- Thông tin khuyến mãi  -->
+                    <small>{{ }}</small>
+                    <small class="d-block">Còn lại: {{ item.bookStock }}</small>
                 </td>
-                <td class="align-middle text-center">36,000₫
-                </td>
+
                 <td class="align-middle text-center">
-                    <div class="btn-group" role="group" aria-label="Basic outlined">
-                        <button type="button" class="btn btn-outline-primary">-</button>
-                        <input type="number" pattern="[0-9]*" class="btn border" step="1" min="1" value="1" max="99" />
-                        <button type="button" class="btn btn-outline-primary">+</button>
-                    </div>
-
+                    {{ (item.bookPrice).toLocaleString('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND'
+                    }) }}
                 </td>
-                <td class="align-middle text-center fw-bold">36,000₫</td>
-                <td class="align-middle text-center">
-                    <button class="btn btn-outline-danger fa-solid fa-trash"></button>
-                </td>
-            </tr>
 
-
-
-            <tr>
-                <th scope="row">
-                    <a href="#">
-                        <img class="imgCart border rounded"
-                            src="https://product.hstatic.net/200000343865/product/4_5f9624b1ec774721962320840ac57f15_master.jpg">
-                    </a>
-                </th>
-                <td class="align-middle">
-                    <a href="#" class="text-decoration-none">
-                        <div class="fs-6 fw-bold text-danger">
-                            Kaguya - Cuộc chiến tỏ tình - Tập 4 (Tặng Kèm 1 Trong 2 Mẫu Thẻ Học Sinh)
-                        </div>
-
-                    </a>
-                    <small>Khuyến mãi: 1017960497 - Giảm vô thời hạn 10% cho toàn bộ Sách Kim Đồng</small>
-                    <small class="d-block">Còn lại: 30</small>
-                </td>
-                <td class="align-middle text-center">36,000₫</td>
                 <td class="align-middle text-center">
                     <div class="btn-group" role="group" aria-label="Basic outlined">
                         <button type="button" class="btn btn-outline-primary">-</button>
@@ -73,12 +43,18 @@
                         <button type="button" class="btn btn-outline-primary">+</button>
                     </div>
                 </td>
-                <td class="align-middle text-center fw-bold">36,000₫</td>
+
+                <td class="align-middle text-center fw-bold">
+                    {{ (item.bookPrice * 2).toLocaleString('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND'
+                    }) }}
+                </td>
+
                 <td class="align-middle text-center">
                     <button class="btn btn-outline-danger fa-solid fa-trash"></button>
                 </td>
             </tr>
-
 
 
             <!-- Thanh toán  -->
@@ -101,6 +77,93 @@
         </tbody>
     </table>
 </template>
+<script>
+import { useDataStore } from '../stores/dataStores';
+import BooksService from '@/services/books.service';
+import axios from 'axios';
+
+export default {
+    props: {
+
+    },
+    data() {
+        return {
+            Cart: [],
+            Books: [],
+            BookInCart: []
+        }
+    },
+    methods: {
+
+        // Lấy tất cả những image của sách  
+        // async getImggeArray() {
+        //     if (useDataStore().getBooks.length !== 0) {
+        //         this.ImgaeArray = useDataStore().getImages.filter(image => image._idBook === this.id)
+        //         // console.log(this.ImgaeArray)
+        //     }
+        //     else {
+        //         try {
+        //             this.ImgaeArray = await ImagesService.getAll();
+        //             useDataStore().setImages(this.ImgaeArray);
+        //             this.ImgaeArray = this.ImgaeArray.filter(image => image._idBook === this.id)
+        //             console.log(this.ImgaeArray)
+        //         }
+        //         catch (error) {
+        //             console.log(error);
+        //         }
+        //     }
+        // },
+        async retrieveBookOnCookies() {
+            if (useDataStore().getBooks.length !== 0) {
+                this.Books = useDataStore().getBooks
+            }
+            else {
+                try {
+                    this.Books = await BooksService.getAll();
+                    this.Books = this.Books.filter(itemBook => (itemBook.bookPrice && itemBook.originalPrice && itemBook.author))
+                    console.log(this.Cart);
+                    for (let i = 0; i < this.Cart.length; i++) {
+                        let temp = this.Books.find(Book => Book._id === this.Cart[i].idBook);
+                        if (temp) {
+                            this.BookInCart.push(temp)
+                        }
+                    }
+                    console.log(this.BookInCart);
+                    // location.reload();
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        },
+
+        // Lấy cart trong cookies
+        async getCartOnCookie() {
+            try {
+                axios
+                    .get(`http://localhost:3000/cookies/read`, {
+                        withCredentials: true
+                    })
+                    .then((response) => {
+                        // console.log(response.data)
+                        this.Cart = response.data
+                        return response.data
+                    })
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+    },
+    mounted() {
+
+    },
+    created() {
+        this.retrieveBookOnCookies();
+        this.getCartOnCookie();
+
+    }
+}
+</script>
 <style scoped>
 .imgCart {
     width: 100px;
