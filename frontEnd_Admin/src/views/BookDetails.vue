@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="row gx-5">
-                    <p>Số lượng sách còn lại: <strong>{{ Book.bookStock }}</strong></p>
+                    <p>Số lượng sách còn lại: <strong>{{ Book.bookStock - 1 }}</strong></p>
                     <p>Đổi trả trong 30 ngày
                         <Modal />
                     </p>
@@ -55,10 +55,10 @@
                 <div style="display: flex; justify-content: start; align-items: center;">
                     <div class="px-0 fs-5 me-3">Số lượng</div>
                     <div class="btn-group" role="group" aria-label="Basic outlined">
-                        <button type="button" class="btn btn-outline-primary">-</button>
-                        <input required type="number" pattern="[0-9]*" class="btn border" step="1" min="1" value="1"
-                            :max="Book.bookStock" />
-                        <button type="button" class="btn btn-outline-primary">+</button>
+                        <button @click="BookQuantityReduce" type="button" class="btn btn-outline-primary">-</button>
+                        <input required type="number" pattern="[0-9]*" class="btn border" step="1" min="1"
+                            v-model="BookQuantity" :max="Book.bookStock - 1" />
+                        <button @click="BookQuantityIncrease" type="button" class="btn btn-outline-primary">+</button>
                     </div>
                 </div>
 
@@ -66,7 +66,7 @@
 
                 <div class="py-3">
                     <a href="/Pay" @click="" class="btn btn-danger">Mua Ngay</a>
-                    <span class="px-2"><a href="/Cart" class="btn btn-outline-danger">
+                    <span @click="addProductToCart" class="px-2"><a class="btn btn-outline-danger">
                             <!-- <img src="../assets/add_shopping_cart_FILL0_wght400_GRAD0_opsz48.svg" width="20px"> -->
                             Thêm Vào Giỏ Hàng</a></span>
                 </div>
@@ -116,6 +116,7 @@ import CommentForm from '../components/CommentForm.vue';
 import BooksService from '@/services/books.service'
 import ImagesService from '@/services/images.service'
 import { useDataStore } from '../stores/dataStores';
+import axios from 'axios'
 
 export default {
     components: {
@@ -126,11 +127,44 @@ export default {
     },
     data() {
         return {
+            BookQuantity: 1,
             Book: {},
             ImgaeArray: {},
         }
     },
+    computed: {
+
+    },
     methods: {
+        // Tăng số lượng sách
+        BookQuantityIncrease() {
+            if (this.Book.bookStock > 0) {
+                this.BookQuantity++;
+                this.Book.bookStock--;
+            }
+        },
+        // Giảm số lượng sách 
+        BookQuantityReduce() {
+            if (this.BookQuantity > 1) {
+                this.BookQuantity--;
+                this.Book.bookStock++;
+            }
+        },
+
+        async addProductToCart() {
+            try {
+                axios
+                    .get(`http://localhost:3000/cookies/set/${this.id}/${this.BookQuantity}`, {
+                        withCredentials: true
+                    })
+                    .then((response) => {
+                        console.log(response.data)
+                    })
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
         async getBook() {
             if (useDataStore().getBooks.length !== 0) {
                 this.Book = useDataStore().getBooks.filter(book => book._id === this.id)[0]

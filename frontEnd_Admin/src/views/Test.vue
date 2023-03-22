@@ -1,6 +1,7 @@
 <template>
-    <div>{{ Books }}</div>
-    <router-link :to="{
+    <div>{{ Cookies }}</div>
+    <!-- <div>{{ Books }}</div> -->
+    <!-- <router-link :to="{
         name: 'BookDetails',
         params: { id: '123' },
     }">
@@ -11,37 +12,51 @@
                     content.</p>
             </div>
         </div>
-    </router-link>
+    </router-link> -->
 </template>
 
 <script>
 import BooksService from '@/services/books.service'
+import CartsService from '../services/carts.service';
 import { useDataStore } from '../stores/dataStores';
+import axios from 'axios'
 
 export default {
     components: {
-        BooksService,
-        useDataStore
+
     },
     data() {
 
         return {
             Books: [],
+            Cookies: [],
+            id: '1',
+            quan: 12
         }
     },
     methods: {
         async retrieveBook() {
             try {
-                this.Books = await BooksService.getAll();
-                useDataStore().setBooks(this.Books)
+                axios
+                    .get(`http://localhost:3000/cookies/set/${this.id}/${this.quan}`, {
+                        withCredentials: true
+                    })
+                    .then((response) => {
+                        this.Cookies = response.data
+                        console.log(response)
+                    })
+                // // this.Cookies = await CartsService.getAll();
+                // // this.Cookies = await CookiesService.get()
+                // this.Cookies = await CartsService.createCookie(this.id, this.quan);
+                // // useDataStore().setBooks(this.Books)
+                console.log(this.Cookies)
             } catch (error) {
                 console.log(error);
             }
         }
-    },
-    mounted() {
+    }, mounted() {
+
         this.retrieveBook()
     }
-
 }
 </script>

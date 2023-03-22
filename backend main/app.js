@@ -21,7 +21,12 @@ const app = express();
 var fs = require('fs');
 
 app.use(cookieParser()); // kiz
-app.use(cors());
+app.set("trust proxy", 1);
+
+app.use(cors({
+    origin: "http://localhost:3001",
+    credentials: true,
+}));
 app.use(express.json());
 app.use("/api/Books", booksRouter);
 app.use("/api/Carts", cartsRouter);
@@ -118,7 +123,7 @@ app.get('/cookies/set/:idBook/:quantityBook', (req, res) => {
         maxAge: 1000 * 60 * 60 * 24 * 7, // Sau 1 tuần cookie sẽ hết hạng
         // path
         // priority
-        secure: true,
+        secure: false,
         // signed
         sameSite: 'lax' // default là lax 
     });
@@ -137,6 +142,41 @@ app.get('/cookies/read', (req, res) => {
     }
     res.send(cart);
 });
+
+app.get('/cookies/clear/:idBook', (req, res) => {
+    // Lấy giỏ hàng từ req 
+    let cart
+    if (req.cookies.cart === undefined) {
+        cart = []
+    }
+    else {
+        cart = JSON.parse(req.cookies.cart);
+        // Chuyển cart thành mảng để xử lý
+        let arr = Object.values(cart)
+        // Kiểm tra sản phẩm đã có trong giỏ hàng hay chưa?     
+        console.log(arr.filter(item => (item.idBook) !== (req.params.idBook)));
+        if ((arr.find(item => item.idBook === req.params.idBook))) {
+            // Xoá sản phẩm khỏi giỏ hàng tạm nếu có sản phẩm này trong giỏ
+            console.log('clear' + req.params.idBook);
+            arr = arr.filter(item => (item.idBook) !== (req.params.idBook))
+        }
+        // Cập nhật vào giỏ hàng trong req 
+        res.cookie('cart', JSON.stringify(arr), {
+            // domain: 'http://localhost:3000/cookies/',
+            // encode
+            // expires
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60 * 24 * 7, // Sau 1 tuần cookie sẽ hết hạng
+            // path
+            // priority
+            secure: false,
+            // signed
+            sameSite: 'lax' // default là lax 
+        });
+    }
+    // Hiển thị vào trình duyệt 
+    res.send(req.cookies.cart);
+})
 
 app.get('/cookies/clear', (req, res) => {
     console.log('clear');
