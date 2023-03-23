@@ -1,17 +1,9 @@
 <template>
     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-        <!-- <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
-                aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-                aria-label="Slide 3"></button>
-        </div> -->
-        <div class="carousel-inner rounded-3 border">
+        <div class="carousel-inner rounded-3">
             <div v-for="item in ImgaeArray" :key="item._id" class="carousel-item active text-center" data-bs-interval="3000"
-                style="height: 400px; width: 400px;">
-                <img :src="item.linkImage" class="" height="450" alt="...">
+                style="max-width: 350px; max-height: 400px;">
+                <img :src="item.linkImage" style="height:400px;" class="text-center" alt="...">
             </div>
         </div>
         <button v-if="ImgaeArray.length > 1" class="carousel-control-prev" type="button"
@@ -36,23 +28,21 @@ export default {
     },
     data() {
         return {
-            ImgaeArray: {},
+            ImgaeArray: useDataStore().getImages.filter(image => image._idBook === this.id),
         }
     },
     methods: {
 
-        // Lấy tất cả những image của sách  
+        // Lấy tất cả những Image của Book
         async getImageArray() {
             if (useDataStore().getBooks.length !== 0) {
                 this.ImgaeArray = useDataStore().getImages.filter(image => image._idBook === this.id)
-                // console.log(this.ImgaeArray)
             }
             else {
                 try {
                     this.ImgaeArray = await ImagesService.getAll();
                     useDataStore().setImages(this.ImgaeArray);
                     this.ImgaeArray = this.ImgaeArray.filter(image => image._idBook === this.id)
-                    console.log(this.ImgaeArray)
                 }
                 catch (error) {
                     console.log(error);
@@ -61,7 +51,7 @@ export default {
         }
     },
     mounted() {
-        console.log(this.id);
+
     },
     created() {
         this.getImageArray();

@@ -16,9 +16,7 @@
                 <div class="row gx-5">
                     <p class="col">
                         Nhà cung cấp:
-                        <strong>
-                            <a class="text-decoration-none" href="#">{{ Book.supplisherName }}</a>
-                        </strong>
+                        <a class="text-decoration-none fw-bold link-primary" href="#">{{ Book.supplisherName }}</a>
                     </p>
                     <p class="col">Nhà xuất bản: <strong>{{ Book.publisher }}</strong></p>
                 </div>
@@ -45,19 +43,19 @@
                 <!-- Số lượng Book trong kho  -->
                 <div class="row gx-5">
                     <p>Số lượng sách còn lại: <strong>{{ Book.bookStock - 1 }}</strong></p>
-                    <p>Đổi trả trong 30 ngày
+                    <p class="">Đổi trả trong 30 ngày
                         <Modal />
                     </p>
                 </div>
 
                 <!-- Địa chỉ giao hàng -->
-                <div class="row gx-5">
+                <!-- <div class="row gx-5">
                     <p>Giao hàng đến
                         <span class="px-2">
-                            <a class="text-decoration-none" href="#">Thay đổi</a>
+                            <a class="text-decoration-none link-primary" href="#">Thay đổi</a>
                         </span>
                     </p>
-                </div>
+                </div> -->
 
                 <!-- Số lượng sách sẽ mua  -->
                 <div style="display: flex; justify-content: start; align-items: center;">

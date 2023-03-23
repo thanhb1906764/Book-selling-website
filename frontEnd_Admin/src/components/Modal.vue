@@ -1,6 +1,7 @@
 <template>
     <!--trigger modal -->
-    <a class="text-decoration-none px-2" style="cursor: pointer; " data-bs-toggle="modal" data-bs-target="#exampleModal">Xem thêm</a>
+    <a class="text-decoration-none px-2 link-primary" style="cursor: pointer; " data-bs-toggle="modal"
+        data-bs-target="#exampleModal">Xem thêm</a>
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -11,7 +12,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    
+
                     <div class="list-group">
                         <a href="#" class="list-group-item list-group-item-action" aria-current="true">
                             Áp dụng cho toàn bộ đơn hàng của Quý Khách
