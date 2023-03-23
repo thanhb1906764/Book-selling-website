@@ -1,9 +1,11 @@
 <template>
-    <!-- <div>{{ imageList }}</div> -->
+    <!-- Link đến trang Chi tiết sản phẩm  -->
     <router-link :to="{
         name: 'BookDetails',
         params: { id: book._id },
     }">
+
+        <!-- Phần hiển thị của Cart trên HomePage  -->
         <v-hover v-slot="{ isHovering, props }" open-delay="200">
 
             <v-tooltip :text="book.bookName"></v-tooltip>
@@ -18,7 +20,7 @@
                 </span>
 
                 <!-- <v-img :src="link"></v-img> -->
-                <img class="text-center" :src="link" height="270">
+                <img class="text-center" :src="linkImage" height="270">
 
                 <v-card-title class="py-2" style="text-overflow: ellipsis;">{{ book.bookName }}</v-card-title>
 
@@ -51,34 +53,33 @@
             </v-card>
 
         </v-hover>
+
     </router-link>
 </template>
 
 <script>
-
+// Import here
 import moment from 'moment';
 import { useDataStore } from "../stores/dataStores";
 import testTime from '../components/testTime.vue'
 import { Countdown } from 'vue3-flip-countdown'
-import { bool, number } from 'yup';
 export default {
     components: {
         testTime, Countdown
     },
     data() {
         return {
-            link: null,
-            Images: [],
+            linkImage: null, // linkImage của Book lấy từ store
+            Images: [], // Lấy hình ảnh từ store hoặc cloud
             time: moment(new Date(), "YYYY-MM-DD HH:mm:ss"),
         }
     },
     props: {
-        book: Object,
+        book: Object, // get book từ HomePage
     },
     methods: {
         checkMonth(date) {
             const dateToCheck = new Date(date);
-
             // Lấy thời gian hiện tại
             const currentTime = new Date().getTime();
 
@@ -101,9 +102,9 @@ export default {
         }
     },
     mounted() {
+        // Lấy dữ liệu Images 
         this.Images = useDataStore().getImages
-        this.link = this.Images.filter(image => image._idBook === this.book._id)[0].linkImage
-        console.log(this.Images);
+        this.linkImage = this.Images.filter(image => image._idBook === this.book._id)[0].linkImage
     }
 }
 </script>

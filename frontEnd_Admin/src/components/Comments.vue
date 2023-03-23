@@ -27,10 +27,11 @@ export default {
     components: {
         StarRating
     },
+    props: {
+        id: { type: String, required: true },
+    },
     data() {
         moment.locale("vi");
-        console.log(moment.locales());
-
         const dateComment = moment().subtract(3, 'days')
         const timeComment = moment(dateComment).fromNow()
         return {

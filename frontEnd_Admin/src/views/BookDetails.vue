@@ -1,16 +1,18 @@
 <template>
     <div class="container shadow-sm rounded-3">
-
         <!-- Chi tiết sản phẩm  -->
         <div style="display: flex;">
-
+            <!-- Hiển thị Images của Book  -->
             <div style="width: 30rem; padding: 10px;">
                 <Carousel_Img :id="this.id" />
             </div>
 
+            <!-- Thông tin Book  -->
             <div class="p-2" style="width: 60rem;">
+                <!-- Tên Book  -->
                 <h4 class="fw-semibold">{{ Book.bookName }}</h4>
 
+                <!-- Nhà Cung cấp và Xuất bản -->
                 <div class="row gx-5">
                     <p class="col">
                         Nhà cung cấp:
@@ -21,15 +23,18 @@
                     <p class="col">Nhà xuất bản: <strong>{{ Book.publisher }}</strong></p>
                 </div>
 
+                <!-- Tác giả  -->
                 <div class="row gx-5">
                     <p class="col">Tác giả: <strong>{{ Book.author }}</strong></p>
                 </div>
 
+                <!-- Kích cỡ Book và số trang  -->
                 <div class="row gx-5">
                     <p class="col">Kích cỡ: <strong>{{ Book.size }}</strong></p>
                     <p class="col">Số trang: <strong>{{ Book.quantityPage }}</strong></p>
                 </div>
 
+                <!-- Giá sách... -->
                 <div style="display: flex; justify-content: start; align-items: center;">
                     <h3 class="text-danger fw-bold">{{ Book.bookPrice }} &#8363;</h3>
                     <h6 v-if="Book.bookPrice !== Book.originalPrice" class="text-decoration-line-through px-2 text-muted">
@@ -37,6 +42,7 @@
                     <h6><span class="badge bg-danger">New</span></h6>
                 </div>
 
+                <!-- Số lượng Book trong kho  -->
                 <div class="row gx-5">
                     <p>Số lượng sách còn lại: <strong>{{ Book.bookStock - 1 }}</strong></p>
                     <p>Đổi trả trong 30 ngày
@@ -44,6 +50,7 @@
                     </p>
                 </div>
 
+                <!-- Địa chỉ giao hàng -->
                 <div class="row gx-5">
                     <p>Giao hàng đến
                         <span class="px-2">
@@ -52,6 +59,7 @@
                     </p>
                 </div>
 
+                <!-- Số lượng sách sẽ mua  -->
                 <div style="display: flex; justify-content: start; align-items: center;">
                     <div class="px-0 fs-5 me-3">Số lượng</div>
                     <div class="btn-group" role="group" aria-label="Basic outlined">
@@ -64,11 +72,11 @@
 
                 <hr />
 
+                <!-- Button  -->
                 <div class="py-3">
-                    <a href="/Pay" @click="" class="btn btn-danger">Mua Ngay</a>
-                    <span @click="addProductToCart" class="px-2"><a @click="notify" class="btn btn-outline-danger">
-                            <!-- <img src="../assets/add_shopping_cart_FILL0_wght400_GRAD0_opsz48.svg" width="20px"> -->
-                            Thêm Vào Giỏ Hàng</a></span>
+                    <a href="/Pay" class="btn btn-danger">Mua Ngay</a>
+                    <span @click="addProductToCart" class="px-2"><a @click="notify" class="btn btn-outline-danger">Thêm Vào
+                            Giỏ Hàng</a></span>
                 </div>
             </div>
         </div>
@@ -88,19 +96,16 @@
                 </div>
             </nav>
 
-
+            <!-- Review -->
             <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">Giá sản
-                    phẩm trên đã bao gồm thuế theo luật hiện hành. Bên cạnh đó, tuỳ vào loại sản phẩm, hình thức
-                    và địa chỉ giao hàng mà có thể phát sinh thêm chi phí khác như phụ phí đóng gói, phí vận chuyển, phụ phí
-                    hàng cồng kềnh,...
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    {{ Book.bookDes }}
                 </div>
 
                 <!-- Bình luận  -->
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                     <CommentForm />
-
-                    <Comments />
+                    <Comments :id="this.id" />
                 </div>
             </div>
         </div>
@@ -108,19 +113,17 @@
 </template>
 
 <script>
+// Import here 
 import Carousel_Img from '../components/Carousel_Img.vue';
 import Modal from '../components/Modal.vue';
 import Comments from '../components/Comments.vue';
 import CommentForm from '../components/CommentForm.vue';
-
 import BooksService from '@/services/books.service'
 import ImagesService from '@/services/images.service'
 import { useDataStore } from '../stores/dataStores';
 import axios from 'axios'
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-
-
 export default {
     components: {
         Carousel_Img, Modal, Comments, CommentForm
@@ -129,8 +132,8 @@ export default {
         id: { type: String, required: true },
     },
     data() {
+        // Đinh nghĩa thông báo nổi 
         const customId = 'custom-id';
-
         const notify = () => {
             toast("Đã Thêm Sản Phẩm Vào Giỏ Hàng", {
                 toastId: customId,
@@ -167,6 +170,7 @@ export default {
             }
         },
 
+        // Thêm sản phẩm vào giỏ hàng trong Cookies 
         async addProductToCart() {
             try {
                 axios
@@ -181,15 +185,14 @@ export default {
             }
         },
 
+        // Lấy Book trong store (nếu có) hoặc từ DB
         async getBook() {
             if (useDataStore().getBooks.length !== 0) {
                 this.Book = useDataStore().getBooks.filter(book => book._id === this.id)[0]
-                // console.log(this.Books);
             }
             else {
                 try {
                     this.Book = await BooksService.get(this.id);
-                    // console.log(this.Book);
                 }
                 catch (error) {
                     console.log(error);
@@ -197,18 +200,16 @@ export default {
             }
         },
 
-        // Lấy tất cả những image của sách  
+        // Lấy tất cả những image của Book trong store (nếu có) hoặc từ DB
         async getImggeArray() {
             if (useDataStore().getBooks.length !== 0) {
-                this.ImgaeArray = useDataStore().getImages.filter(image => image._idBook === this.id)
-                // console.log(this.ImgaeArray)
+                this.ImgaeArray = useDataStore().getImages.filter(image => image._idBook === this.id);
             }
             else {
                 try {
                     this.ImgaeArray = await ImagesService.getAll();
                     useDataStore().setImages(this.ImgaeArray);
-                    this.ImgaeArray = this.ImgaeArray.filter(image => image._idBook === this.id)
-                    // console.log(this.ImgaeArray)
+                    this.ImgaeArray = this.ImgaeArray.filter(image => image._idBook === this.id);
                 }
                 catch (error) {
                     console.log(error);
@@ -217,11 +218,10 @@ export default {
         }
     },
     mounted() {
-        // console.log(this.Book);
-        // console.log(this.id);
-        // console.log(this.ImgaeArray);
+
     },
     created() {
+        // Lấy dữ liệu trước khi kết xuất 
         this.getBook();
         this.getImggeArray();
     }

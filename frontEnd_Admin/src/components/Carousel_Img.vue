@@ -42,7 +42,7 @@ export default {
     methods: {
 
         // Lấy tất cả những image của sách  
-        async getImggeArray() {
+        async getImageArray() {
             if (useDataStore().getBooks.length !== 0) {
                 this.ImgaeArray = useDataStore().getImages.filter(image => image._idBook === this.id)
                 // console.log(this.ImgaeArray)
@@ -64,7 +64,7 @@ export default {
         console.log(this.id);
     },
     created() {
-        this.getImggeArray();
+        this.getImageArray();
     }
 }
 </script>

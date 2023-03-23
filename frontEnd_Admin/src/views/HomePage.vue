@@ -1,8 +1,6 @@
 <template>
     <div class="container">
-        <!-- <Cards /> -->
-
-        <!-- Carousel - Hiển thị những sản phẩm đặt biệt hoặc một chương trình giảm giá...  -->
+        <!-- Carousel - Hiển thị những sản phẩm đặt biệt hoặc một chương trình giảm giá... need-fix -->
         <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#carouselExampleInterval" data-bs-slide-to="0" class="active"
@@ -41,17 +39,16 @@
         <!-- Các thành phần - nội dung chính trong trang   -->
         <div id="content">
             <div class="p-2 fw-semibold fs-5 text-center">
-                <a href="#flash-sale" class="text-danger text-decoration-none px-2 btn">Flash Sale</a>
                 <a href="#hot" class="text-danger text-decoration-none px-2 btn">Sản Phẩm HOT</a>
                 <a href="#new" class="text-danger text-decoration-none px-2 btn">Sản Phẩm Mới</a>
                 <a href="#product" class="text-danger text-decoration-none px-2 btn">Sản Phẩm</a>
             </div>
         </div>
 
-        <!-- FLASH SALE -->
-        <div id="flash-sale">
-            <div class="p-2 fw-semibold fs-5" style="background-color: #fcdab0;">
-                <a href="#" class="text-dark text-decoration-none">Flash Sale | <small>Kết Thúc Trong {{ }}</small></a>
+        <!-- Sản phẩm HOT -->
+        <div id="hot">
+            <div class="p-2 fw-semibold fs-5" style="background-color: #eb0200;">
+                <a href="#" class="text-white text-decoration-none">Sản Phẩm HOT</a>
             </div>
             <div class="container-fluid px-0 py-2">
                 <v-row class="p-2 m-0" :equal="{ sm: true, md: false }">
@@ -62,54 +59,39 @@
             </div>
         </div>
 
-        <!--Sản phẩm HOT -->
-        <!-- <div id="hot">
-            <div class="p-2 fw-semibold fs-5" style="background-color: #eb0200;">
-                <a href="#" class="text-white text-decoration-none">Sản Phẩm HOT</a>
-            </div>
-            <div class="container-fluid px-0 py-2">
-                <v-row class="p-2 m-0" :equal="{ sm: true, md: false }">
-                    <v-col v-for="item in bookList" :key="item.id" class="d-flex align-center justify-center">
-                        <Cards :book="item" />
-                    </v-col>
-                </v-row>
-            </div>
-        </div> -->
-
         <!-- Sản phẩm mới - New  -->
-        <!-- <div id="new">
-            <div class="p-2 fw-semibold fs-5" style="background-color:  #e7f0fe;">
-                <a href="#" class="text-dark text-decoration-none">Sản Phẩm Mới</a>
+        <div id="new">
+            <div class="p-2 fw-semibold fs-5" style="background-color:  #1c73e8;">
+                <a href="#" class="text-white text-decoration-none">Sản Phẩm Mới</a>
             </div>
             <div class="container-fluid px-0 py-2">
                 <v-row class="p-2 m-0" :equal="{ sm: true, md: false }">
-                    <v-col v-for="item in bookList" :key="item.id" class="d-flex align-center justify-center">
+                    <v-col v-for="item in Books" :key="item._id" class="d-flex align-center justify-center">
                         <Cards :book="item" />
                     </v-col>
                 </v-row>
             </div>
-        </div> -->
+        </div>
 
         <!-- Sản phẩm -->
-        <!-- <div id="product">
+        <div id="product">
             <div class="p-2 fw-semibold fs-5" style="background-color:  #e7f0fe;">
                 <a href="#" class="text-dark text-decoration-none">Sản Phẩm</a>
             </div>
             <div class="container-fluid px-0 py-2">
                 <v-row class="p-2 m-0" :equal="{ sm: true, md: false }">
-                    <v-col v-for="item in bookList" :key="item.id" class="d-flex align-center justify-center">
+                    <v-col v-for="item in Books" :key="item._id" class="d-flex align-center justify-center">
                         <Cards :book="item" />
                     </v-col>
                 </v-row>
             </div>
-        </div> -->
-
+        </div>
     </div>
 </template>
 
 <script>
+// Import here
 import Cards from '../components/Cards.vue';
-import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiApps } from '@mdi/js'
 import moment from 'moment';
 
@@ -118,16 +100,14 @@ import BooksService from '@/services/books.service'
 import { useDataStore } from '../stores/dataStores';
 export default {
     components: {
-        Cards, SvgIcon,
-        BooksService,
-        useDataStore
+        Cards
     },
     data() {
         return {
             Books: [],
             Images: [],
 
-            bookList: useDataStore().getBooks,
+            // bookList: useDataStore().getBooks,
             geneList: useDataStore().getGenes,
             tagList: useDataStore().getTagList,
             path: mdiApps,
@@ -140,27 +120,25 @@ export default {
     },
     methods: {
 
-        // kiz
+        // Lấy tất cả Book từ DB và lưu vào store - kiz
         async retrieveBook() {
             try {
                 this.Books = await BooksService.getAll();
-                this.Books = this.Books.filter(itemBook => (itemBook.bookPrice && itemBook.originalPrice))
+                this.Books = this.Books.filter(itemBook => (itemBook.bookPrice && itemBook.originalPrice && itemBook.author))
                 useDataStore().setBooks(this.Books)
             } catch (error) {
                 console.log(error);
             }
         },
+        // Lấy tất cả Image từ DB và lưu vào store
         async retrieveImage() {
             try {
                 this.Images = await ImagesService.getAll();
-                console.log(this.Images)
                 useDataStore().setImages(this.Images)
             } catch (error) {
                 console.log(error);
             }
         },
-
-
 
         search() {
             if (this.$refs.search.value === '') {
@@ -296,7 +274,7 @@ export default {
                 }
             }
         }
-        console.log(waitingList)
+        // console.log(waitingList)
         if (waitingList.length > 0) {
             var waiting = setInterval(() => {
                 // console.log(waitingList)
@@ -314,9 +292,9 @@ export default {
                 }
             }, 1000)
         }
+
         this.retrieveImage();
         this.retrieveBook();
-
     }
 }
 </script>

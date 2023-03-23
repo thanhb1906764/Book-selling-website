@@ -14,48 +14,8 @@
         </thead>
         <tbody>
             <tr v-for="item in BookInCart" :key="item._id">
-                <th scope="row">
-                    <a href="#">
-                        <img class="imgCart border rounded"
-                            src="https://product.hstatic.net/200000343865/product/4_5f9624b1ec774721962320840ac57f15_master.jpg">
-                    </a>
-                </th>
-                <td class="align-middle">
-                    <a href="#" class="text-decoration-none">
-                        <div class="fs-6 fw-bold text-danger">{{ item.bookName }}</div>
-                    </a>
-                    <!-- Thông tin khuyến mãi  -->
-                    <small>{{ }}</small>
-                    <small class="d-block">Còn lại: {{ item.bookStock }}</small>
-                </td>
-
-                <td class="align-middle text-center">
-                    {{ (item.bookPrice).toLocaleString('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND'
-                    }) }}
-                </td>
-
-                <td class="align-middle text-center">
-                    <div class="btn-group" role="group" aria-label="Basic outlined">
-                        <button type="button" class="btn btn-outline-primary">-</button>
-                        <input type="number" pattern="[0-9]*" class="btn border" step="1" min="1" value="1" max="99" />
-                        <button type="button" class="btn btn-outline-primary">+</button>
-                    </div>
-                </td>
-
-                <td class="align-middle text-center fw-bold">
-                    {{ (item.bookPrice * 2).toLocaleString('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND'
-                    }) }}
-                </td>
-
-                <td class="align-middle text-center">
-                    <button class="btn btn-outline-danger fa-solid fa-trash"></button>
-                </td>
+                <CardOfCart :Book="item" />
             </tr>
-
 
             <!-- Thanh toán  -->
             <tr class="fs-6 fw-bold text-danger">
@@ -81,8 +41,12 @@
 import { useDataStore } from '../stores/dataStores';
 import BooksService from '@/services/books.service';
 import axios from 'axios';
+import CardOfCart from '../components/CardOfCart.vue';
 
 export default {
+    components: {
+        CardOfCart
+    },
     props: {
 
     },
@@ -94,25 +58,6 @@ export default {
         }
     },
     methods: {
-
-        // Lấy tất cả những image của sách  
-        // async getImggeArray() {
-        //     if (useDataStore().getBooks.length !== 0) {
-        //         this.ImgaeArray = useDataStore().getImages.filter(image => image._idBook === this.id)
-        //         // console.log(this.ImgaeArray)
-        //     }
-        //     else {
-        //         try {
-        //             this.ImgaeArray = await ImagesService.getAll();
-        //             useDataStore().setImages(this.ImgaeArray);
-        //             this.ImgaeArray = this.ImgaeArray.filter(image => image._idBook === this.id)
-        //             console.log(this.ImgaeArray)
-        //         }
-        //         catch (error) {
-        //             console.log(error);
-        //         }
-        //     }
-        // },
         async retrieveBookOnCookies() {
             if (useDataStore().getBooks.length !== 0) {
                 this.Books = useDataStore().getBooks
@@ -121,14 +66,14 @@ export default {
                 try {
                     this.Books = await BooksService.getAll();
                     this.Books = this.Books.filter(itemBook => (itemBook.bookPrice && itemBook.originalPrice && itemBook.author))
-                    console.log(this.Cart);
+                    // console.log(this.Cart);
                     for (let i = 0; i < this.Cart.length; i++) {
                         let temp = this.Books.find(Book => Book._id === this.Cart[i].idBook);
                         if (temp) {
                             this.BookInCart.push(temp)
                         }
                     }
-                    console.log(this.BookInCart);
+                    // console.log(this.BookInCart);
                     // location.reload();
                 } catch (error) {
                     console.log(error);
@@ -164,15 +109,3 @@ export default {
     }
 }
 </script>
-<style scoped>
-.imgCart {
-    width: 100px;
-}
-
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-</style>
