@@ -6,7 +6,7 @@
 
                 <!-- Đăng nhập  -->
                 <div class="form-group form-floating mb-3 text-center">
-                    <div class="fw-bold fs-6 text-danger py-3">Tên cửa hàng</div>
+                    <div class="fw-bold fs-6 text-danger py-3">Book Store</div>
                     <div class="fw-bold fs-5">Đăng Nhập</div>
                     <small>Sử dụng tài khoản người bán</small>
                 </div>

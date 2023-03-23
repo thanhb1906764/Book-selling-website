@@ -3,6 +3,7 @@ const cors = require("cors");
 const cookieParser = require('cookie-parser'); // kiz
 const carts = require('./app/controllers/carts.controller'); // kiz
 
+const adminsRouter = require("./app/routes/admins.route");
 const booksRouter = require("./app/routes/books.route");
 const genresRouter = require("./app/routes/genres.route");
 const tagsRouter = require("./app/routes/tags.route");
@@ -28,6 +29,7 @@ app.use(cors({
     credentials: true,
 }));
 app.use(express.json());
+app.use("/api/admins", adminsRouter);
 app.use("/api/Books", booksRouter);
 app.use("/api/Carts", cartsRouter);
 app.use("/api/Comments", commentsRouter);
