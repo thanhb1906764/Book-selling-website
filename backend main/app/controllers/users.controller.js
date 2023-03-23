@@ -10,15 +10,12 @@ exports.create = async (req, res, next) => {
     if (!req.body?.name) {
         return next(new ApiError(400, "Name can not be empty"));
     }
-
     try {
         const usersService = new UsersService(MongoDB.client);
         const document = await usersService.create(req.body);
         if (document === undefined) {
-            // return next(new ApiError(400, "phone registered!"));
             return res.send(false);
         }
-        // return res.send(true);
         return res.send(document);
     }
     catch (error) {
@@ -33,14 +30,28 @@ exports.Login = async (req, res, next) => {
         const usersService = new UsersService(MongoDB.client);
         const document = await usersService.check(req.body);
         if (document) {
-
             // Load hash from your password DB.
             if (bcrypt.compareSync(req.body.password, document.password)) {
-                res.setHeader('X-Foo', 'bar');
-                res.cookie('cookie name', 'value');
-                return res.send(document)
+                // Tạo đối tượng user
+                let user = {
+                    name: document.name,
+                    _id: document._id
+                }
+                // Tạo cookies lưu thông tin user
+                res.cookie('user', JSON.stringify(user), {
+                    // domain: 'http://localhost:3000/cookies/',
+                    // encode
+                    // expires
+                    httpOnly: true,
+                    maxAge: 1000 * 60 * 60 * 24 * 7, // Sau 1 tuần cookie sẽ hết hạng
+                    // path
+                    // priority
+                    secure: false, // Không sử dụng trong sản xuất 
+                    // signed
+                    sameSite: 'lax' // default là lax 
+                })
+                return res.send(req.cookies.user)
             }
-
         }
         return res.send("Password incorrect")
     }
@@ -52,6 +63,9 @@ exports.Login = async (req, res, next) => {
 };
 
 exports.logout = async (req, res, next) => {
+    // Xoá thông tin người dùng từ cookies
+    res.clearCookie('user');
+    // Chuyển đến HomePage
     res.redirect('/');
 }
 

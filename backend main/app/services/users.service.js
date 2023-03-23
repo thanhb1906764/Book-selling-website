@@ -29,27 +29,24 @@ class UsersService {
 
     async create(payload) {
         const users = this.extractUsersData(payload);
-
         //Kiểm tra phone đã tồn tại hay chưa
         const phone = await this.Users.findOne({ phone: payload.phone });
         if (phone === null) {
-
             // Băm mật khẩu 
             const hash = bcrypt.hashSync(payload.password, saltRounds);
-            
             const result = await this.Users.findOneAndUpdate(
                 users,
                 {
                     $set: {
                         password: hash,
-                        registerDate: new Date,
+                        registerDate: new Date(),
                         statusUser: true
                     }
                 },
                 { returnDocument: "after", upsert: true }
             );
 
-            return result;
+            return result.value;
         }
     }
 
@@ -58,7 +55,7 @@ class UsersService {
         const cursor = await this.Users.findOne({
             phone: filter.phone
         });
-        if(!cursor){
+        if (!cursor) {
             return false;
         }
         return await cursor;

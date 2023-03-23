@@ -99,17 +99,14 @@ app.get('/cookies/set/:idBook/:quantityBook', (req, res) => {
     // Chuyển cart thành mảng để xử lý
     const arr = Object.values(cart)
     // Kiểm tra sản phẩm đã có trong giỏ hàng hay chưa?     
-    console.log(arr.find(item => item.idBook === req.params.idBook));
     if ((arr.find(item => item.idBook === req.params.idBook)) === undefined) {
         // Thêm sản phẩm vào giỏ hàng tạm nếu không có sản phẩm này trong giỏ
-        console.log('add' + req.params.idBook);
         arr.push({
             idBook: req.params.idBook,
             quantityBook: req.params.quantityBook
         })
     }
     else {
-        console.log('update');
         // Cập nhật số lượng giỏ hàng nếu sản phẩm có trong giỏ 
         let indexProduct = arr.findIndex(item => item.idBook === req.params.idBook)
         arr[indexProduct].quantityBook = req.params.quantityBook
@@ -132,8 +129,6 @@ app.get('/cookies/set/:idBook/:quantityBook', (req, res) => {
 });
 
 app.get('/cookies/read', (req, res) => {
-    console.log('read');
-
     let cart
     if (req.cookies.cart === undefined) {
         cart = []
@@ -154,10 +149,8 @@ app.get('/cookies/clear/:idBook', (req, res) => {
         // Chuyển cart thành mảng để xử lý
         let arr = Object.values(cart)
         // Kiểm tra sản phẩm đã có trong giỏ hàng hay chưa?     
-        console.log(arr.filter(item => (item.idBook) !== (req.params.idBook)));
         if ((arr.find(item => item.idBook === req.params.idBook))) {
             // Xoá sản phẩm khỏi giỏ hàng tạm nếu có sản phẩm này trong giỏ
-            console.log('clear' + req.params.idBook);
             arr = arr.filter(item => (item.idBook) !== (req.params.idBook))
         }
         // Cập nhật vào giỏ hàng trong req 
@@ -179,8 +172,6 @@ app.get('/cookies/clear/:idBook', (req, res) => {
 })
 
 app.get('/cookies/clear', (req, res) => {
-    console.log('clear');
-
     res.clearCookie('cart', { path: '/' })
     res.send(req.cookies)
 })
