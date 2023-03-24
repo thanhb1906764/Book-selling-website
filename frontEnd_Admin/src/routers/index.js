@@ -3,8 +3,6 @@ import { createWebHistory, createRouter } from "vue-router";
 // import store from "../store/store"
 
 const routes = [
-
-
     // kiz
     {
         path: "/",
@@ -34,6 +32,18 @@ const routes = [
         path: "/Test",
         name: "Test",
         component: () => import("@/views/Test.vue"),
+        // props: true
+    },
+    {
+        path: "/UserLogin",
+        name: "LoginUser",
+        component: () => import("@/views/LoginUserPage.vue"),
+        // props: true
+    },
+    {
+        path: "/UserRegister",
+        name: "RegisterUser",
+        component: () => import("@/views/RegisterUserPage.vue"),
         // props: true
     },
     {

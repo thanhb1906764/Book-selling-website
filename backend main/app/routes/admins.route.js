@@ -15,4 +15,8 @@ router.route("/login")
 router.route("/logout")
     .get(admins.logout);
 
+// Lấy cookies
+router.route("/cookies")
+    .get(admins.getCookies);
+
 module.exports = router;

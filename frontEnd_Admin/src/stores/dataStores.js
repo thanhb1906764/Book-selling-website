@@ -5,14 +5,8 @@ export const useDataStore = defineStore('data', {
     state: () => ({
         Books: [],
         Images: [],
-        TBooks: [
-            { id: "12as", name: 'Đất nhân tâmzzzzzzzzzzxxxxx', author: "vvv", price: 5000, gene: ["aaa", 'aab'], originalPrice: 5000, promotionTime: null, publisher: "123", tag: 'Hot', number: 5, numberPage: 100, size: "12x13", supplier: "ppp", publishing_year: "2001", des: "...", receiptDate: '2023-02-15T19:46' },
-            { id: "12as1", name: 'conan2', author: "vvv12", price: 2200, gene: ["aaa"], originalPrice: 2200, promotionTime: null, publisher: "123", tag: 'New', number: 2, numberPage: 100, size: "12x13", supplier: "popo", publishing_year: "1988", des: "...", receiptDate: '2023-01-15T19:46' },
-            { id: "12as13a", name: 'Doraemon', author: "zzz", price: 1000, gene: ["bbb"], originalPrice: 1000, promotionTime: null, publisher: "123", tag: 'Hot', number: 5, numberPage: 100, size: "12x13", supplier: "ppp", publishing_year: "2001", des: "...", receiptDate: '2023-03-15T19:46' },
-            { id: "12asdd23", name: 'Toán', author: "vvv,qq", price: 4000, gene: ["cccc"], originalPrice: 4000, promotionTime: null, publisher: "123", tag: 'Sale', number: 5, numberPage: 100, size: "12x13", supplier: "ppp", publishing_year: "2001", des: "...", receiptDate: '2023-03-15T19:46' },
-            { id: "12asdd1", name: 'Hóa', author: "vvvoo", price: 4500, gene: ["cccc"], originalPrice: 4500, promotionTime: null, publisher: "123", tag: 'Hot', number: 0, numberPage: 100, size: "12x13", supplier: "ppp", publishing_year: "2001", des: "...", receiptDate: '2023-01-15T19:46' },
-            { id: "12asddg", name: 'Địa Lý', author: "vvv999", price: 4300, gene: ["cccc"], originalPrice: 4300, promotionTime: null, publisher: "123", tag: 'New', number: 0, numberPage: 100, size: "12x13", supplier: "ppp", publishing_year: "2001", des: "...", receiptDate: '2023-03-15T19:46' },
-        ],
+        admin: [],
+        user: [],
         Genes: [
             {
                 id: "sdae3e",
@@ -107,6 +101,8 @@ export const useDataStore = defineStore('data', {
 
         // kiz
         getImages: state => state.Images,
+        getUser: state => state.user,
+        getAdmin: state => state.admin,
 
         getBooks: state => state.Books,
         getGenes: state => state.Genes,
@@ -131,7 +127,16 @@ export const useDataStore = defineStore('data', {
                 state.Images = data;
             })
         },
-
+        setAdmin(data) {
+            this.$patch((state) => {
+                state.admin = data;
+            })
+        },
+        setUser(data) {
+            this.$patch((state) => {
+                state.user = data;
+            })
+        },
 
         updateBook(id) {
             this.$patch((state) => {

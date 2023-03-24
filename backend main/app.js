@@ -29,7 +29,7 @@ app.use(cors({
     credentials: true,
 }));
 app.use(express.json());
-app.use("/api/admins", adminsRouter);
+app.use("/api/Admins", adminsRouter);
 app.use("/api/Books", booksRouter);
 app.use("/api/Carts", cartsRouter);
 app.use("/api/Comments", commentsRouter);

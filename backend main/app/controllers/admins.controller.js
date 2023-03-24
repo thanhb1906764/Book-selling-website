@@ -26,6 +26,16 @@ exports.create = async (req, res, next) => {
     }
 };
 
+exports.getCookies = async (req, res, next) => {
+    let admin
+    if (req.cookies.admin === undefined) {
+        admin = []
+    } else {
+        admin = JSON.parse(req.cookies.admin);
+    }
+    res.send(admin)
+}
+
 // login admin
 exports.login = async (req, res, next) => {
     try {
@@ -56,7 +66,7 @@ exports.login = async (req, res, next) => {
                 return res.send(req.cookies.admin)
             }
         }
-        return res.send("Error name or password incorrect")
+        return res.send(false)
     }
     catch (error) {
         return next(
@@ -66,8 +76,9 @@ exports.login = async (req, res, next) => {
 };
 
 exports.logout = async (req, res, next) => {
-    // Xoá thông tin người dùng từ cookies
-    res.clearCookie('admin');
-    // Chuyển đến HomePage
-    res.redirect('/');
+    // Xoá thông tin admin từ cookies
+    if (req.cookies.admin !== undefined) {
+        res.clearCookie('admin');
+    }
+    res.send("Clear cookies complete");
 }

@@ -16,7 +16,26 @@ exports.create = async (req, res, next) => {
         if (document === undefined) {
             return res.send(false);
         }
-        return res.send(document);
+        else {
+            // Tạo đối tượng user 
+            let user = document
+            user.password = undefined;
+            user.roles = 'user'
+            // Tạo cookies lưu thông tin user
+            res.cookie('user', JSON.stringify(user), {
+                // domain: 'http://localhost:3000/cookies/',
+                // encode
+                // expires
+                httpOnly: true,
+                maxAge: 1000 * 60 * 60 * 24 * 7, // Sau 1 tuần cookie sẽ hết hạng
+                // path
+                // priority
+                secure: false, // Không sử dụng trong sản xuất 
+                // signed
+                sameSite: 'lax' // default là lax 
+            });
+            return res.send(document);
+        }
     }
     catch (error) {
         return next(
@@ -25,19 +44,27 @@ exports.create = async (req, res, next) => {
     }
 };
 
-exports.Login = async (req, res, next) => {
+exports.getCookies = async (req, res, next) => {
+    let user
+    if (req.cookies.user === undefined) {
+        user = []
+    } else {
+        user = JSON.parse(req.cookies.user);
+    }
+    res.send(user)
+}
+
+exports.login = async (req, res, next) => {
     try {
         const usersService = new UsersService(MongoDB.client);
         const document = await usersService.check(req.body);
         if (document) {
             // Load hash from your password DB.
             if (bcrypt.compareSync(req.body.password, document.password)) {
-                // Tạo đối tượng user
-                let user = {
-                    name: document.name,
-                    _id: document._id,
-                    roles: 'user'
-                }
+                // Tạo đối tượng user 
+                let user = document
+                user.password = undefined;
+                user.roles = 'user'
                 // Tạo cookies lưu thông tin user
                 res.cookie('user', JSON.stringify(user), {
                     // domain: 'http://localhost:3000/cookies/',
@@ -64,10 +91,11 @@ exports.Login = async (req, res, next) => {
 };
 
 exports.logout = async (req, res, next) => {
-    // Xoá thông tin người dùng từ cookies
-    res.clearCookie('user');
-    // Chuyển đến HomePage
-    res.redirect('/');
+    // Xoá thông tin user từ cookies
+    if (req.cookies.user !== undefined) {
+        res.clearCookie('user');
+    }
+    res.send("Clear cookies complete");
 }
 
 // Xác thực đăng nhập, được dùng khi thực hiện hành động cần quyền của người dùng

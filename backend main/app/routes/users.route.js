@@ -13,12 +13,16 @@ router.route("/register")
     .post(users.create);
 
 // Đăng nhập 
-router.route('/Login')
-    .post(users.Login);
+router.route('/login')
+    .post(users.login);
 
 // Đăng xuất
-router.route('/Logout')
+router.route('/logout')
     .get(users.logout)
+
+// Lấy cookies
+router.route("/cookies")
+    .get(users.getCookies);
 
 // Tìm người dùng theo id, cập nhật và xoá người dùng 
 router.route('/:id')
