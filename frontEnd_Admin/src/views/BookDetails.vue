@@ -42,7 +42,7 @@
 
                 <!-- Số lượng Book trong kho  -->
                 <div class="row gx-5">
-                    <p>Số lượng sách còn lại: <strong>{{ Book.bookStock - 1 }}</strong></p>
+                    <p>Số lượng sách còn lại: <strong>{{ getBookStock }}</strong></p>
                     <p class="">Đổi trả trong 30 ngày
                         <Modal />
                     </p>
@@ -62,8 +62,8 @@
                     <div class="px-0 fs-5 me-3">Số lượng</div>
                     <div class="btn-group" role="group" aria-label="Basic outlined">
                         <button @click="BookQuantityReduce" type="button" class="btn btn-outline-primary">-</button>
-                        <input required type="number" pattern="[0-9]*" class="btn border" step="1" min="1"
-                            v-model="BookQuantity" :max="Book.bookStock - 1" />
+                        <input required type="number" pattern="[0-9]*" class="btn border" step="1" min="1" width="10px"
+                            v-model="BookQuantity" :max="this.Book.bookStock" />
                         <button @click="BookQuantityIncrease" type="button" class="btn btn-outline-primary">+</button>
                     </div>
                 </div>
@@ -131,10 +131,8 @@ export default {
     },
     data() {
         // Đinh nghĩa thông báo nổi 
-        const customId = 'custom-id';
         const notify = () => {
             toast("Đã Thêm Sản Phẩm Vào Giỏ Hàng", {
-                toastId: customId,
                 autoClose: 1500,
                 limit: 1,
                 type: toast.TYPE.SUCCESS,
@@ -143,28 +141,32 @@ export default {
 
         return {
             BookQuantity: 1,
+            BookStock: this.getBookStock,
             Book: {},
             ImgaeArray: {},
             notify: notify,
-            customId: customId
         }
     },
     computed: {
-
+        getBookStock() {
+            return this.Book.bookStock - this.BookQuantity;
+        }
     },
     methods: {
         // Tăng số lượng sách
         BookQuantityIncrease() {
-            if (this.Book.bookStock > 0) {
+            if (this.BookStock > 0 || this.Book.bookStock) {
                 this.BookQuantity++;
-                this.Book.bookStock--;
+                // this.Book.bookStock--;
+                this.BookStock--;
             }
         },
         // Giảm số lượng sách 
         BookQuantityReduce() {
             if (this.BookQuantity > 1) {
                 this.BookQuantity--;
-                this.Book.bookStock++;
+                // this.Book.bookStock++;
+                this.BookStock++;
             }
         },
 
