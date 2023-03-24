@@ -35,7 +35,8 @@ exports.Login = async (req, res, next) => {
                 // Tạo đối tượng user
                 let user = {
                     name: document.name,
-                    _id: document._id
+                    _id: document._id,
+                    roles: 'user'
                 }
                 // Tạo cookies lưu thông tin user
                 res.cookie('user', JSON.stringify(user), {

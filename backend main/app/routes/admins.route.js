@@ -3,7 +3,16 @@ const admins = require("../controllers/admins.controller");
 
 const router = expires.Router();
 
+// Đăng ký - Tạo 
 router.route("/register")
     .post(admins.create);
+
+// Đăng nhập
+router.route("/login")
+    .post(admins.login);
+
+// Đăng xuất
+router.route("/logout")
+    .get(admins.logout);
 
 module.exports = router;

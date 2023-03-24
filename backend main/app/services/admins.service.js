@@ -43,20 +43,20 @@ class AdminsService {
                 { returnDocument: "after", upsert: true }
             );
 
-            return result;
+            return result.value;
         }
     }
 
-    // // Kiểm tra đăng nhập
-    // async check(filter) {
-    //     const cursor = await this.Admins.findOne({
-    //         name: filter.name
-    //     });
-    //     if (!cursor) {
-    //         return false;
-    //     }
-    //     return await cursor;
-    // }
+    // Kiểm tra đăng nhập
+    async nameCheck(filter) {
+        const cursor = await this.Admins.findOne({
+            name: filter.name
+        });
+        if (!cursor) {
+            return false;
+        }
+        return await cursor;
+    }
 
     // async find(filter) {
     //     const cursor = await this.Admins.find(filter);
