@@ -63,7 +63,7 @@
                     <div class="btn-group" role="group" aria-label="Basic outlined">
                         <button @click="BookQuantityReduce" type="button" class="btn btn-outline-primary">-</button>
                         <input required type="number" pattern="[0-9]*" class="btn border" step="1" min="1" width="10px"
-                            v-model="BookQuantity" :max="this.Book.bookStock" />
+                            v-model="BookQuantity" :max="this.TempBookStock" />
                         <button @click="BookQuantityIncrease" type="button" class="btn btn-outline-primary">+</button>
                     </div>
                 </div>
@@ -159,28 +159,41 @@ export default {
     },
     computed: {
         getBookStock() {
-            if ((this.BookQuantity > this.Book.bookStock) || (this.BookQuantity < 0)) {
+            if ((this.BookQuantity > this.TempBookStock) || (this.BookQuantity < 0)) {
                 alert(`Số lượng sách ${this.BookQuantity} là không hợp lệ.`);
                 this.BookQuantity = 1;
-                return this.Book.bookStock - this.BookQuantity;
+                return this.TempBookStock - this.BookQuantity;
             } else {
-                return this.Book.bookStock - this.BookQuantity;
+                this.Book.bookStock = this.TempBookStock - this.BookQuantity;
+                console.log(this.Book.bookStock);
+                return this.TempBookStock - this.BookQuantity;
             }
         }
     },
     methods: {
+        // Cập nhật dữ liệu vào store và chuyển sang trang Pay
+        PayClick() {
+
+        },
+
         // Tăng số lượng sách
         BookQuantityIncrease() {
             if (this.getBookStock > 0) {
                 this.BookQuantity++;
                 this.BookStock--;
+                // Cập nhật Book.bookStock 
+                this.Book.bookStock--;
+                console.log(this.Book.bookStock);
             }
         },
         // Giảm số lượng sách 
         BookQuantityReduce() {
-            if (this.BookQuantity > 1) {
+            if (this.BookQuantity > 0) {
                 this.BookQuantity--;
                 this.BookStock++;
+                // Cập nhật Book.bookStock 
+                this.Book.bookStock++;
+                console.log(this.Book.bookStock);
             }
         },
 
