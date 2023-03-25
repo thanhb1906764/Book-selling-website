@@ -132,32 +132,47 @@ export default {
     data() {
         // Đinh nghĩa thông báo nổi 
         const notify = () => {
+            console.log(this.Cart);
+            if (this.Cart.find(item => item.idBook === this.id)) {
+                window.location.href = "/Cart";
+            }
             toast("Đã Thêm Sản Phẩm Vào Giỏ Hàng", {
                 autoClose: 1500,
                 limit: 1,
                 type: toast.TYPE.SUCCESS,
-            }); // ToastOptions
+                multiple: false,
+            }); // ToastOptions                            
+            this.notify = function () {
+                window.location.href = "/Cart";
+                return 0;
+            };
         }
-
         return {
+            TempBookStock: {},
             BookQuantity: 1,
             BookStock: this.getBookStock,
             Book: {},
             ImgaeArray: {},
             notify: notify,
+            Cart: [],
         }
     },
     computed: {
         getBookStock() {
-            return this.Book.bookStock - this.BookQuantity;
+            if ((this.BookQuantity > this.Book.bookStock) || (this.BookQuantity < 0)) {
+                alert(`Số lượng sách ${this.BookQuantity} là không hợp lệ.`);
+                this.BookQuantity = 1;
+                return this.Book.bookStock - this.BookQuantity;
+            } else {
+                return this.Book.bookStock - this.BookQuantity;
+            }
         }
     },
     methods: {
         // Tăng số lượng sách
         BookQuantityIncrease() {
-            if (this.BookStock > 0 || this.Book.bookStock) {
+            if (this.getBookStock > 0) {
                 this.BookQuantity++;
-                // this.Book.bookStock--;
                 this.BookStock--;
             }
         },
@@ -165,7 +180,6 @@ export default {
         BookQuantityReduce() {
             if (this.BookQuantity > 1) {
                 this.BookQuantity--;
-                // this.Book.bookStock++;
                 this.BookStock++;
             }
         },
@@ -185,14 +199,33 @@ export default {
             }
         },
 
+        // Lấy carts từ cookies
+        async getCookiesToCheck() {
+            try {
+                axios
+                    .get(`http://localhost:3000/cookies/read`, {
+                        withCredentials: true
+                    })
+                    .then((response) => {
+                        // Gán biến để kiểm tra sản phẩm đã có trong cart hay chưa 
+                        this.Cart = response.data
+                        // console.log(this.Cart)
+                    })
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
         // Lấy Book trong store (nếu có) hoặc từ DB
         async getBook() {
             if (useDataStore().getBooks.length !== 0) {
-                this.Book = useDataStore().getBooks.filter(book => book._id === this.id)[0]
+                this.Book = useDataStore().getBooks.filter(book => book._id === this.id)[0];
+                this.TempBookStock = this.Book.bookStock
             }
             else {
                 try {
                     this.Book = await BooksService.get(this.id);
+                    this.TempBookStock = this.Book.bookStock
                 }
                 catch (error) {
                     console.log(error);
@@ -222,6 +255,7 @@ export default {
     },
     created() {
         // Lấy dữ liệu trước khi kết xuất 
+        this.getCookiesToCheck(); // Do hàm này chỉ run 1 lần nên cần thêm code để xem Book có trong Cart hay không 
         this.getBook();
         this.getImggeArray();
     }
