@@ -100,12 +100,38 @@ export default {
                     // Lưu vào store
                     useDataStore().setAdmin(this.cookies);
                     console.log(this.cookies);
-                    // Chuyển hướng về trang của Admin 
-                    this.$router.replace('/' || '/');
+                    // Lưu vào localStorage 
+                    localStorage.setItem('admin', this.cookies.name)
+                    console.log("Admin: " + localStorage.getItem('admin'))
+                    // Chuyển hướng về trang của Admin
+                    this.$router.push('/Products' || '/');
                 }
             } catch (error) {
                 console.log(error);
             }
+        },
+
+        // Đăng xuất
+        async logout() {
+            try {
+                // Xoá thông tin user từ cookies
+                await AdminsService.logout();
+                // Xoá thông tin user từ store
+                useDataStore().setAdmin([]);
+                // Xoá thông tin user từ localStorage
+                localStorage.removeItem("admin")
+                // Chuyển hướng về HomePage
+                this.$router.push('/Products');
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    },
+    mounted() {
+        // nếu admin đã đã đăng nhập thì chuyển hướng đến /Products
+        console.log(useDataStore().getAdmin);
+        if (useDataStore().getAdmin.name) {
+            this.$router.push('/Products');
         }
     }
 }

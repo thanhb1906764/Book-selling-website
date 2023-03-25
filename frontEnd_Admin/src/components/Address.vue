@@ -13,6 +13,7 @@ export default {
             .get('https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json')
             .then((response) => {
                 this.citys = response.data
+                console.log(response.data)
             })
     },
     computed: {

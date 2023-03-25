@@ -1,4 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router";
+import { useDataStore } from '../stores/dataStores';
 
 // import store from "../store/store"
 
@@ -23,7 +24,7 @@ const routes = [
         // props: true
     },
     {
-        path: "/Admin/Login",
+        path: "/AdminLogin",
         name: "LoginAdmin",
         component: () => import("@/views/LoginAdmin.vue"),
         // props: true
@@ -113,6 +114,29 @@ const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes,
 });
+
+// Xử lý truy cập trái phép - Chưa đăng nhập 
+router.beforeEach(async (to, from, next) => {
+    const id = to.params.id;
+    const publicPagesUser = ['/acc'];
+    const PagesAdmin = ["/Receipts", "/Orders", "/Promotion", "/Catalog", "/Clients", "/Products"]
+    const authRequiredUser = publicPagesUser.includes(to.path);
+    const authRequiredAdmin = PagesAdmin.includes(to.path);
+
+    if (authRequiredUser && !localStorage.getItem('user')) {
+        // redirect the user to the login page
+        next('/UserLogin');
+    } else if ((authRequiredAdmin) && (!localStorage.getItem('admin'))) {
+        // redirect the user to the login page
+        next('/AdminLogin')
+    }
+    else {
+        // Không làm gì 
+        next();
+    }
+})
+
+
 // router.beforeEach((to, from) => {
 //     const authenticated=store.state.isAuthenticated
 //     if ((to.name === 'Home' || to.name === 'diary.edit' || to.name === 'diary.create' || to.name === 'changeName' || to.name === 'changePass' || to.name === 'deleteAcc' )&& authenticated===false) {

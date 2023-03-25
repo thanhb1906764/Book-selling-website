@@ -115,6 +115,9 @@ export default {
                     // Lưu vào store
                     useDataStore().setUser(this.cookies);
                     console.log(this.cookies);
+                    // Lưu vào localStorage 
+                    localStorage.setItem('user', this.cookies.name)
+                    console.log("User: " + localStorage.getItem('user'))
                     // Chuyển hướng về HomePage 
                     this.$router.push('/');
                 }
@@ -126,10 +129,12 @@ export default {
         // Đăng xuất 
         async logout() {
             try {
-                // Xoá thông tin admin từ cookies
+                // Xoá thông tin user từ cookies
                 await UsersService.logout();
-                // Xoá thông tin admin từ store
+                // Xoá thông tin user từ store
                 useDataStore().setUser([]);
+                // Xoá thông tin user từ localStorage
+                localStorage.removeItem("user")
                 // Chuyển hướng về HomePage
                 this.$router.push('/');
             } catch (error) {
