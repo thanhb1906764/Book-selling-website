@@ -169,9 +169,10 @@
                             currency: 'VND'
                         }) }}</small>
                     </div>
+                    <!-- Phí Ship  -->
                     <div class="d-flex justify-content-between">
                         <small class="text-muted">Phí Ship</small>
-                        <small class="">{{ (30000).toLocaleString('vi-VN', {
+                        <small class="">{{ (shipFee).toLocaleString('vi-VN', {
                             style: 'currency',
                             currency: 'VND'
                         }) }}</small>
@@ -200,8 +201,10 @@
 </template>
 
 <script>
+// import here
 import AddressVue from '../components/Address.vue'
-
+import ShipFeeService from '@/services/shipFee.service';
+import { useDataStore } from '../stores/dataStores';
 export default {
     components: {
         AddressVue
@@ -210,6 +213,8 @@ export default {
         return {
             ImgaeArray: {},
             name: null, // Tên user
+            shipFee: Number,
+            tempCost: Number,
         }
     },
     methods: {
@@ -231,10 +236,27 @@ export default {
                     console.log(error);
                 }
             }
+        },
+        // Lấy shipFee 
+        async getShipFee() {
+            try {
+                let temp = await ShipFeeService.getAll();
+                this.shipFee = temp[0].shipFee;
+                // console.log(this.shipFee)
+            }
+            catch (error) {
+                console.log(error);
+            }
+        },
+        async TempAllProduct() {
+            // Tính tạm giá trị các Book trong Cart, chưa tính shipFee 
         }
     },
     mounted() {
+    },
+    created() {
         this.name = localStorage.getItem('user');
+        this.getShipFee()
     }
 
 }

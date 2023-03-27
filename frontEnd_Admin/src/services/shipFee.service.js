@@ -29,3 +29,5 @@ class ShipFeeService {
         return (await this.api.delete(`${id}`)).data;
     }
 }
+
+export default new ShipFeeService();
