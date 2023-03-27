@@ -2,10 +2,8 @@
     <title>Thông tin vận chuyển - Đặt hàng</title>
     <div class="container-sm text-dark py-2">
         <div class="row">
-
             <!-- Nội dung bên trái: Thông tin khách hàng và địa chỉ giao hàng -->
             <div class="col-auto col-sm-6">
-
                 <!-- Thanh điều hướng  -->
                 <nav class="navbar navbar-expand-lg bg-body-tertiary">
                     <div class="container-fluid">
@@ -39,11 +37,11 @@
                     </div>
                 </div>
 
-                <!-- Thẻ, chứa thông tin người dùng (Tên, email, nút đăng xuất) -->
-                <div class="container">
+                <!-- Thẻ, chứa thông tin người dùng (Tên, email, nút đăng xuất), nếu người dùng chưa đăng nhập sẽ không hiển thị -->
+                <div v-if="name !== null" class="container">
                     <ul class="list-group px-2">
                         <li class="list-group-item fw-bolder">
-                            <div><a class="me-2 fa-solid fa-user"></a>Khánh (0330006710)<a href="#"
+                            <div><a class="me-2 fa-solid fa-user"></a>{{ name }}<a href="#"
                                     class="text-decoration-none mx-2 text-danger">Đăng xuất</a></div>
                         </li>
                     </ul>
@@ -211,6 +209,7 @@ export default {
     data() {
         return {
             ImgaeArray: {},
+            name: null, // Tên user
         }
     },
     methods: {
@@ -233,6 +232,10 @@ export default {
                 }
             }
         }
+    },
+    mounted() {
+        this.name = localStorage.getItem('user');
     }
+
 }
 </script>
