@@ -12,6 +12,9 @@ class AddressesService {
             ward: payload.ward,
             streetName: payload.streetName,
             _idUser: payload._idUser,
+            phone: payload.phone,
+            name: payload.phone,
+            default: payload.default
         };
         // remove undefined fields. 
         Object.keys(addresses).forEach(
@@ -33,7 +36,7 @@ class AddressesService {
     async find(filter) {
         const cursor = await this.Addresses.find(filter);
         return await cursor.toArray();
-    } 
+    }
 
     async findByName(name) {
         return await this.find({ name: { $regex: new RegExp(name), $options: "i" }, });

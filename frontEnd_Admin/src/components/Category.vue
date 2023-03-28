@@ -10,10 +10,12 @@
                 @click="getGenreClick(0, category)">
                 <v-menu :location="location" open-on-hover>
                     <template v-slot:activator="{ props }">
-                        <v-list-item-title v-bind="props" class="hover-item">
-                            <router-link to=""></router-link>
-                            {{ category.genreName }}
-                        </v-list-item-title>
+                        <router-link to="/category"><v-list-item-title v-bind="props" class="hover-item">
+
+                                {{ category.genreName }}
+
+
+                            </v-list-item-title> </router-link>
                     </template>
                     <v-list>
                         <v-list-item v-for="(subGenre, index) in category.subGenre" :key="index" :value="index"
@@ -40,8 +42,9 @@ export default {
                 //console.log(useDataStore().getGenreSelected)
             }
             else {
-                console.log(data)
-                useDataStore().setGenreSelected(data)
+                //console.log(data)
+                var a = [data]
+                useDataStore().setGenreSelected(a)
             }
 
 

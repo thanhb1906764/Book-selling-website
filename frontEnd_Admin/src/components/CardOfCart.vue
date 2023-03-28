@@ -74,7 +74,8 @@ export default {
                 try {
                     this.ImgaeArray = await ImagesService.getAll();
                     useDataStore().setImages(this.ImgaeArray);
-                    this.linkImage = this.ImgaeArray.filter(image => image._idBook === this.Book._id)[0].linkImage;
+                    let temp = this.ImgaeArray.filter(image => image._idBook === this.Book._id)
+                    this.linkImage = temp[0].linkImage;
                 }
                 catch (error) {
                     console.log(error);

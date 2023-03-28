@@ -1,6 +1,13 @@
 import { createWebHistory, createRouter } from "vue-router";
 import { useDataStore } from '../stores/dataStores';
-
+// import AccountVue from "@/components/Account.vue";
+import AccountVue from "../views/Account.vue";
+import InfoVue from "@/components/Info.vue";
+import AddressAccVue from "@/components/AddressAcc.vue";
+import OrderVue from "@/components/Order.vue";
+import NewAddress from "@/components/NewAddress.vue"
+import OrderDetailVue from "@/components/OrderDetail.vue";
+import AddressEditVue from "@/components/AddressEdit.vue";
 // import store from "../store/store"
 
 const routes = [
@@ -57,9 +64,22 @@ const routes = [
 
     // Phu
     {
-        path: "/acc",
-        name: "acc",
-        component: () => import("@/views/Account.vue"),
+        path: '/acc',
+        component: AccountVue,
+        children: [
+            { path: "info", component: InfoVue },
+            { path: "address", component: AddressAccVue },
+            { path: "order", component: OrderVue },
+            { path: "address/add", component: NewAddress },
+            { path: "address/edit/:id", name: "AddressEditVue", component: AddressEditVue },
+            { path: "order/:id", name: "OrderDetail", component: OrderDetailVue, },
+
+        ]
+    },
+    {
+        path: "/category",
+        name: "category",
+        component: () => import("../components/CategoryView.vue"),
     },
 
 

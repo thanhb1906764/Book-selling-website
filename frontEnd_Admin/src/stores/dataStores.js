@@ -6,7 +6,10 @@ export const useDataStore = defineStore('data', {
         Books: [],
         Images: [],
         admin: [],
+        address: [],
         user: [],
+        // user: { _id: "63fd659dfb9d13249a5499b5", name: 'Lê Quang Phú', phone: '0915101852' },
+        genreSelected: [],
         Genes: [
             {
                 id: "sdae3e",
@@ -111,7 +114,9 @@ export const useDataStore = defineStore('data', {
         getOrderConfirmation: state => state.orderConfirmation,
         getOrderList: state => state.orderList,
         getReceiptList: state => state.receiptList,
-        getTagList: state => state.tagList
+        getTagList: state => state.tagList,
+        getAddress: state => state.address,
+        getGenreSelected: state => state.genreSelected,
     },
 
     actions: {
@@ -167,6 +172,16 @@ export const useDataStore = defineStore('data', {
         setGenreSelected(data) {
             this.$patch((state) => {
                 state.genreSelected = data
+            })
+        },
+        getAPIOrder(data) {
+            this.$patch((state) => {
+                state.orderList = data
+            })
+        },
+        getAPIAddress(data) {
+            this.$patch((state) => {
+                state.address = data
             })
         },
     }
