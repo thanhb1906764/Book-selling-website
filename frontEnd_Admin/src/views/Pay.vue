@@ -52,44 +52,46 @@
                 <div class="container">
                     <div class="p-2">
 
-                        <!-- Địa chỉ giao hàng - select -->
-                        <div class="form-group form-floating mb-2">
+                        <!-- Địa chỉ giao hàng, nếu đã đăng nhập -->
+                        <div v-if="name !== null" class="form-group form-floating mb-2">
                             <select class="form-select" aria-label="Default select example">
-                                <option selected>Chọn Địa Chỉ</option>
+                                <option v-for="address in addressList" :key="address._id" selected>{{ address.ward }}, {{
+                                    address.district }}, {{ address.city }}</option>
                             </select>
                             <label class="fs-6" for="floatingInput">Địa chỉ</label>
                         </div>
 
                         <!-- Tên khách hàng -->
                         <div class="form-floating mb-2">
-                            <input type="email" class="form-control" placeholder="name@example.com">
+                            <input type="email" class="form-control" placeholder="name@example.com"
+                                v-model="order.userName">
                             <label class="fs-6" for="floatingInput">Họ tên</label>
                         </div>
 
                         <!-- Số điện thoại  -->
                         <div class="form-floating mb-2">
-                            <input type="text" class="form-control" placeholder="name@example.com">
+                            <input type="text" class="form-control" placeholder="name@example.com" v-model="order.phone">
                             <label class="fs-6" for="floatingInput">Số điện thoại</label>
                         </div>
 
 
                         <!-- Địa chỉ - input-->
                         <div class="form-floating mb-2">
-                            <input type="text" class="form-control" placeholder="name@example.com">
+                            <input type="text" class="form-control" v-model="order.reAddress">
                             <label class="fs-6" for="floatingInput">Địa chỉ</label>
                         </div>
 
 
                         <!-- Chọn Tỉnh, Quận, Huyện theo Select -->
-                        <AddressVue />
+                        <!-- <AddressVue /> -->
 
 
                         <!-- Chọn phương thức thanh toán -->
                         <div class="form-group form-floating mb-2">
-                            <select required class="form-select" aria-label="">
-                                <option selected value="payment">Chọn phương thức thanh toán</option>
-                                <option value="cash">Thanh toán khi nhận hàng</option>
-                                <option value="bankTransfer">Chuyển khoản</option>
+                            <select required class="form-select" aria-label="" v-model="order.payment">
+                                <!-- <option selected value="payment">Chọn phương thức thanh toán</option> -->
+                                <option value="Thanh toán khi nhận hàng">Thanh toán khi nhận hàng</option>
+                                <option value="Chuyển khoản">Chuyển khoản</option>
                             </select>
                             <label class="fs-6" for="payment">Phương thức thanh toán</label>
                         </div>
@@ -98,7 +100,7 @@
                         <!-- Nút Giỏ hàng và Chọn phương thức thanh toán -->
                         <div class="d-flex justify-content-end">
                             <!-- <a class="btn btn-outline-primary">Giỏ hàng</a> -->
-                            <button class="btn btn-primary">Đặt hàng</button>
+                            <button @click="submitOrder" class="btn btn-primary">Đặt hàng</button>
                         </div>
 
                     </div>
@@ -113,36 +115,8 @@
             <div class="col-auto col-sm-6 border-start">
 
                 <!-- Danh sách sản phẩm - sách  -->
-                <div class="container">
-
-                    <table class="table">
-                        <tbody>
-
-                            <tr style="font-size: 12px;">
-                                <td class="" style="width: 20%">
-                                    <div class="figure position-relative">
-                                        <img src="https://product.hstatic.net/200000343865/product/4_5f9624b1ec774721962320840ac57f15_master.jpg"
-                                            width="60" class="rounded" alt="...">
-                                        <span
-                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">1</span>
-                                    </div>
-                                </td>
-                                <td class="align-middle fw-bold" style="width: 70%;">Kaguya - Cuộc chiến tỏ tình - Tập 4
-                                    (Tặng Kèm 1
-                                    Trong 2 Mẫu Thẻ Học Sinh)</td>
-                                <td class="align-middle" style="width: 10%;">
-                                    <!-- <div class="text-decoration-line-through text-muted">40000đ</div>
-                                    <hr /> -->
-                                    <div class="text-danger fw-bolder">{{ (36000).toLocaleString('vi-VN', {
-                                        style: 'currency',
-                                        currency: 'VND'
-                                    }) }}</div>
-                                </td>
-                            </tr>
-                        </tbody>
-
-                    </table>
-
+                <div v-for="item in BookInCart" :key="item._id" class="container">
+                    <PayCardsVue :Book="item" :Cart="Cart" />
                 </div>
 
                 <!-- Mã giảm giá  -->
@@ -164,7 +138,7 @@
 
                     <div class="d-flex justify-content-between py-2">
                         <small class="text-muted">Tính tạm</small>
-                        <small class="">{{ (72000).toLocaleString('vi-VN', {
+                        <small v-bind="order.totalProductMoney" class="">{{ (tempCost).toLocaleString('vi-VN', {
                             style: 'currency',
                             currency: 'VND'
                         }) }}</small>
@@ -172,7 +146,7 @@
                     <!-- Phí Ship  -->
                     <div class="d-flex justify-content-between">
                         <small class="text-muted">Phí Ship</small>
-                        <small class="">{{ (shipFee).toLocaleString('vi-VN', {
+                        <small class="" v-bind="order.orderTotal">{{ (shipFee).toLocaleString('vi-VN', {
                             style: 'currency',
                             currency: 'VND'
                         }) }}</small>
@@ -187,7 +161,7 @@
 
                     <div class="d-flex justify-content-between">
                         <div class="text-muted fs-6">Tổng tiền</div>
-                        <div class="fw-bolder">{{ (102000).toLocaleString('vi-VN', {
+                        <div class="fw-bolder">{{ (shipFee + tempCost).toLocaleString('vi-VN', {
                             style: 'currency',
                             currency: 'VND'
                         }) }}</div>
@@ -202,22 +176,65 @@
 
 <script>
 // import here
-import AddressVue from '../components/Address.vue'
-import ShipFeeService from '@/services/shipFee.service';
+import AddressVue from '../components/Address.vue';
+import PayCardsVue from '../components/PayCards.vue';
+
 import { useDataStore } from '../stores/dataStores';
+import BooksService from '@/services/books.service';
+import ShipFeeService from '@/services/shipFee.service';
+import AddressesService from '@/services/addresses.service';
+import OrdersService from '@/services/orders.service';
+
+import axios from 'axios';
+import { number } from 'yup';
 export default {
     components: {
-        AddressVue
+        AddressVue,
+        PayCardsVue,
     },
     data() {
         return {
-            ImgaeArray: {},
+            ImgaeArray: [],
             name: null, // Tên user
             shipFee: Number,
-            tempCost: Number,
+            tempCost: 0,
+            user: {},
+            bookList: [],
+            BookInCart: [],
+            Cart: this.getCartOnCookie(),
+            addressList: [],
+            addressDefault: {},
+            order: {
+                type: Object,
+                required: true,
+                reDate: new Date(0),
+                orderDate: new Date(),
+                orderStatus: 'Chờ xác nhận',
+                userId: localStorage.getItem('_id') || null,
+            },
+        }
+    },
+    computed: {
+        getOrderTotal() {
+            return this.shipFee + this.tempCost;
+        },
+        getTotalProductMoney() {
+            return this.tempCost;
         }
     },
     methods: {
+        // Lấy địa chỉ của người dùng nếu có đăng nhập 
+        async getAddressList() {
+            let addressList = await AddressesService.getAll();
+            addressList = addressList.filter(address => address._idUser === '63fd659dfb9d13249a5499b5')
+            console.log('Address');
+            console.log(addressList);
+            this.addressList = addressList;
+            this.addressDefault = addressList.filter(address => address?.default === true)[0]
+            console.log('Address default');
+            console.log(this.addressDefault);
+            return addressList;
+        },
 
         // Lấy tất cả những image của sách  
         async getImggeArray() {
@@ -237,26 +254,113 @@ export default {
                 }
             }
         },
+
         // Lấy shipFee 
         async getShipFee() {
             try {
                 let temp = await ShipFeeService.getAll();
                 this.shipFee = temp[0].shipFee;
-                // console.log(this.shipFee)
+                console.log('shipFee ' + this.shipFee)
+                this.order.shipFee = this.shipFee
             }
             catch (error) {
                 console.log(error);
             }
         },
-        async TempAllProduct() {
-            // Tính tạm giá trị các Book trong Cart, chưa tính shipFee 
+
+        // Lấy sách có trong giỏ hàng
+        async retrieveBookOnCart() {
+            try {
+                // Lấy tất cả sách trên DataBase 
+                this.bookList = await BooksService.getAll();
+                // Lọc những sách có bookPrice, originalPrice và author
+                this.bookList = this.bookList.filter(itemBook => (itemBook.bookPrice && itemBook.originalPrice && itemBook.author))
+                // Lấy sách trong có trong giỏ hàng 
+                this.order.productList = []
+                for (let i = 0; i < this.Cart.length; i++) {
+                    let temp = this.bookList.find(Book => Book._id === this.Cart[i].idBook);
+                    let tempProduct = {}
+                    if (temp) {
+                        // Tạo đối tượng để thêm sản phẩm vào productList 
+                        tempProduct = {
+                            _idBook: temp._id,
+                            quantity: parseInt(this.Cart[i].quantityBook, 10),
+                            price: temp.bookPrice,
+                        }
+                        this.order.productList.push(tempProduct)
+                        this.BookInCart.push(temp)
+                    }
+                }
+                console.log('BookList in cart');
+                console.log(this.BookInCart);
+
+                // Tính tạm giá trị các Book trong Cart, chưa tính shipFee 
+                for (let i = 0; i < this.BookInCart.length; i++) {
+                    this.tempCost = this.tempCost + this.BookInCart[i].bookPrice
+                    // console.log(this.BookInCart[i].bookPrice);
+                }
+                // console.log(this.tempCost);
+                this.order.totalProductMoney = this.tempCost
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        // Lấy giỏ hàng trên cookies
+        async getCartOnCookie() {
+            try {
+                axios
+                    .get(`http://localhost:3000/cookies/read`, {
+                        withCredentials: true
+                    })
+                    .then((response) => {
+                        this.Cart = response.data
+                        console.log('Cart on cookies');
+                        console.log(this.Cart)
+                        return response.data
+                    })
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        // submit
+        async submitOrder() {
+            try {
+                console.log(this.order);
+                let order = await OrdersService.create(this.order)
+                if (order === undefined)
+                    alert('Tạo đơn hàng không thành công');
+                else {
+                    console.log(order);
+                    // this.cookies = await UsersService.getCookies();
+                    // // Lưu vào store
+                    // useDataStore().setUser(this.cookies);
+                    // console.log(this.cookies);
+                    // // Lưu vào localStorage 
+                    // localStorage.setItem('name', this.cookies.name)
+                    // console.log("User: " + localStorage.getItem('name'))
+                    // localStorage.setItem('_id', this.cookies._id)
+                    // console.log("id_ " + localStorage.getItem('_id'))
+                    // console.log(useDataStore().getUser);
+                    // // Chuyển hướng về HomePage 
+                    // this.$router.push('/');
+                }
+            }
+            catch (error) {
+
+            }
         }
     },
     mounted() {
+        // console.log(this.addressList);
     },
     created() {
         this.name = localStorage.getItem('user');
         this.getShipFee()
+        this.retrieveBookOnCart();
+        this.getAddressList();
+
     }
 
 }

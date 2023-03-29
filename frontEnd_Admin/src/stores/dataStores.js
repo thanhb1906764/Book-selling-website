@@ -7,8 +7,8 @@ export const useDataStore = defineStore('data', {
         Images: [],
         admin: [],
         address: [],
-        user: [],
-        // user: { _id: "63fd659dfb9d13249a5499b5", name: 'Lê Quang Phú', phone: '0915101852' },
+        // user: [],
+        user: { _id: "63fd659dfb9d13249a5499b5", name: 'Lê Quang Phú', phone: '0915101852' },
         genreSelected: [],
         Genes: [
             {

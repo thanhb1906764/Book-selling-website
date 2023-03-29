@@ -8,7 +8,7 @@ class OrdersService {
     extractOrdersData(payload) {
         const orders = {
             reDate: payload.reDate,
-            orderTotal: payload.orderTotal,
+            orderTotal: payload.totalProductMoney + payload.shipFee,
             shipFee: payload.shipFee,
             totalProductMoney: payload.totalProductMoney,
             payment: payload.payment,
@@ -18,6 +18,7 @@ class OrdersService {
             phone: payload.phone,
             reAddress: payload.reAddress,
             userId: payload.userId,
+            userName: payload.userName
         };
         // remove undefined fields. 
         Object.keys(orders).forEach(

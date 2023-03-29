@@ -52,36 +52,37 @@ export default {
     },
     data() {
         return {
-            Cart: [],
+            Cart: this.getCartOnCookie(),
             Books: [],
             BookInCart: []
         }
     },
     methods: {
         async retrieveBookOnCookies() {
-            if (useDataStore().getBooks.length !== 0) {
-                this.Books = useDataStore().getBooks
-            }
-            else {
-                try {
-                    this.Books = await BooksService.getAll();
-                    this.Books = this.Books.filter(itemBook => (itemBook.bookPrice && itemBook.originalPrice && itemBook.author))
-                    // console.log(this.Cart);
-                    for (let i = 0; i < this.Cart.length; i++) {
-                        let temp = this.Books.find(Book => Book._id === this.Cart[i].idBook);
-                        if (temp) {
-                            this.BookInCart.push(temp)
-                        }
+            // if (useDataStore().getBooks.length !== 0) {
+            //     this.Books = useDataStore().getBooks
+            // }
+            // else {
+            try {
+                // Lấy tất cả sách trên DataBase 
+                this.Books = await BooksService.getAll();
+                // Lọc những sách có bookPrice, originalPrice và author
+                this.Books = this.Books.filter(itemBook => (itemBook.bookPrice && itemBook.originalPrice && itemBook.author))
+                // Lấy sách trong có trong giỏ hàng 
+                for (let i = 0; i < this.Cart.length; i++) {
+                    let temp = this.Books.find(Book => Book._id === this.Cart[i].idBook);
+                    if (temp) {
+                        this.BookInCart.push(temp)
                     }
-                    // console.log(this.BookInCart);
-                    // location.reload();
-                } catch (error) {
-                    console.log(error);
                 }
+                // console.log(this.BookInCart);
+            } catch (error) {
+                console.log(error);
             }
+            // }
         },
 
-        // Lấy cart trong cookies
+        // Lấy giỏ hàng trên cookies
         async getCartOnCookie() {
             try {
                 axios
@@ -89,8 +90,8 @@ export default {
                         withCredentials: true
                     })
                     .then((response) => {
-                        // console.log(response.data)
                         this.Cart = response.data
+                        console.log(this.Cart)
                         return response.data
                     })
             } catch (error) {
@@ -100,12 +101,9 @@ export default {
 
     },
     mounted() {
-
     },
     created() {
         this.retrieveBookOnCookies();
-        this.getCartOnCookie();
-
     }
 }
 </script>

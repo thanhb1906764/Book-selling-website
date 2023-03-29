@@ -116,11 +116,13 @@ export default {
                     useDataStore().setUser(this.cookies);
                     console.log(this.cookies);
                     // Lưu vào localStorage 
-                    localStorage.setItem('user', this.cookies.name)
-                    console.log("User: " + localStorage.getItem('user'))
+                    localStorage.setItem('name', this.cookies.name)
+                    console.log("User: " + localStorage.getItem('name'))
+                    localStorage.setItem('_id', this.cookies._id)
+                    console.log("id_ " + localStorage.getItem('_id'))
                     console.log(useDataStore().getUser);
                     // Chuyển hướng về HomePage 
-                    // this.$router.push('/');
+                    this.$router.push('/');
                 }
             } catch (error) {
                 console.log(error);

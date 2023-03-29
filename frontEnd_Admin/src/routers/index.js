@@ -136,25 +136,25 @@ const router = createRouter({
 });
 
 // Xử lý truy cập trái phép - Chưa đăng nhập 
-router.beforeEach(async (to, from, next) => {
-    const id = to.params.id;
-    const publicPagesUser = ['/acc'];
-    const PagesAdmin = ["/Receipts", "/Orders", "/Promotion", "/Catalog", "/Clients", "/Products"]
-    const authRequiredUser = publicPagesUser.includes(to.path);
-    const authRequiredAdmin = PagesAdmin.includes(to.path);
+// router.beforeEach(async (to, from, next) => {
+//     const id = to.params.id;
+//     const publicPagesUser = ['/acc'];
+//     const PagesAdmin = ["/Receipts", "/Orders", "/Promotion", "/Catalog", "/Clients", "/Products"]
+//     const authRequiredUser = publicPagesUser.includes(to.path);
+//     const authRequiredAdmin = PagesAdmin.includes(to.path);
 
-    if (authRequiredUser && !localStorage.getItem('user')) {
-        // redirect the user to the login page
-        next('/UserLogin');
-    } else if ((authRequiredAdmin) && (!localStorage.getItem('admin'))) {
-        // redirect the user to the login page
-        next('/AdminLogin')
-    }
-    else {
-        // Không làm gì 
-        next();
-    }
-})
+//     if (authRequiredUser && !localStorage.getItem('user')) {
+//         // redirect the user to the login page
+//         next('/UserLogin');
+//     } else if ((authRequiredAdmin) && (!localStorage.getItem('admin'))) {
+//         // redirect the user to the login page
+//         next('/AdminLogin')
+//     }
+//     else {
+//         // Không làm gì 
+//         next();
+//     }
+// })
 
 
 // router.beforeEach((to, from) => {
