@@ -16,7 +16,8 @@ class OrdersService {
             orderDate: payload.orderDate,
             orderStatus: payload.orderStatus,
             phone: payload.phone,
-            reAddress: payload.reAddress
+            reAddress: payload.reAddress,
+            userId: payload.userId,
         };
         // remove undefined fields. 
         Object.keys(orders).forEach(
