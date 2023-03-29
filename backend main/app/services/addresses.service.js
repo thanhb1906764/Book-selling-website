@@ -13,7 +13,7 @@ class AddressesService {
             streetName: payload.streetName,
             _idUser: payload._idUser,
             phone: payload.phone,
-            name: payload.phone,
+            name: payload.name,
             default: payload.default
         };
         // remove undefined fields. 
