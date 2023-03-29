@@ -178,7 +178,6 @@
 // import here
 import AddressVue from '../components/Address.vue';
 import PayCardsVue from '../components/PayCards.vue';
-
 import { useDataStore } from '../stores/dataStores';
 import BooksService from '@/services/books.service';
 import ShipFeeService from '@/services/shipFee.service';
@@ -195,13 +194,13 @@ export default {
     data() {
         return {
             ImgaeArray: [],
-            name: null, // Tên user
+            name: null, // Tên user, nếu người dùng có đăng nhập 
             shipFee: Number,
             tempCost: 0,
             user: {},
             bookList: [],
-            BookInCart: [],
-            Cart: this.getCartOnCookie(),
+            BookInCart: [], // Lưu những book có trong giỏ hàng 
+            Cart: this.getCartOnCookie(), // Lưu số lượng, id sách được đặt hàng
             addressList: [],
             addressDefault: {},
             order: {
@@ -327,30 +326,55 @@ export default {
         // submit
         async submitOrder() {
             try {
+                // Nếu không có sách trong giỏ hàng thì không được đặt hàng
+                if (this.BookInCart.length === 0) {
+                    alert('Không có sản phẩm nào trong giỏ');
+                    return 0;
+                }
                 console.log(this.order);
                 let order = await OrdersService.create(this.order)
                 if (order === undefined)
                     alert('Tạo đơn hàng không thành công');
                 else {
+                    // Kiểm tra order 
                     console.log(order);
-                    // this.cookies = await UsersService.getCookies();
-                    // // Lưu vào store
-                    // useDataStore().setUser(this.cookies);
-                    // console.log(this.cookies);
-                    // // Lưu vào localStorage 
-                    // localStorage.setItem('name', this.cookies.name)
-                    // console.log("User: " + localStorage.getItem('name'))
-                    // localStorage.setItem('_id', this.cookies._id)
-                    // console.log("id_ " + localStorage.getItem('_id'))
-                    // console.log(useDataStore().getUser);
-                    // // Chuyển hướng về HomePage 
+                    // Cập nhật bookStock cho book 
+                    let book = Object
+                    let quantityBook
+                    for (let i = 0; i < this.BookInCart.length; i++) {
+                        quantityBook = this.Cart.find(book => book.idBook === this.BookInCart[i]._id).quantityBook
+                        console.log(quantityBook);
+                        book = {
+                            bookStock: (parseInt(this.BookInCart[i].bookStock, 10) - parseInt(quantityBook, 10))
+                        }
+                        await BooksService.update(this.BookInCart[i]._id, book)
+                    }
+                    // Destroy cookies giỏ hàng - cart sau khi đặt hàng thành công
+                    this.deleteCart();
+                    // Chuyển hướng đến trang ...
                     // this.$router.push('/');
                 }
             }
             catch (error) {
-
+                console.log(error);
             }
-        }
+        },
+
+        // Xoá cookie giỏ hàng 
+        async deleteCart() {
+            try {
+                axios
+                    .get(`http://localhost:3000/cookies/clear`, {
+                        withCredentials: true
+                    })
+                    .then((response) => {
+                        console.log(response.data)
+                    })
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
     },
     mounted() {
         // console.log(this.addressList);
