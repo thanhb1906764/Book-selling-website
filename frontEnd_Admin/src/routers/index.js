@@ -68,7 +68,7 @@ const routes = [
         component: AccountVue,
         children: [
             { path: "info", component: InfoVue },
-            { path: "address", component: AddressAccVue },
+            { path: "address",name:"AddressAcc", component: AddressAccVue },
             { path: "order", component: OrderVue },
             { path: "address/add", component: NewAddress },
             { path: "address/edit/:id", name: "AddressEditVue", component: AddressEditVue },
