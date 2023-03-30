@@ -91,6 +91,7 @@ export default {
 
         if (this.orderDetail[0].orderStatus !== "Chờ xác nhận" )
             this.isDisable = true
+            
     },
     methods: {
         calc(price, quantity) {
