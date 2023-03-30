@@ -12,6 +12,7 @@ class CommentsService {
             commentDate: payload.commentDate,
             phone: payload.phone,
             _idBook: payload._idBook,
+            _idUser: payload._idUser
         };
         // remove undefined fields. 
         Object.keys(comments).forEach(
