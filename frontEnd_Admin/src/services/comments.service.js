@@ -4,6 +4,10 @@ class CommentsService {
     constructor(baseUrl = "/api/Comments") {
         this.api = createApiClient(baseUrl);
     }
+    async create(data) {
+        return (await this.api.post("/", data)).data;
+    }
+
     async getAll(data) {
         return (await this.api.get("/", data)).data;
     }

@@ -200,7 +200,7 @@ export default {
             user: {},
             bookList: [],
             BookInCart: [], // Lưu những book có trong giỏ hàng 
-            Cart: this.getCartOnCookie(), // Lưu số lượng, id sách được đặt hàng
+            Cart: [], // Lưu số lượng, id sách được đặt hàng
             addressList: [],
             addressDefault: {},
             order: {
@@ -272,8 +272,10 @@ export default {
             try {
                 // Lấy tất cả sách trên DataBase 
                 this.bookList = await BooksService.getAll();
+
                 // Lọc những sách có bookPrice, originalPrice và author
                 this.bookList = this.bookList.filter(itemBook => (itemBook.bookPrice && itemBook.originalPrice && itemBook.author))
+
                 // Lấy sách trong có trong giỏ hàng 
                 this.order.productList = []
                 for (let i = 0; i < this.Cart.length; i++) {
@@ -290,12 +292,16 @@ export default {
                         this.BookInCart.push(temp)
                     }
                 }
+
                 console.log('BookList in cart');
                 console.log(this.BookInCart);
+                let quantity
 
                 // Tính tạm giá trị các Book trong Cart, chưa tính shipFee 
                 for (let i = 0; i < this.BookInCart.length; i++) {
-                    this.tempCost = this.tempCost + this.BookInCart[i].bookPrice
+                    quantity = this.Cart.find(item => item.idBook === this.BookInCart[i]._id).quantityBook
+                    console.log(quantity);
+                    this.tempCost = this.tempCost + (this.BookInCart[i].bookPrice * parseInt(quantity, 10))
                     // console.log(this.BookInCart[i].bookPrice);
                 }
                 // console.log(this.tempCost);
@@ -340,10 +346,13 @@ export default {
                     console.log(order);
                     // Cập nhật bookStock cho book 
                     let book = Object
-                    let quantityBook
+                    // let quantityBook
+                    // // L
+
+
                     for (let i = 0; i < this.BookInCart.length; i++) {
-                        quantityBook = this.Cart.find(book => book.idBook === this.BookInCart[i]._id).quantityBook
-                        console.log(quantityBook);
+                        // quantityBook = this.Cart.find(book => book.idBook === this.BookInCart[i]._id).quantityBook
+                        // console.log(quantityBook);
                         book = {
                             bookStock: (parseInt(this.BookInCart[i].bookStock, 10) - parseInt(quantityBook, 10))
                         }
@@ -381,8 +390,9 @@ export default {
     },
     created() {
         this.name = localStorage.getItem('user');
-        this.getShipFee()
+        this.Cart = this.getCartOnCookie();
         this.retrieveBookOnCart();
+        this.getShipFee()
         this.getAddressList();
 
     }

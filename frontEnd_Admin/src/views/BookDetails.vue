@@ -42,7 +42,7 @@
 
                 <!-- Số lượng Book trong kho  -->
                 <div class="row gx-5">
-                    <p>Số lượng sách còn lại: <strong>{{ getBookStock }}</strong></p>
+                    <p>Số lượng sách còn lại: <strong>{{ Book.bookStock }}</strong></p>
                     <p class="">Đổi trả trong 30 ngày
                         <Modal />
                     </p>
@@ -58,7 +58,7 @@
                 </div> -->
 
                 <!-- Số lượng sách sẽ mua  -->
-                <div style="display: flex; justify-content: start; align-items: center;">
+                <div v-if="Book.bookStock !== 0" style="display: flex; justify-content: start; align-items: center;">
                     <div class="px-0 fs-5 me-3">Số lượng</div>
                     <div class="btn-group" role="group" aria-label="Basic outlined">
                         <button @click="BookQuantityReduce" type="button" class="btn btn-outline-primary">-</button>
@@ -71,10 +71,15 @@
                 <hr />
 
                 <!-- Button  -->
-                <div class="py-3">
-                    <a href="/Pay" class="btn btn-danger">Mua Ngay</a>
+                <div v-if="Book.bookStock !== 0" class="py-3">
+                    <span @click="PayClick" class="btn btn-danger">Mua Ngay</span>
                     <span @click="addProductToCart" class="px-2"><a @click="notify" class="btn btn-outline-danger">Thêm Vào
                             Giỏ Hàng</a></span>
+                </div>
+
+                <!-- Hết hàng  -->
+                <div v-if="Book.bookStock === 0" class="text-danger fs-3 fw-bold">
+                    Hết hàng
                 </div>
             </div>
         </div>
@@ -109,7 +114,6 @@
         </div>
     </div>
 </template>
-
 <script>
 // Import here 
 import Carousel_Img from '../components/Carousel_Img.vue';
@@ -148,9 +152,7 @@ export default {
             };
         }
         return {
-            TempBookStock: {},
             BookQuantity: 1,
-            BookStock: this.getBookStock,
             Book: {},
             ImgaeArray: {},
             notify: notify,
@@ -158,42 +160,24 @@ export default {
         }
     },
     computed: {
-        getBookStock() {
-            if ((this.BookQuantity > this.TempBookStock) || (this.BookQuantity < 0)) {
-                alert(`Số lượng sách ${this.BookQuantity} là không hợp lệ.`);
-                this.BookQuantity = 1;
-                return this.TempBookStock - this.BookQuantity;
-            } else {
-                this.Book.bookStock = this.TempBookStock - this.BookQuantity;
-                console.log(this.Book.bookStock);
-                return this.TempBookStock - this.BookQuantity;
-            }
-        }
     },
     methods: {
         // Cập nhật dữ liệu vào store và chuyển sang trang Pay
         PayClick() {
-
+            this.addProductToCart();
+            this.$router.push('/Pay');
         },
 
         // Tăng số lượng sách
         BookQuantityIncrease() {
-            if (this.getBookStock > 0) {
+            if (this.BookQuantity < this.Book.bookStock) {
                 this.BookQuantity++;
-                this.BookStock--;
-                // Cập nhật Book.bookStock 
-                this.Book.bookStock--;
-                console.log(this.Book.bookStock);
             }
         },
         // Giảm số lượng sách 
         BookQuantityReduce() {
             if (this.BookQuantity > 0) {
                 this.BookQuantity--;
-                this.BookStock++;
-                // Cập nhật Book.bookStock 
-                this.Book.bookStock++;
-                console.log(this.Book.bookStock);
             }
         },
 
@@ -264,7 +248,6 @@ export default {
         }
     },
     mounted() {
-
     },
     created() {
         // Lấy dữ liệu trước khi kết xuất 

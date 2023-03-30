@@ -1,33 +1,39 @@
 <template>
-    <table class="table">
-        <tbody>
-            <tr style="font-size: 12px;">
+    <router-link :to="{
+        name: 'BookDetails',
+        params: { id: Book._id },
+    }">
+        <table class="table">
+            <tbody>
+                <tr style="font-size: 12px;">
 
-                <!-- Image -->
-                <td class="" style="width: 20%">
-                    <div class="figure position-relative">
-                        <img src="https://product.hstatic.net/200000343865/product/4_5f9624b1ec774721962320840ac57f15_master.jpg"
-                            width="60" class="rounded" alt="...">
+                    <!-- Image -->
+                    <td class="" style="width: 20%">
+                        <div class="figure position-relative">
+                            <img src="https://product.hstatic.net/200000343865/product/4_5f9624b1ec774721962320840ac57f15_master.jpg"
+                                width="60" class="rounded" alt="...">
 
-                        <!-- Số lượng sách  -->
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{
-                            BookQuantity }}</span>
-                    </div>
-                </td>
+                            <!-- Số lượng sách  -->
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{
+                                BookQuantity }}</span>
+                        </div>
+                    </td>
 
-                <!-- Tên sách  -->
-                <td class="align-middle fw-bold" style="width: 70%;">{{ Book.bookName }}</td>
+                    <!-- Tên sách  -->
+                    <td class="align-middle fw-bold" style="width: 70%;">{{ Book.bookName }}</td>
 
-                <!-- Giá sách, tính theo giá khuyến mãi nếu có  -->
-                <td class="align-middle" style="width: 10%;">
-                    <div class="text-danger fw-bolder">{{ (Book.bookPrice).toLocaleString('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND'
-                    }) }}</div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                    <!-- Giá sách, tính theo giá khuyến mãi nếu có  -->
+                    <td class="align-middle" style="width: 10%;">
+                        <div class="text-danger fw-bolder">{{ (Book.bookPrice * parseInt(BookQuantity,
+                            10)).toLocaleString('vi-VN', {
+                                style: 'currency',
+                                currency: 'VND'
+                            }) }}</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </router-link>
 </template>
 <script>
 // Import here

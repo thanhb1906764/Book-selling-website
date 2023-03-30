@@ -39,14 +39,14 @@
         <!-- Các thành phần - nội dung chính trong trang   -->
         <div id="content">
             <div class="p-2 fw-semibold fs-5 text-center">
-                <a href="#hot" class="text-danger text-decoration-none px-2 btn">Sản Phẩm HOT</a>
-                <a href="#new" class="text-danger text-decoration-none px-2 btn">Sản Phẩm Mới</a>
+                <!-- <a href="#hot" class="text-danger text-decoration-none px-2 btn">Sản Phẩm HOT</a>
+                <a href="#new" class="text-danger text-decoration-none px-2 btn">Sản Phẩm Mới</a> -->
                 <a href="#product" class="text-danger text-decoration-none px-2 btn">Sản Phẩm</a>
             </div>
         </div>
 
         <!-- Sản phẩm HOT -->
-        <div id="hot">
+        <!-- <div id="hot">
             <div class="p-2 fw-semibold fs-5" style="background-color: #eb0200;">
                 <a href="#" class="text-white text-decoration-none">Sản Phẩm HOT</a>
             </div>
@@ -57,10 +57,10 @@
                     </v-col>
                 </v-row>
             </div>
-        </div>
+        </div> -->
 
         <!-- Sản phẩm mới - New  -->
-        <div id="new">
+        <!-- <div id="new">
             <div class="p-2 fw-semibold fs-5" style="background-color:  #1c73e8;">
                 <a href="#" class="text-white text-decoration-none">Sản Phẩm Mới</a>
             </div>
@@ -71,7 +71,7 @@
                     </v-col>
                 </v-row>
             </div>
-        </div>
+        </div> -->
 
         <!-- Sản phẩm -->
         <div id="product">
