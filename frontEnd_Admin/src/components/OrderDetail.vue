@@ -7,7 +7,7 @@
                 <div>{{ this.orderDetail[0].orderStatus }}</div>
 
                 <div>Ngày mua: {{ this.orderDetail[0].orderDate }}</div>
-                <div>Ngày nhận: {{ this.orderDetail[0].reDate }}</div>
+                <div v-show="show" >Ngày nhận: {{ showDate(this.orderDetail[0].reDate) }}</div>
                 <div>Tổng tiền: {{ this.orderDetail[0].orderTotal }}</div>
             </div>
             <div class="col">
@@ -79,6 +79,7 @@
 import axios from 'axios'
 import { useDataStore } from '@/stores/dataStores'
 import ImagesService from '@/services/images.service'
+import orderService from "../services/orders.service"
 
 export default {
     data: () => {
@@ -89,24 +90,38 @@ export default {
             isDisable: false,
             ImgaeArray: [],
             linkImage:"",
+            show: true
         }
     },
     mounted() {
         this.test()
         if (this.orderDetail[0].orderStatus !== "Chờ xác nhận" )
-            this.isDisable = true
+            this.isDisable = false
 
     },
+    // created(){
+    //     this.test()
+    // },
     methods: {
+
         calc(price, quantity) {
             return price * quantity
         },
+        showDate(data){
+            var date = new Date(data)
+            var dateString = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'numeric', year: 'numeric' }).replace(/\//g, '-');
+            var yearString= date.toLocaleDateString('en-GB', { year: 'numeric' });
+            
+            if(yearString=='1970')
+                this.show=false
+            return dateString
+        },
         
          getImageArray(id) {
-            
+           
                 this.ImgaeArray = useDataStore().getImages.filter(image => image._idBook === id);
                 this.linkImage = this.ImgaeArray.filter(image => image._idBook === id)[0].linkImage;
-            
+                
             return this.linkImage
             
         },
@@ -126,14 +141,7 @@ export default {
             return "Book not found";
         },
         cancelOrder(){
-            axios.put(`http://localhost:3000/api/orders/${this.orderDetail[0]._id}`, { orderStatus: "Đã hủy" }, {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .then(response => {
-                        console.log(response)
-                    })
+            orderService.update(this.orderDetail[0]._id,{ orderStatus: "Đã hủy" } )
         }
     },
 
