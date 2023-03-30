@@ -8,6 +8,7 @@
 <script >
 import AddressAccEdit from './AddressForm.vue';
 import axios from 'axios';
+import { useDataStore } from '../stores/dataStores';
 export default {
     components: {
         AddressAccEdit,
@@ -32,6 +33,8 @@ export default {
                     console.log(error)
                 })
             console.log(JSON.stringify(formData))
+            useDataStore().setSnackbar(true)
+            this.$router.push({name:"AddressAcc"})
         },
         submitForm() {
             this.$refs.AddressAccEdit.submitAddress()

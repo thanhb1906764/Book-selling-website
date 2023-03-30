@@ -71,6 +71,8 @@ export default {
                     console.log(error)
                 })
             console.log(JSON.stringify(formData))
+            useDataStore().setSnackbar(true)
+            this.$router.push({name:"AddressAcc"})
         },
     },
 }

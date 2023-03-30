@@ -71,7 +71,7 @@ export default {
                 this.orderOfUser = useDataStore().getUser
                 useDataStore().getAPIOrder(response.data)
                 this.order = useDataStore().getOrderList
-                this.order = this.order.filter(i => i.userId === this.orderOfUser._id)
+                // this.order = this.order.filter(i => i.userId === this.orderOfUser._id)
                 this.orderList = this.order
                 for (let index = 0; index <= this.orderList.length; index++) {
                     //console.log(this.orderList[index].orderDate)

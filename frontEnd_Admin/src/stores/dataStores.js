@@ -10,6 +10,7 @@ export const useDataStore = defineStore('data', {
         // user: [],
         user: { _id: "63fd659dfb9d13249a5499b5", name: 'Lê Quang Phú', phone: '0915101852' },
         genreSelected: [],
+        snackbar: false,
         Genes: [
             {
                 id: "sdae3e",
@@ -117,6 +118,7 @@ export const useDataStore = defineStore('data', {
         getTagList: state => state.tagList,
         getAddress: state => state.address,
         getGenreSelected: state => state.genreSelected,
+        getSnackbar: state => state.snackbar,
     },
 
     actions: {
@@ -182,6 +184,11 @@ export const useDataStore = defineStore('data', {
         getAPIAddress(data) {
             this.$patch((state) => {
                 state.address = data
+            })
+        },
+        setSnackbar(data) {
+            this.$patch((state) => {
+                state.snackbar = data
             })
         },
     }

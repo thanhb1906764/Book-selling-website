@@ -68,6 +68,22 @@
 
         </div>
     </div>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+    >
+     cập nhật thành công
+
+      <template v-slot:actions>
+        <v-btn
+          color="blue"
+          variant="text"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
 </template>
 
 <script >
@@ -80,11 +96,11 @@ export default {
             addressDefault: [],
             address: [],
             dialog: false,
+            snackbar: useDataStore().getSnackbar,
+            timeout: 2000,
         };
     },
-    updated(){
-       
-    },
+    
     mounted() {
         axios
             .get("http://localhost:3000/api/addresses/")

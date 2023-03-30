@@ -11,7 +11,7 @@
                 <div>Tổng tiền: {{ this.orderDetail[0].orderTotal }}</div>
             </div>
             <div class="col">
-                <button type="button" class="btn btn-danger " @click="getBookName" :disabled="isDisable">Huỷ đơn
+                <button type="button" class="btn btn-danger " @click="cancelOrder" :disabled="isDisable">Huỷ đơn
                     hàng</button>
             </div>
         </div>
@@ -89,7 +89,7 @@ export default {
     },
     mounted() {
 
-        if (this.orderDetail[0].orderStatus === "Chờ xác nhận" || this.orderDetail[0].status === 'Lấy hàng')
+        if (this.orderDetail[0].orderStatus !== "Chờ xác nhận" )
             this.isDisable = true
     },
     methods: {
@@ -106,6 +106,16 @@ export default {
                 return foundBook.bookName;
             }
             return "Book not found";
+        },
+        cancelOrder(){
+            axios.put(`http://localhost:3000/api/orders/${this.orderDetail[0]._id}`, { orderStatus: "Đã hủy" }, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        console.log(response)
+                    })
         }
     },
 
