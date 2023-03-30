@@ -73,8 +73,11 @@ export default {
         }
     },
     beforeCreate(){
-        if (useDataStore().getUser._id == undefined)
+        // if (useDataStore().getUser._id == undefined)
+        //     this.$router.push({name:"LoginUser"})
+        if (localStorage.getItem('_id') == undefined)
             this.$router.push({name:"LoginUser"})
+
     },
     mounted() {
         axios

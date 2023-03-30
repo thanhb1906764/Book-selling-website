@@ -22,9 +22,10 @@ export default {
     },
     methods: {
         addAddress(formData) {
-            if (formData.default == true && this.$route.params.id != this.idDefault[0]._id) {
+            if (formData.default == true ) {
                 console.log(this.idDefault)
-                axios
+                if(this.idDefault!=""){
+                    axios
                     .put(`http://localhost:3000/api/addresses/${this.idDefault[0]._id}`, { default: false }, {
                         headers: {
                             'Content-Type': 'application/json'
@@ -33,6 +34,8 @@ export default {
                     .then(response => {
                         console.log(response)
                     })
+                }
+                
             }
             axios
                 .post("http://localhost:3000/api/addresses", formData, {

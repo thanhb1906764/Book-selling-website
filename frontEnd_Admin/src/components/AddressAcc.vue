@@ -114,14 +114,16 @@ export default {
     methods: {
         async getAddress1 (){
             this.address = await addressService.getAll()
-            useDataStore().getAPIAddress(this.address.filter(item => item._idUser == useDataStore().getUser._id));
+            // useDataStore().getAPIAddress(this.address.filter(item => item._idUser == useDataStore().getUser._id));
+            useDataStore().getAPIAddress(this.address.filter(item => item._idUser == localStorage.getItem('_id')));
             this.address = useDataStore().getAddress.filter(item => item.default == false);
             this.addressDefault = useDataStore().getAddress.filter(item => item.default == true);
         },
         async deleteAddress(id) {
             await addressService.delete(id);
             this.address = await addressService.getAll()
-            useDataStore().getAPIAddress(this.address.filter(item => item._idUser == useDataStore().getUser._id));
+            // useDataStore().getAPIAddress(this.address.filter(item => item._idUser == useDataStore().getUser._id));
+            useDataStore().getAPIAddress(this.address.filter(item => item._idUser == localStorage.getItem('_id')));
             this.address = useDataStore().getAddress.filter(item => item.default == false);
             this.addressDefault = useDataStore().getAddress.filter(item => item.default == true);
 

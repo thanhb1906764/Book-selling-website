@@ -148,15 +148,25 @@ export default {
         // }
         // else
         //     this.login = 0
-        console.log('adfds');
+        this.user = useDataStore().getUser
 
     },
     computed: {
         getNameUser() {
-            this.user = useDataStore().getUser
-            if (this.user !== undefined) {
+            // this.user = useDataStore().getUser
+            // if (this.user !== undefined) {
+            //     console.log(this.user)
+            //     this.userName = this.user
+            // }
+            // if (this.userName != "") {
+            //     this.login = 1
+            // }
+            // else
+            //     this.login = 0
+           
+            if (localStorage.getItem('name') !== undefined) {
                 console.log(this.user)
-                this.userName = this.user
+                this.userName = localStorage.getItem('name')
             }
             if (this.userName != "") {
                 this.login = 1
@@ -164,7 +174,7 @@ export default {
             else
                 this.login = 0
 
-            return this.user.name
+            return localStorage.getItem('name')
         }
     },
     created() {

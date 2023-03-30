@@ -127,7 +127,8 @@ export default {
         },
         submitAddress() {
             this.$emit("form-submitted", {
-                _idUser: useDataStore().getUser._id,
+                // _idUser: useDataStore().getUser._id,
+                _idUser: localStorage.getItem('_id'),
                 name: this.name,
                 phone: this.phone,
                 city: this.citys[this.indexCity].Name,
