@@ -28,14 +28,13 @@ export default {
     },
     data() {
         return {
-            ImgaeArray: useDataStore().getImages.filter(image => image._idBook === this.id),
+            ImgaeArray: [],
         }
     },
     methods: {
-
-        // Lấy tất cả những Image của Book
+        // Lấy tất cả Image của của một Book cụ thể
         async getImageArray() {
-            if (useDataStore().getBooks.length !== 0) {
+            if (useDataStore().getImages.length !== 0) {
                 this.ImgaeArray = useDataStore().getImages.filter(image => image._idBook === this.id)
             }
             else {
