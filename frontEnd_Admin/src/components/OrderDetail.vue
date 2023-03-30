@@ -11,7 +11,7 @@
                 <div>Tổng tiền: {{ this.orderDetail[0].orderTotal }}</div>
             </div>
             <div class="col">
-                <button type="button" class="btn btn-danger " @click="getBookName" :disabled="isDisable">Huỷ đơn
+                <button type="button" class="btn btn-danger " @click="cancelOrder" :disabled="isDisable">Huỷ đơn
                     hàng</button>
             </div>
         </div>
@@ -54,47 +54,71 @@
             </thead>
             <tbody>
                 <tr v-for="items in this.orderDetail[0].productList">
-                    <td>asdasd</td>
+                    <td><img :src="getImageArray(items._idBook)" width="60" class="rounded" alt="..."></td>
                     <!-- <td v-if="this.book.length > 0">{{findBookNameById(items._id)}}</td>
                     <td v-else>Loading...</td> -->
                     <td>{{ findBookNameById(items._idBook) }}</td>
 
 
-                    <td>{{ items.price }}</td>
+                    <td>{{ items.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) }}</td>
                     <td>{{ items.quantity }}</td>
-                    <td>{{ calc(items.price, items.quantity) }}</td>
+                    <td>{{ calc(items.price, items.quantity).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
+                    }}</td>
 
                 </tr>
 
             </tbody>
         </v-table>
-        <div class="d-flex justify-content-end">Thành tiền {{ this.orderDetail[0].totalProductMoney }}</div>
-        <div class="d-flex justify-content-end">Phí vận chuyển {{ this.orderDetail[0].shipFee }}</div>
+        <div class="d-flex justify-content-end">Thành tiền {{ this.orderDetail[0].totalProductMoney.toLocaleString('vi-VN',
+            { style: 'currency', currency: 'VND' }) }}</div>
+        <div class="d-flex justify-content-end">Phí vận chuyển {{ this.orderDetail[0].shipFee.toLocaleString('vi-VN',
+            { style: 'currency', currency: 'VND' }) }}</div>
         <div class="d-flex justify-content-end">Chiết khấu</div>
-        <div class="d-flex justify-content-end">Tổng số tiền {{ this.orderDetail[0].orderTotal }}</div>
+        <div class="d-flex justify-content-end">Tổng số tiền {{ this.orderDetail[0].orderTotal.toLocaleString('vi-VN',
+            { style: 'currency', currency: 'VND' }) }}</div>
     </div>
 </template>
 <script>
 
 import axios from 'axios'
 import { useDataStore } from '@/stores/dataStores'
+import ImagesService from '@/services/images.service'
+
 export default {
     data: () => {
         return {
             id: "",
             orderDetail: null,
             book: useDataStore().getBooks,
-            isDisable: false
+            isDisable: false,
+            ImgaeArray: [],
+            linkImage: "",
         }
     },
     mounted() {
-
-        if (this.orderDetail[0].orderStatus === "Chờ xác nhận" || this.orderDetail[0].status === 'Lấy hàng')
+        this.test()
+        if (this.orderDetail[0].orderStatus !== "Chờ xác nhận")
             this.isDisable = true
+
     },
     methods: {
         calc(price, quantity) {
             return price * quantity
+        },
+        // Lấy tất cả những image của sách  
+        getImageArray(id) {
+
+            this.ImgaeArray = useDataStore().getImages.filter(image => image._idBook === id);
+            this.linkImage = this.ImgaeArray.filter(image => image._idBook === id)[0].linkImage;
+
+
+            console.log(this.linkImage)
+            return this.linkImage
+
+        },
+        async test() {
+            this.ImgaeArray = await ImagesService.getAll();
+            useDataStore().setImages(this.ImgaeArray);
         },
         findBookNameById(id) {
 
@@ -106,6 +130,16 @@ export default {
                 return foundBook.bookName;
             }
             return "Book not found";
+        },
+        cancelOrder() {
+            axios.put(`http://localhost:3000/api/orders/${this.orderDetail[0]._id}`, { orderStatus: "Đã hủy" }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    console.log(response)
+                })
         }
     },
 

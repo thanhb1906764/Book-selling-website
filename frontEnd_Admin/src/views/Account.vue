@@ -72,6 +72,10 @@ export default {
             this.selectedIndex = index;
         }
     },
+    beforeCreate() {
+        if (useDataStore().getUser._id == undefined)
+            this.$router.push({ name: "LoginUser" })
+    },
     mounted() {
         axios
             .get("http://localhost:3000/api/books")

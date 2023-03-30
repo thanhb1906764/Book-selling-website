@@ -122,6 +122,9 @@ export default {
         Wards(indexCity, indexDistrict) {
             return this.citys[indexCity].Districts[indexDistrict].Wards
         },
+        changeSnackbar() {
+
+        },
         submitAddress() {
             this.$emit("form-submitted", {
                 _idUser: useDataStore().getUser._id,
@@ -131,7 +134,8 @@ export default {
                 district: this.citys[this.indexCity].Districts[this.indexDistrict].Name,
                 ward: this.citys[this.indexCity].Districts[this.indexDistrict].Wards[this.indexWard].Name,
                 streetName: this.streetName,
-                default: document.getElementById("flexCheckCheck").checked
+                default: document.getElementById("flexCheckCheck").checked,
+
             })
         },
         setData(id) {

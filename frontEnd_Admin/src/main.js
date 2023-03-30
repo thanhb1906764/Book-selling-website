@@ -8,6 +8,7 @@ import 'bootstrap/dist/js/bootstrap.js'
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "@fortawesome/fontawesome-free/js/all.min.js";
 import 'vuetify/styles'
+import './assets/main.css'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'

@@ -14,7 +14,7 @@
                 :class="{ 'on-hover': isHovering }" v-bind="props">
 
                 <span class="badge text-bg-danger text-uppercase"
-                    style="position: absolute;z-index: 2;  margin: 5px; max-height: 30px;">
+                    style="position: absolute;z-index: 2;  margin: 5px; max-height: 30px; left: 20px;">
                     <h6 v-if="book.bookPrice !== book.originalPrice">Sale</h6>
                     <h6 v-else-if="!checkMonth(book.receiptDate)">New</h6>
                 </span>
@@ -98,7 +98,7 @@ export default {
         },
         handleMessage() {
             // this.book.promotionTime = null
-            useDataStore().updateBook(this.book.id)
+            useDataStore().updateBook(this.book._id)
         }
     },
     mounted() {

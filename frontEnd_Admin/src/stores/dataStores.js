@@ -7,8 +7,9 @@ export const useDataStore = defineStore('data', {
         Images: [],
         admin: [],
         address: [],
-        // user: [],
-        user: { _id: "63fd659dfb9d13249a5499b5", name: 'Lê Quang Phú', phone: '0915101852' },
+        user: [],
+        // user: { _id: "63fd659dfb9d13249a5499b5", name: 'Lê Quang Phú', phone: '0915101852' },
+        snackbar: false,
         genreSelected: [],
         Genes: [
             {
@@ -117,6 +118,7 @@ export const useDataStore = defineStore('data', {
         getTagList: state => state.tagList,
         getAddress: state => state.address,
         getGenreSelected: state => state.genreSelected,
+        getSnackbar: state => state.snackbar,
     },
 
     actions: {
@@ -146,8 +148,8 @@ export const useDataStore = defineStore('data', {
         updateBook(id) {
             this.$patch((state) => {
                 for (var book of state.Books) {
-                    if (id === book.id) {
-                        book.price = book.originalPrice
+                    if (id === book._id) {
+                        book.bookPrice = book.originalPrice
                         book.promotionTime = null
                         break;
                     }
@@ -157,8 +159,8 @@ export const useDataStore = defineStore('data', {
         updateProBook(id, price, time) {
             this.$patch((state) => {
                 for (var book of state.Books) {
-                    if (id === book.id) {
-                        book.price = book.price - (book.originalPrice * price / 100);
+                    if (id === book._id) {
+                        book.bookPrice = book.bookPrice - (book.originalPrice * price / 100);
                         book.promotionTime = time
                         break;
                     }
@@ -182,6 +184,11 @@ export const useDataStore = defineStore('data', {
         getAPIAddress(data) {
             this.$patch((state) => {
                 state.address = data
+            })
+        },
+        setSnackbar(data) {
+            this.$patch((state) => {
+                state.snackbar = data
             })
         },
     }

@@ -41,7 +41,7 @@ export default {
     data() {
         return {
 
-            itemsOrder: ["Tất cả", "Chờ thanh toán", "Đang giao", "Hoàn tất", "Đã hủy"],
+            itemsOrder: ["Tất cả", "Lấy hàng", "Đang giao", "Đã nhận", "Hoàn trả", "Đã hủy"],
             item2: ["Mã đơn hàng", "Ngày mua", "Tổng tiền", "Trạng thái", ""],
             order: [],
             orderList: this.order,

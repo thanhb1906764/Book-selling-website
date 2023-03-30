@@ -13,8 +13,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="item in BookInCart" :key="item._id">
-                <CartCards :Book="item" :Cart="Cart" />
+            <tr v-if="show" v-for="item in BookInCart" :key="item._id">
+                <CartCards :Book="item" :Cart="Cart" @updateCart="update" />
             </tr>
 
             <!-- Thanh toán  -->
@@ -55,10 +55,11 @@ export default {
     },
     data() {
         return {
-            Cart: this.getCartOnCookie(),
+            Cart: [],
             Books: [],
             BookInCart: [],
             tempCost: 0,
+            show: true
         }
     },
     methods: {
@@ -69,12 +70,17 @@ export default {
             // else {
             try {
                 // Lấy tất cả sách trên DataBase 
-                this.Books = await BooksService.getAll();
+                this.Books = useDataStore().getBooks;
+
+                // this.Books = await BooksService.getAll()
+
                 // Lọc những sách có bookPrice, originalPrice và author
                 this.Books = this.Books.filter(itemBook => (itemBook.bookPrice && itemBook.originalPrice && itemBook.author))
+
                 // Lấy sách trong có trong giỏ hàng 
+                console.log(this.Cart);
                 for (let i = 0; i < this.Cart.length; i++) {
-                    let temp = this.Books.find(Book => Book._id === this.Cart[i].idBook);
+                    let temp = this.Books.find(Book => Book._id === this.Cart[i].idBook); console.log(temp);
                     if (temp) {
                         this.BookInCart.push(temp)
                     }
@@ -101,19 +107,34 @@ export default {
         // Lấy giỏ hàng trên cookies
         async getCartOnCookie() {
             try {
-                axios
+                await axios
                     .get(`http://localhost:3000/cookies/read`, {
                         withCredentials: true
                     })
                     .then((response) => {
                         this.Cart = response.data
+                        this.retrieveBookOnCookies();
                         console.log(this.Cart)
                         return response.data
+
                     })
+                this.show = true
             } catch (error) {
                 console.log(error);
             }
         },
+
+        // 
+        async update() {
+            this.show = false
+            //this.retrieveBookOnCookies()
+            this.BookInCart = []
+            this.Cart = []
+            this.getCartOnCookie();
+            this.retrieveBookOnCookies()
+            this.show = true
+            console.log();
+        }
 
     },
     updated() {
@@ -122,7 +143,8 @@ export default {
     mounted() {
     },
     created() {
-        this.retrieveBookOnCookies();
+        this.getCartOnCookie()
+        // this.retrieveBookOnCookies();
     }
 }
 </script>

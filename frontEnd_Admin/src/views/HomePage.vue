@@ -94,7 +94,6 @@
 import Cards from '../components/Cards.vue';
 import { mdiApps } from '@mdi/js'
 import moment from 'moment';
-
 import ImagesService from '@/services/images.service'
 import BooksService from '@/services/books.service'
 import { useDataStore } from '../stores/dataStores';
@@ -104,7 +103,7 @@ export default {
     },
     data() {
         return {
-            Books: [],
+            Books: useDataStore().getBooks,
             Images: [],
             show: false,
 
@@ -122,15 +121,15 @@ export default {
     methods: {
 
         // Lấy tất cả Book từ DB và lưu vào store - kiz
-        async retrieveBook() {
-            try {
-                this.Books = await BooksService.getAll();
-                this.Books = this.Books.filter(itemBook => (itemBook.bookPrice && itemBook.originalPrice && itemBook.author))
-                useDataStore().setBooks(this.Books)
-            } catch (error) {
-                console.log(error);
-            }
-        },
+        // async retrieveBook() {
+        //     try {
+        //         this.Books = await BooksService.getAll();
+        //         this.Books = this.Books.filter(itemBook => (itemBook.bookPrice && itemBook.originalPrice && itemBook.author))
+        //         useDataStore().setBooks(this.Books)
+        //     } catch (error) {
+        //         console.log(error);
+        //     }
+        // },
         // Lấy tất cả Image từ DB và lưu vào store
         async retrieveImage() {
             try {
@@ -253,50 +252,10 @@ export default {
         }
     },
     mounted() {
-        var proList = useDataStore().getPromotionList
-        var waitingList = []
-        for (var i of proList) {
-            const now = new Date();
-            if (now > new Date(i.dateEnd)) {
-                console.log("Đã kết thúc")
-            }
-            else if (now < new Date(i.dateBegin)) {
-                console.log("Yet")
-                const dateBegin = moment(i.dateBegin)
-                var duration = moment.duration(dateBegin.diff(now)).asMinutes();
-                if (duration < 30) {
-                    waitingList.push(i)
-                }
-                console.log(duration)
-            }
-            else {
-                for (var id of i.productList) {
-                    useDataStore().updateProBook(id, i.pricePro, i.dateEnd)
-                    console.log(this.bookList.filter(i => i.id == id))
-                }
-            }
-        }
-        // console.log(waitingList)
-        if (waitingList.length > 0) {
-            var waiting = setInterval(() => {
-                // console.log(waitingList)
-                for (var i of waitingList) {
-                    const now = moment();
-                    if (now >= new Date(i.dateBegin) && now <= new Date(i.dateEnd)) {
-                        for (var id of i.productList) {
-                            useDataStore().updateProBook(id, i.pricePro, i.dateEnd)
-                        }
-                        waitingList = waitingList.filter(item => item.id !== i.id)
-                    }
-                    if (waitingList.length === 0) {
-                        clearInterval(waiting)
-                    }
-                }
-            }, 1000)
-        }
+
 
         this.retrieveImage();
-        this.retrieveBook();
+        // this.retrieveBook();
     }
 }
 </script>
