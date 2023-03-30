@@ -176,7 +176,7 @@ export default {
         },
         // Giảm số lượng sách 
         BookQuantityReduce() {
-            if (this.BookQuantity > 0) {
+            if (this.BookQuantity > 1) {
                 this.BookQuantity--;
             }
         },

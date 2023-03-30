@@ -10,8 +10,7 @@
                     <!-- Image -->
                     <td class="" style="width: 20%">
                         <div class="figure position-relative">
-                            <img src="https://product.hstatic.net/200000343865/product/4_5f9624b1ec774721962320840ac57f15_master.jpg"
-                                width="60" class="rounded" alt="...">
+                            <img :src="linkImage" width="60" class="rounded" alt="...">
 
                             <!-- Số lượng sách  -->
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{
@@ -39,6 +38,7 @@
 // Import here
 // import ImagesService from '@/services/images.service'
 import { useDataStore } from "../stores/dataStores";
+import ImagesService from '@/services/images.service'
 
 export default {
     props: {
@@ -47,18 +47,17 @@ export default {
     },
     data() {
         return {
-            // linkImage: null, // linkImage của Book lấy từ store
-            // ImgaeArray: [],
+            linkImage: null, // linkImage của Book lấy từ store
+            ImgaeArray: [],
             BookQuantity: this.getBookQuantity(),
         }
     },
     methods: {
         // Lấy tất cả những image của sách  
         async getImageArray() {
-            if (useDataStore().getBooks.length !== 0) {
+            if (useDataStore().getImages.length !== 0) {
                 this.ImgaeArray = useDataStore().getImages.filter(image => image._idBook === this.Book._id);
                 this.linkImage = this.ImgaeArray.filter(image => image._idBook === this.Book._id)[0].linkImage;
-
             }
             else {
                 try {
@@ -85,10 +84,9 @@ export default {
         }
     },
     mounted() {
-
     },
     created() {
-        // this.getImageArray();
+        this.getImageArray();
     }
 }
 </script>

@@ -193,7 +193,7 @@ export default {
     },
     data() {
         return {
-            ImgaeArray: [],
+            ImageArray: [],
             name: null, // Tên user, nếu người dùng có đăng nhập 
             shipFee: Number,
             tempCost: 0,
@@ -233,25 +233,6 @@ export default {
             console.log('Address default');
             console.log(this.addressDefault);
             return addressList;
-        },
-
-        // Lấy tất cả những image của sách  
-        async getImggeArray() {
-            if (useDataStore().getBooks.length !== 0) {
-                this.ImgaeArray = useDataStore().getImages.filter(image => image._idBook === this.id)
-                // console.log(this.ImgaeArray)
-            }
-            else {
-                try {
-                    this.ImgaeArray = await ImagesService.getAll();
-                    useDataStore().setImages(this.ImgaeArray);
-                    this.ImgaeArray = this.ImgaeArray.filter(image => image._idBook === this.id)
-                    console.log(this.ImgaeArray)
-                }
-                catch (error) {
-                    console.log(error);
-                }
-            }
         },
 
         // Lấy shipFee 
@@ -394,7 +375,6 @@ export default {
         this.retrieveBookOnCart();
         this.getShipFee()
         this.getAddressList();
-
     }
 
 }

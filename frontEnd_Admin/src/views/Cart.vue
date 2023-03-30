@@ -14,14 +14,17 @@
         </thead>
         <tbody>
             <tr v-for="item in BookInCart" :key="item._id">
-                <CardOfCart :Book="item" />
+                <CartCards :Book="item" :Cart="Cart" />
             </tr>
 
             <!-- Thanh toán  -->
             <tr class="fs-6 fw-bold text-danger">
                 <td colspan="3"></td>
                 <td class="align-middle text-center">Tính tạm</td>
-                <td class="align-middle text-center">72000₫</td>
+                <td class="align-middle text-center">{{ (tempCost).toLocaleString('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND'
+                }) }}</td>
                 <td></td>
             </tr>
             <tr class="fs-6 fw-bold text-danger">
@@ -41,11 +44,11 @@
 import { useDataStore } from '../stores/dataStores';
 import BooksService from '@/services/books.service';
 import axios from 'axios';
-import CardOfCart from '../components/CardOfCart.vue';
+import CartCards from '../components/CartCards.vue';
 
 export default {
     components: {
-        CardOfCart
+        CartCards
     },
     props: {
 
@@ -54,7 +57,8 @@ export default {
         return {
             Cart: this.getCartOnCookie(),
             Books: [],
-            BookInCart: []
+            BookInCart: [],
+            tempCost: 0,
         }
     },
     methods: {
@@ -75,7 +79,19 @@ export default {
                         this.BookInCart.push(temp)
                     }
                 }
-                // console.log(this.BookInCart);
+
+                console.log('BookList in cart');
+                console.log(this.BookInCart);
+                let quantity
+
+                // Tính tạm giá trị các Book trong Cart, chưa tính shipFee 
+                for (let i = 0; i < this.BookInCart.length; i++) {
+                    quantity = this.Cart.find(item => item.idBook === this.BookInCart[i]._id).quantityBook
+                    console.log(quantity);
+                    this.tempCost = this.tempCost + (this.BookInCart[i].bookPrice * parseInt(quantity, 10))
+                    // console.log(this.BookInCart[i].bookPrice);
+                }
+                // console.log(this.tempCost);
             } catch (error) {
                 console.log(error);
             }
@@ -98,6 +114,9 @@ export default {
                 console.log(error);
             }
         },
+
+    },
+    updated() {
 
     },
     mounted() {
