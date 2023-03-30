@@ -90,6 +90,7 @@
 import axios from "axios";
 import { useDataStore } from '@/stores/dataStores';
 import { RouterLink } from "vue-router";
+import addressService from "../services/addresses.service"
 export default {
     data: () => {
         return {
@@ -100,28 +101,30 @@ export default {
             timeout: 2000,
         };
     },
-    
+    computed:{
+        
+    },
+    // updated(){
+    //     this.address = useDataStore().getAddress.filter(item => item.default == false);
+    //    this.addressDefault = useDataStore().getAddress.filter(item => item.default == true);
+    // },
     mounted() {
-        axios
-            .get("http://localhost:3000/api/addresses/")
-            .then((response) => {
-                console.log(response.data);
-                useDataStore().getAPIAddress(response.data.filter(item => item._idUser == useDataStore().getUser._id));
-                this.address = useDataStore().getAddress.filter(item => item.default == false);
-                this.addressDefault = useDataStore().getAddress.filter(item => item.default == true);
-            });
+       this.getAddress1()
     },
     methods: {
-        deleteAddress(id) {
-            axios.delete(`http://localhost:3000/api/addresses/${id}`);
-            axios
-            .get("http://localhost:3000/api/addresses/")
-            .then((response) => {
-                console.log(response.data);
-                useDataStore().getAPIAddress(response.data.filter(item => item._idUser == useDataStore().getUser._id));
-                this.address = useDataStore().getAddress.filter(item => item.default == false);
-                this.addressDefault = useDataStore().getAddress.filter(item => item.default == true);
-            });
+        async getAddress1 (){
+            this.address = await addressService.getAll()
+            useDataStore().getAPIAddress(this.address.filter(item => item._idUser == useDataStore().getUser._id));
+            this.address = useDataStore().getAddress.filter(item => item.default == false);
+            this.addressDefault = useDataStore().getAddress.filter(item => item.default == true);
+        },
+        async deleteAddress(id) {
+            await addressService.delete(id);
+            this.address = await addressService.getAll()
+            useDataStore().getAPIAddress(this.address.filter(item => item._idUser == useDataStore().getUser._id));
+            this.address = useDataStore().getAddress.filter(item => item.default == false);
+            this.addressDefault = useDataStore().getAddress.filter(item => item.default == true);
+
         },
         openDialog() {
       this.dialog = true;

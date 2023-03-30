@@ -101,14 +101,12 @@ export default {
         calc(price, quantity) {
             return price * quantity
         },
-        // Lấy tất cả những image của sách  
+        
          getImageArray(id) {
             
                 this.ImgaeArray = useDataStore().getImages.filter(image => image._idBook === id);
                 this.linkImage = this.ImgaeArray.filter(image => image._idBook === id)[0].linkImage;
             
-            
-            console.log(this.linkImage)
             return this.linkImage
             
         },

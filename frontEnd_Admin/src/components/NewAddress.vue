@@ -15,12 +15,25 @@ export default {
     },
     data() {
         return {
-            address: {}
+            address: {},
+            addressEdit: useDataStore().getAddress.filter(address => address._id == this.$route.params.id),
+            idDefault: useDataStore().getAddress.filter(i => i.default == true),
         }
     },
     methods: {
         addAddress(formData) {
-
+            if (formData.default == true && this.$route.params.id != this.idDefault[0]._id) {
+                console.log(this.idDefault)
+                axios
+                    .put(`http://localhost:3000/api/addresses/${this.idDefault[0]._id}`, { default: false }, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        console.log(response)
+                    })
+            }
             axios
                 .post("http://localhost:3000/api/addresses", formData, {
                     headers: {
