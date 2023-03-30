@@ -29,6 +29,7 @@
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import StarRating from 'vue-star-rating'
+import CommentsService from '@/services/comments.service'
 
 export default {
 
@@ -47,13 +48,21 @@ export default {
                 .max(5),
         })
         return {
-            commentSchema
+            commentSchema,
+            comment: {
+                _idBook: 'idBook',
+                _idUser: 'idUser',
+                commentDate: new Date(),
+                content: 'comment content',
+                rateStar: '4.5'
+            }
         }
     },
 
     methods: {
-        submitComment() {
-
+        async submitComment() {
+            let doc = await CommentsService.create(this.comment);
+            console.log(doc);
         }
     }
 }

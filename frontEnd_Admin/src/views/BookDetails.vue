@@ -108,7 +108,7 @@
                 <!-- Bình luận  -->
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                     <CommentForm />
-                    <Comments :id="this.id" />
+                    <!-- <Comments :id="this.id" /> -->
                 </div>
             </div>
         </div>
