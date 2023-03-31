@@ -21,6 +21,10 @@ import FooterVue from './components/Footer.vue';
 import { useDataStore } from './stores/dataStores';
 import BooksService from '@/services/books.service';
 import PromotionsService from '@/services/promotions.service';
+
+// model - Hiển thị đăng nhập, đăng ký mà không cần chuyển trang 
+import LoginUser from './components/LoginUser.vue';
+import RegisterUser from './components/RegisterUser.vue';
 import moment from 'moment';
 
 export default {
@@ -29,6 +33,8 @@ export default {
         HeaderVue,
         HomePage,
         FooterVue,
+        LoginUser,
+        RegisterUser,
         // Card, BookDetails, UploadsFile, Catalog_management, PromotionVue, Product_Management,
         // PromotionForm, Account_Clients, Book_Receipt, Order_Management, Receipt_List, ChartsVue, Statistical, TestTime
     },
@@ -108,6 +114,8 @@ export default {
     </header>
     <main v-if="show" class="container py-2">
         <!-- <HomePage /> -->
+        <LoginUser />
+        <RegisterUser />
         <router-view />
     </main>
 
