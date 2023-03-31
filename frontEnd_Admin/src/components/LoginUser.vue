@@ -146,7 +146,8 @@ export default {
                     console.log("id_ " + localStorage.getItem('_id'))
                     console.log(useDataStore().getUser);
                     // Chuyển hướng về HomePage 
-                    this.$router.push('/');
+                    // this.$router.push('/');
+                    window.location.href = "/";
                 }
             } catch (error) {
                 console.log(error);

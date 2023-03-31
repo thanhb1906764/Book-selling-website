@@ -75,11 +75,11 @@
                                 </v-hover>
                                 <v-hover>
                                     <template v-slot:default="{ isHovering, props }">
-                                        <router-link to="#" class="nav-link active">
+                                        <router-link to="/acc/order">
                                             <v-sheet class=" ms-2 pb-2 " v-bind="props"
                                                 :color="isHovering ? '#d4d7d9' : undefined">
-                                                <router-link to="/acc/order" @click="selectItem(2)">Đơn hàng của
-                                                    tôi</router-link>
+                                                Đơn hàng của
+                                                tôi
                                             </v-sheet>
                                         </router-link>
 

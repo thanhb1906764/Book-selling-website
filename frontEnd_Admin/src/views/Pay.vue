@@ -194,7 +194,7 @@ export default {
     data() {
         return {
             ImageArray: [],
-            name: '63fd659dfb9d13249a5499b5', // Tên user, nếu người dùng có đăng nhập 
+            name: '', // Tên user, nếu người dùng có đăng nhập 
             shipFee: this.getShipFee(),
             tempCost: 0,
             user: {},
@@ -209,7 +209,7 @@ export default {
                 reDate: new Date(0),
                 orderDate: new Date(),
                 orderStatus: 'Chờ xác nhận',
-                userId: '63fd659dfb9d13249a5499b5' || null,
+                userId: localStorage.getItem('_id'),
             },
         }
     },
@@ -380,8 +380,8 @@ export default {
         // console.log(this.addressList);
     },
     created() {
-        // this.name = localStorage.getItem('user');
-        this.name = '63fd659dfb9d13249a5499b5'
+        this.name = localStorage.getItem('_id');
+        // this.name = '63fd659dfb9d13249a5499b5'
         this.Cart = this.getCartOnCookie();
         this.retrieveBookOnCart();
         // this.getShipFee()
