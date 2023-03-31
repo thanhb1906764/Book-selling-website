@@ -11,9 +11,21 @@
                 <div>Tổng tiền: {{ this.orderDetail[0].orderTotal }}</div>
             </div>
             <div class="col">
-                <button type="button" class="btn btn-danger " @click="cancelOrder" :disabled="isDisable">Huỷ đơn
+                <button type="button" class="btn btn-danger " @click="openDialog" :disabled="isDisable">Huỷ đơn
                     hàng</button>
             </div>
+            <v-dialog v-model="dialog" persistent max-width="400">
+                <v-card>
+                    <v-card-title class="headline">Are you sure?</v-card-title>
+                    <v-card-text>
+                        This action cannot be undone.
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn color="green darken-1" text @click="dialog = false; cancelOrder()">Yes</v-btn>
+                        <v-btn color="red darken-1" text @click="dialog = false">No</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </div>
 
     </div>
@@ -84,6 +96,7 @@ import axios from 'axios'
 import { useDataStore } from '@/stores/dataStores'
 import ImagesService from '@/services/images.service'
 import orderService from "../services/orders.service"
+import BooksService from '@/services/books.service'
 
 export default {
     data: () => {
@@ -94,19 +107,24 @@ export default {
             isDisable: false,
             ImgaeArray: [],
             linkImage: "",
-            show: true
+            show: true,
+            dialog: false
         }
     },
     mounted() {
         this.test()
+
         if (this.orderDetail[0].orderStatus !== "Chờ xác nhận")
-            this.isDisable = false
+            this.isDisable = true
 
     },
     // created(){
     //     this.test()
     // },
     methods: {
+        openDialog() {
+            this.dialog = true;
+        },
 
         calc(price, quantity) {
             return price * quantity
@@ -136,7 +154,7 @@ export default {
         findBookNameById(id) {
 
             this.book = useDataStore().getBooks
-            // console.log(this.book)
+            //console.log(this.book)
             const foundBook = this.book.find(item => item._id === id);
             //  console.log(foundBook)
             if (foundBook) {
@@ -144,8 +162,19 @@ export default {
             }
             return "Book not found";
         },
-        cancelOrder() {
-            orderService.update(this.orderDetail[0]._id, { orderStatus: "Đã hủy" })
+        async cancelOrder() {
+            await orderService.update(this.orderDetail[0]._id, { orderStatus: "Đã hủy" })
+
+            for (let i = 0; i <= this.orderDetail[0].productList.length - 1; i++) {
+                var quantity = this.orderDetail[0].productList[i].quantity //so luong cua 1 loai sach trong don hang
+                var _idBook = this.orderDetail[0].productList[i]._idBook
+                var bookStock = this.book.find(book => book._id == _idBook).bookStock //so luong kho cua sach theo id sach ben tren
+                var undoStock = bookStock + quantity    // khoi phuc so luong 
+                await BooksService.update(_idBook, { bookStock: undoStock })
+                console.log(undoStock)
+
+            }
+            await this.$route.push({ name: "addressAcc" })
         }
     },
 
