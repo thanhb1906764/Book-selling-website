@@ -112,6 +112,14 @@ export default {
                     alert('Password or name not match')
                 else {
                     this.cookies = await UsersService.getCookies();
+                    // Kiểm tài khoản - có bị khoá hay không 
+                    if (this.cookies.statusUser === false) {
+                        alert('Tài khoản đã bị khoá');
+                        this.user.phone = '';
+                        this.user.name = '';
+                        this.user.password = '';
+                        return 0;
+                    }
                     // Lưu vào store
                     useDataStore().setUser(this.cookies);
                     console.log(this.cookies);
