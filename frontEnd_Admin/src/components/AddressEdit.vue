@@ -10,7 +10,7 @@
 <script >
 import AddressAccEdit from './AddressForm.vue';
 import { useDataStore } from '@/stores/dataStores';
-import axios from 'axios';
+import addressesService from '../services/addresses.service';
 export default {
     components: {
         AddressAccEdit,
@@ -45,31 +45,13 @@ export default {
             childComponent.setData(this.$route.params.id);
         },
         editAddress(formData) {
-            if (formData.default == true && this.$route.params.id != this.idDefault[0]._id) {
+            if (formData.default == true) {
                 console.log(this.idDefault)
-                axios
-                    .put(`http://localhost:3000/api/addresses/${this.idDefault[0]._id}`, { default: false }, {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .then(response => {
-                        console.log(response)
-                    })
+                if (this.idDefault != "") {
+                    addressesService.update(this.idDefault[0]._id, { default: false })
+                }
             }
-            axios
-                .put(`http://localhost:3000/api/addresses/${this.$route.params.id}`, formData, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(response => {
-                    console.log(response)
-                    console.log(formData.default)
-
-                }).catch(error => {
-                    console.log(error)
-                })
+            addressesService.create(formData)
             console.log(JSON.stringify(formData))
             useDataStore().setSnackbar(true)
             this.$router.push({ name: "AddressAcc" })
