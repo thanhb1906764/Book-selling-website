@@ -145,7 +145,8 @@ export default {
                 // Xoá thông tin user từ store
                 useDataStore().setUser([]);
                 // Xoá thông tin user từ localStorage
-                localStorage.removeItem("user")
+                localStorage.removeItem("name");
+                localStorage.removeItem("_id");
                 // Chuyển hướng về HomePage
                 this.$router.push('/');
             } catch (error) {
