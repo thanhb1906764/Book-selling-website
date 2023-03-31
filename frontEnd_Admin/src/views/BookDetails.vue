@@ -134,7 +134,8 @@ export default {
                 multiple: false,
             });
             this.notify = function () {
-                this.$router.push('/Cart')
+                // this.$router.replace('/Cart'); Lỗi
+                window.location.href = "/Cart";
                 return 0;
             };
         }
