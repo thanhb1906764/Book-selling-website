@@ -25,7 +25,7 @@
                 <v-card-title class="py-2" style="text-overflow: ellipsis;">{{ book.bookName }}</v-card-title>
 
                 <!-- Số lượng đánh giá sao của Book  -->
-                <v-card-subtitle class=""><span>0 đánh giá</span></v-card-subtitle>
+                <v-card-subtitle class=""><span>{{ counterComement }} đánh giá</span></v-card-subtitle>
 
                 <v-card-text class="py-3">
                     <div v-if="book.originalPrice !== book.bookPrice">
@@ -62,7 +62,8 @@
 import moment from 'moment';
 import { useDataStore } from "../stores/dataStores";
 import testTime from '../components/testTime.vue'
-import { Countdown } from 'vue3-flip-countdown'
+import { Countdown } from 'vue3-flip-countdown';
+import CommentsService from '@/services/comments.service'
 export default {
     components: {
         testTime, Countdown
@@ -72,12 +73,19 @@ export default {
             linkImage: null, // linkImage của Book lấy từ store
             Images: [], // Lấy hình ảnh từ store hoặc cloud
             time: moment(new Date(), "YYYY-MM-DD HH:mm:ss"),
+            counterComement: Object
         }
     },
     props: {
         book: Object, // get book từ HomePage
     },
     methods: {
+        // Đếm số lượng comment của một cuốn sách cụ thể 
+        async counterComment() {
+            let commentList = await CommentsService.getAll();
+            this.counterComement = commentList.filter(item => item._idBook === this.book._id).length;
+        },
+        // New
         checkMonth(date) {
             const dateToCheck = new Date(date);
             // Lấy thời gian hiện tại
@@ -105,6 +113,9 @@ export default {
         // Lấy dữ liệu Images 
         this.Images = useDataStore().getImages
         this.linkImage = this.Images.filter(image => image._idBook === this.book._id)[0].linkImage
+    },
+    created() {
+        this.counterComment();
     }
 }
 </script>
