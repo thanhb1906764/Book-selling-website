@@ -168,7 +168,7 @@ export default {
                 console.log(this.user)
                 this.userName = localStorage.getItem('name')
             }
-            if (this.userName != "") {
+            if (this.userName != undefined) {
                 this.login = 1
             }
             else
