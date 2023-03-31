@@ -87,12 +87,12 @@
                                 </v-hover>
                                 <v-hover>
                                     <template v-slot:default="{ isHovering, props }">
-                                        <router-link to="#" class="nav-link active">
+                                        <div class="nav-link active" @click="logout">
                                             <v-sheet class=" ms-2 pb-2 " v-bind="props"
                                                 :color="isHovering ? '#d4d7d9' : undefined">
                                                 Đăng xuất
                                             </v-sheet>
-                                        </router-link>
+                                        </div>
                                     </template>
                                 </v-hover>
 
@@ -119,6 +119,7 @@
 <script>
 import Category from "./Category.vue";
 import { useDataStore } from "@/stores/dataStores";
+import UsersService from '@/services/users.service';
 import axios from "axios";
 export default {
     components: {
@@ -148,8 +149,26 @@ export default {
         // }
         // else
         //     this.login = 0
-        this.user = useDataStore().getUser
+        //this.user = useDataStore().getUser
 
+    },
+    methods:{
+        async logout() {
+            try {
+                // Xoá thông tin user từ cookies
+                await UsersService.logout();
+                // Xoá thông tin user từ store
+                useDataStore().setUser([]);
+                // Xoá thông tin user từ localStorage
+                localStorage.removeItem("name")
+                localStorage.removeItem("_id")
+                // localStorage.setItem("name, _id")=null
+                // Chuyển hướng về HomePage
+                this.$router.push('/');
+            } catch (error) {
+                console.log(error);
+            }
+        }
     },
     computed: {
         getNameUser() {
@@ -165,7 +184,7 @@ export default {
             //     this.login = 0
            
             if (localStorage.getItem('name') !== undefined) {
-                console.log(this.user)
+               
                 this.userName = localStorage.getItem('name')
             }
             if (this.userName != undefined) {
