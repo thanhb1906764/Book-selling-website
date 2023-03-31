@@ -43,8 +43,8 @@
                 <div class="form-group mb-2">
                     <div class="input-group">
                         <div class="form-floating">
-                            <Field name="comfirmpassword" type="password" class="form-control"
-                                placeholder="Xác nhận mật khẩu" />
+                            <Field name="comfirmpassword" v-bind:type="showPassword ? 'text' : 'password'"
+                                class=" form-control" placeholder="Xác nhận mật khẩu" />
                             <label class="fs-6" for="comfirmpassword">Xác nhận mật khẩu</label>
                         </div>
                         <span @click="showPasswordF" class="input-group-text user-select-none">{{
