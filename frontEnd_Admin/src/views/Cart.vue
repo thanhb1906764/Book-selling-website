@@ -18,7 +18,7 @@
             </tr>
 
             <!-- Thanh toán  -->
-            <tr class="fs-6 fw-bold text-danger">
+            <tr v-if="show" class="fs-6 fw-bold text-danger">
                 <td colspan="3"></td>
                 <td class="align-middle text-center">Tính tạm</td>
                 <td class="align-middle text-center">{{ (tempCost).toLocaleString('vi-VN', {
@@ -91,13 +91,19 @@ export default {
                 let quantity
 
                 // Tính tạm giá trị các Book trong Cart, chưa tính shipFee 
-                for (let i = 0; i < this.BookInCart.length; i++) {
-                    quantity = this.Cart.find(item => item.idBook === this.BookInCart[i]._id).quantityBook
-                    console.log(quantity);
-                    this.tempCost = this.tempCost + (this.BookInCart[i].bookPrice * parseInt(quantity, 10))
-                    // console.log(this.BookInCart[i].bookPrice);
+                if (this.BookInCart.length !== 0) {
+                    for (let i = 0; i < this.BookInCart.length; i++) {
+                        quantity = this.Cart.find(item => item.idBook === this.BookInCart[i]._id).quantityBook
+                        console.log(quantity);
+                        this.tempCost = this.tempCost + (this.BookInCart[i].bookPrice * parseInt(quantity, 10))
+                        // console.log(this.BookInCart[i].bookPrice);
+                    }
                 }
-                // console.log(this.tempCost);
+                else {
+                    this.tempCost = 0
+                }
+
+                console.log(this.tempCost);
             } catch (error) {
                 console.log(error);
             }
@@ -127,11 +133,10 @@ export default {
         // 
         async update() {
             this.show = false
-            //this.retrieveBookOnCookies()
             this.BookInCart = []
             this.Cart = []
             this.getCartOnCookie();
-            this.retrieveBookOnCookies()
+            this.retrieveBookOnCookies();
             this.show = true
             console.log();
         }

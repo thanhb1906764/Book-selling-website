@@ -256,11 +256,15 @@ export default {
         async retrieveBookOnCart() {
             try {
                 // Lấy tất cả sách trên DataBase 
-                this.bookList = await BooksService.getAll();
+                // this.bookList = await BooksService.getAll();
+                // Lấy tất cả sách từ store, để lấy giá khuyến mãi 
+                this.bookList = useDataStore().getBooks
 
                 // Lọc những sách có bookPrice, originalPrice và author
                 this.bookList = this.bookList.filter(itemBook => (itemBook.bookPrice && itemBook.originalPrice && itemBook.author))
-
+                console.log('useData');
+                console.log(this.bookList);
+                console.log(this.Cart);
                 // Lấy sách trong có trong giỏ hàng 
                 this.order.productList = []
                 for (let i = 0; i < this.Cart.length; i++) {
@@ -307,6 +311,8 @@ export default {
                         this.Cart = response.data
                         console.log('Cart on cookies');
                         console.log(this.Cart)
+                        // Lấy sách 
+                        this.retrieveBookOnCart();
                         return response.data
                     })
             } catch (error) {
@@ -333,8 +339,6 @@ export default {
                     // Cập nhật bookStock cho book 
                     let book = Object
                     let quantityBook
-                    // // L
-
 
                     for (let i = 0; i < this.BookInCart.length; i++) {
                         quantityBook = this.Cart.find(book => book.idBook === this.BookInCart[i]._id).quantityBook
