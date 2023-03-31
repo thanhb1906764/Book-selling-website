@@ -42,7 +42,7 @@
                 <!-- login -->
                 <hr />
                 <div class="form-group fs-6 mb-2 d-flex justify-content-between">
-                    <a class="btn btn-outline-primary">Tạo tài khoản</a>
+                    <router-link class="btn btn-outline-primary" to="/UserRegister">Tạo tài khoản</router-link>
                     <button type="submit" class="btn btn-primary text-white">Đăng nhập</button>
                 </div>
 
