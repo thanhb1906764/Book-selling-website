@@ -80,6 +80,7 @@ import axios from 'axios'
 import { useDataStore } from '@/stores/dataStores'
 import ImagesService from '@/services/images.service'
 import orderService from "../services/orders.service"
+import BooksService from '@/services/books.service'
 
 export default {
     data: () => {
@@ -95,9 +96,10 @@ export default {
     },
     mounted() {
         this.test()
-        if (this.orderDetail[0].orderStatus !== "Chờ xác nhận" )
-            this.isDisable = false
-
+        
+        if (this.orderDetail[0].orderStatus !== "Chờ xác nhận"   )
+            this.isDisable = true
+            
     },
     // created(){
     //     this.test()
@@ -132,7 +134,7 @@ export default {
         findBookNameById(id) {
 
             this.book = useDataStore().getBooks
-            // console.log(this.book)
+            //console.log(this.book)
             const foundBook = this.book.find(item => item._id === id);
             //  console.log(foundBook)
             if (foundBook) {
@@ -140,8 +142,18 @@ export default {
             }
             return "Book not found";
         },
-        cancelOrder(){
-            orderService.update(this.orderDetail[0]._id,{ orderStatus: "Đã hủy" } )
+        async cancelOrder(){
+            await orderService.update(this.orderDetail[0]._id,{ orderStatus: "Đã hủy" } )
+
+             for(let i=0; i<=this.orderDetail[0].productList.length-1; i++){
+                var quantity=this.orderDetail[0].productList[i].quantity //so luong cua 1 loai sach trong don hang
+                var _idBook=this.orderDetail[0].productList[i]._idBook
+                var bookStock=this.book.find(book=>book._id==_idBook).bookStock //so luong kho cua sach theo id sach ben tren
+                var undoStock=bookStock+quantity    // khoi phuc so luong 
+                await BooksService.update(_idBook,{bookStock: undoStock})
+                console.log(undoStock)
+             
+            }
         }
     },
 
