@@ -151,6 +151,11 @@ export default {
                     alert('Password or name not match')
                 else {
                     this.cookies = await UsersService.getCookies();
+                    // Lưu vào localStorage 
+                    localStorage.setItem('name', this.cookies.name)
+                    console.log("User: " + localStorage.getItem('name'))
+                    localStorage.setItem('_id', this.cookies._id)
+                    console.log("id_ " + localStorage.getItem('_id'))
                     // Lưu vào store
                     useDataStore().setUser(this.cookies);
                     console.log(this.cookies);
