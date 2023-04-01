@@ -37,39 +37,9 @@
         </div>
 
         <!-- Các thành phần - nội dung chính trong trang   -->
-        <div id="content">
+        <!-- <div id="content">
             <div class="p-2 fw-semibold fs-5 text-center">
-                <!-- <a href="#hot" class="text-danger text-decoration-none px-2 btn">Sản Phẩm HOT</a>
-                <a href="#new" class="text-danger text-decoration-none px-2 btn">Sản Phẩm Mới</a> -->
                 <a href="#product" class="text-danger text-decoration-none px-2 btn">Sản Phẩm</a>
-            </div>
-        </div>
-
-        <!-- Sản phẩm HOT -->
-        <!-- <div id="hot">
-            <div class="p-2 fw-semibold fs-5" style="background-color: #eb0200;">
-                <a href="#" class="text-white text-decoration-none">Sản Phẩm HOT</a>
-            </div>
-            <div class="container-fluid px-0 py-2">
-                <v-row v-if="show" class="p-2 m-0" :equal="{ sm: true, md: false }">
-                    <v-col v-for="item in Books" :key="item._id" class="d-flex align-center justify-center">
-                        <Cards :book="item" />
-                    </v-col>
-                </v-row>
-            </div>
-        </div> -->
-
-        <!-- Sản phẩm mới - New  -->
-        <!-- <div id="new">
-            <div class="p-2 fw-semibold fs-5" style="background-color:  #1c73e8;">
-                <a href="#" class="text-white text-decoration-none">Sản Phẩm Mới</a>
-            </div>
-            <div class="container-fluid px-0 py-2">
-                <v-row v-if="show" class="p-2 m-0" :equal="{ sm: true, md: false }">
-                    <v-col v-for="item in Books" :key="item._id" class="d-flex align-center justify-center">
-                        <Cards :book="item" />
-                    </v-col>
-                </v-row>
             </div>
         </div> -->
 
@@ -78,8 +48,8 @@
             <div class="p-2 fw-semibold fs-5" style="background-color:  #e7f0fe;">
                 <a href="#" class="text-dark text-decoration-none">Sản Phẩm</a>
             </div>
-            <div class="container-fluid px-0 py-2">
-                <v-row v-if="show" class="p-2 m-0" :equal="{ sm: true, md: false }">
+            <div v-if="loaded" class="container-fluid px-0 py-2">
+                <v-row class="p-2 m-0" :equal="{ sm: true, md: false }">
                     <v-col v-for="item in Books" :key="item._id" class="d-flex align-center justify-center">
                         <Cards :book="item" />
                     </v-col>
@@ -103,11 +73,9 @@ export default {
     },
     data() {
         return {
-            Books: useDataStore().getBooks,
+            Books: [],
             Images: [],
-            show: false,
-
-            // bookList: useDataStore().getBooks,
+            loaded: false,
             geneList: useDataStore().getGenes,
             tagList: useDataStore().getTagList,
             path: mdiApps,
@@ -119,150 +87,25 @@ export default {
         }
     },
     methods: {
-
-        // Lấy tất cả Book từ DB và lưu vào store - kiz
-        // async retrieveBook() {
-        //     try {
-        //         this.Books = await BooksService.getAll();
-        //         this.Books = this.Books.filter(itemBook => (itemBook.bookPrice && itemBook.originalPrice && itemBook.author))
-        //         useDataStore().setBooks(this.Books)
-        //     } catch (error) {
-        //         console.log(error);
-        //     }
-        // },
         // Lấy tất cả Image từ DB và lưu vào store
         async retrieveImage() {
             try {
+                this.Books = useDataStore().getBooks
                 this.Images = await ImagesService.getAll();
                 useDataStore().setImages(this.Images)
-                this.show = true
             } catch (error) {
                 console.log(error);
             }
+            this.loaded = true
         },
-
-        search() {
-            if (this.$refs.search.value === '') {
-                if (this.flag == 0) {
-                    this.pillGenes(0)
-                }
-                else if (this.flag == 1) {
-                    this.pillGenes(1, this.title)
-                }
-                else {
-                    this.pillGenes(2, this.title)
-                }
-            }
-            else {
-                this.bookList = this.bookList.filter(item => {
-                    var normalizedBookName = this.removeVietnameseTones(item.name).toLowerCase()
-                    const searchTerm = this.removeVietnameseTones(this.$refs.search.value).toLowerCase()
-                    return normalizedBookName.includes(searchTerm)
-                })
-                // this.bookList = this.bookList.filter(item =>
-                //     item.name.toLowerCase().includes(this.$refs.search.value.toLowerCase())
-
-                // )
-            }
-            // this.bookList=this.bookList.filter(item=>item.name)
-            console.log(this.bookList)
-            console.log(this.removeVietnameseTones(this.$refs.search.value))
-        },
-        removeVietnameseTones(str) {
-            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
-            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
-            str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
-            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
-            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
-            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
-            str = str.replace(/đ/g, "d");
-            str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
-            str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
-            str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
-            str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
-            str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
-            str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
-            str = str.replace(/Đ/g, "D");
-            // Some system encode vietnamese combining accent as individual utf-8 characters
-            // Một vài bộ encode coi các dấu mũ, dấu chữ như một kí tự riêng biệt nên thêm hai dòng này
-            str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); // ̀ ́ ̃ ̉ ̣  huyền, sắc, ngã, hỏi, nặng
-            str = str.replace(/\u02C6|\u0306|\u031B/g, ""); // ˆ ̆ ̛  Â, Ê, Ă, Ơ, Ư
-            // Remove extra spaces
-            // Bỏ các khoảng trắng liền nhau
-            str = str.replace(/ + /g, " ");
-            str = str.trim();
-            // Remove punctuations
-            // Bỏ dấu câu, kí tự đặc biệt
-            str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, " ");
-            return str;
-        },
-        upDown_Tag(e) {
-            if (e === 0) {
-                this.upDown = !this.upDown
-                if (this.upDown) {
-                    this.bookList.sort((a, b) => a.price - b.price);
-                    console.log(this.bookList)
-                    this.bookList = this.bookList.filter((item, index, array) => {
-                        return index === 0 || item.price > array[index - 1].price;
-                    });
-                }
-                else {
-                    this.bookList.sort((a, b) => b.price - a.price);
-                    console.log(this.bookList)
-                    this.bookList = this.bookList.filter((item, index, array) => {
-                        return index === 0 || item.price < array[index - 1].price;
-                    });
-                }
-            }
-            else {
-                if (this.flag == 0) {
-                    this.pillGenes(0)
-                }
-                else if (this.flag == 1) {
-                    this.pillGenes(1, this.title)
-                }
-                else {
-                    this.pillGenes(2, this.title)
-                }
-                this.bookList = this.bookList.filter(book => book.tag === this.selectTag)
-            }
-        },
-        pillGenes(e, v) {
-            if (e === 0) {
-                this.bookList = useDataStore().getBooks
-                this.title = 'tất cả'
-                this.flag = 0
-            }
-            else if (e === 1) {
-                this.bookList = useDataStore().getBooks
-                var geneExists = this.geneList.filter(item => item.name === v)
-                geneExists = geneExists[0]
-                this.bookList = this.bookList.filter(book => geneExists.sub.some(gene => gene.name === book.gene[0]));
-                this.title = v
-                this.flag = 1
-                console.log(geneExists)
-                // console.log(this.bookList)
-            }
-            else {
-                this.bookList = useDataStore().getBooks
-                this.bookList = this.bookList.filter(book => book.gene.includes(v))
-                this.title = v
-                this.flag = 2
-            }
-        }
     },
     mounted() {
-
-
         this.retrieveImage();
-        // this.retrieveBook();
+    },
+    created() {
+
     }
 }
 </script>
 
-<style>
-.gene:hover {
-    color: orange;
-    display: block;
-}
-</style>
+<style></style>
