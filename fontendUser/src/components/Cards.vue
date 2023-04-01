@@ -20,7 +20,7 @@
                 </span>
 
                 <!-- <v-img :src="link"></v-img> -->
-                <img v-if="linkImage" class="text-center" :src="linkImage" height="270">
+                <img v-if="linkImage !== null" class="text-center" :src="linkImage" height="270">
                 <div>{{ }}</div>
 
                 <v-card-title class="py-2" style="text-overflow: ellipsis;">{{ book.bookName }}</v-card-title>
@@ -73,7 +73,7 @@ export default {
     data() {
         return {
             ImageArray: [],
-            linkImage: useDataStore().getImages.find(image => image._idBook === this.book._id).linkImage, // linkImage của Book lấy từ store
+            linkImage: null, // linkImage của Book lấy từ store
             Images: [], // Lấy hình ảnh từ store hoặc cloud
             time: moment(new Date(), "YYYY-MM-DD HH:mm:ss"),
             counterComement: Object
@@ -135,7 +135,11 @@ export default {
     },
     created() {
         this.counterComment();
-        // this.getImageArray();
+
+        var link = useDataStore().getImages.find(image => image._idBook === this.book._id)
+        console.log(link);
+        this.linkImage = link.linkImage
+
     }
 }
 </script>

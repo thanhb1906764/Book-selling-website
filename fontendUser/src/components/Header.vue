@@ -167,12 +167,12 @@ export default {
         }
     },
     created() {
-        axios
-            .get("http://localhost:3000/api/books")
-            .then((response) => {
-                useDataStore().setBooks(response.data)
-                this.book = useDataStore().getBooks
-            })
+        // axios
+        //     .get("http://localhost:3000/api/books")
+        //     .then((response) => {
+        //         useDataStore().setBooks(response.data)
+        //         this.book = useDataStore().getBooks
+        //     })
     },
     updated() {
         if (localStorage.getItem('name')) {

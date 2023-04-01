@@ -1,5 +1,4 @@
 <script >
-import Nav from './components/TheWelcome.vue';
 import HomePage from './views/HomePage.vue';
 import HeaderVue from './components/Header.vue';
 import FooterVue from './components/Footer.vue';
@@ -14,7 +13,6 @@ import moment from 'moment';
 
 export default {
     components: {
-        Nav,
         HeaderVue,
         HomePage,
         FooterVue,
@@ -35,7 +33,7 @@ export default {
                 var Images = await ImagesService.getAll();
                 useDataStore().setImages(Images)
                 this.Books = await BooksService.getAll();
-                this.Books = this.Books.filter(itemBook => (itemBook.bookPrice && itemBook.originalPrice && itemBook.author))
+                this.Books = await this.Books.filter(itemBook => itemBook.author !== undefined)
                 useDataStore().setBooks(this.Books)
 
 

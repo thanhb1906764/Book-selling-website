@@ -74,7 +74,7 @@ export default {
     },
     data() {
         return {
-            Books: useDataStore().getBooks,
+            Books: useDataStore().getBooks.filter(itemBook => itemBook.author !== undefined),
             Images: useDataStore().getImages,
             loaded: false,
             geneList: useDataStore().getGenes,
@@ -95,6 +95,7 @@ export default {
     },
     mounted() {
         // this.retrieveImage();
+        console.log(this.Books)
     },
     created() {
 
