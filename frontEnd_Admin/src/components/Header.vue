@@ -164,7 +164,8 @@ export default {
                 localStorage.removeItem("_id")
                 // localStorage.setItem("name, _id")=null
                 // Chuyển hướng về HomePage
-                this.$router.push('/');
+                // this.$router.replace('/');
+                window.location.href = "http://localhost:3001/";
             } catch (error) {
                 console.log(error);
             }
@@ -202,10 +203,8 @@ export default {
             .then((response) => {
                 useDataStore().setBooks(response.data)
                 this.book = useDataStore().getBooks
-
             })
     }
-
 }
 </script>
 <style></style>

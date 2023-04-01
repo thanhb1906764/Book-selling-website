@@ -73,7 +73,7 @@ export default {
     },
     data() {
         return {
-            Books: [],
+            Books: useDataStore().getBooks,
             Images: [],
             loaded: false,
             geneList: useDataStore().getGenes,
@@ -90,7 +90,6 @@ export default {
         // Lấy tất cả Image từ DB và lưu vào store
         async retrieveImage() {
             try {
-                this.Books = useDataStore().getBooks
                 this.Images = await ImagesService.getAll();
                 useDataStore().setImages(this.Images)
             } catch (error) {
@@ -103,6 +102,7 @@ export default {
         this.retrieveImage();
     },
     created() {
+
 
     }
 }

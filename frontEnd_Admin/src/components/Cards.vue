@@ -21,6 +21,7 @@
 
                 <!-- <v-img :src="link"></v-img> -->
                 <img class="text-center" :src="linkImage" height="270">
+                <div>{{ }}</div>
 
                 <v-card-title class="py-2" style="text-overflow: ellipsis;">{{ book.bookName }}</v-card-title>
 
@@ -63,6 +64,7 @@ import moment from 'moment';
 import { useDataStore } from "../stores/dataStores";
 import testTime from '../components/testTime.vue'
 import { Countdown } from 'vue3-flip-countdown';
+import ImagesService from '@/services/images.service'
 import CommentsService from '@/services/comments.service'
 export default {
     components: {
@@ -70,6 +72,7 @@ export default {
     },
     data() {
         return {
+            ImageArray: [],
             linkImage: null, // linkImage của Book lấy từ store
             Images: [], // Lấy hình ảnh từ store hoặc cloud
             time: moment(new Date(), "YYYY-MM-DD HH:mm:ss"),
@@ -80,6 +83,24 @@ export default {
         book: Object, // get book từ HomePage
     },
     methods: {
+        // Lấy tất cả Image của của một Book cụ thể
+        async getImageArray() {
+            if (useDataStore().getImages.length !== 0) {
+                this.ImageArray = useDataStore().getImages.find(image => image._idBook === this.book._id)
+            }
+            else {
+                try {
+                    this.ImageArray = await ImagesService.getAll();
+                    useDataStore().setImages(this.ImageArray);
+                    this.ImageArray = this.ImageArray.find(image => image._idBook === this.book._id)
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+            // Lấy dữ liệu Images
+            this.linkImage = this.ImageArray.linkImage
+        },
         // Đếm số lượng comment của một cuốn sách cụ thể 
         async counterComment() {
             let commentList = await CommentsService.getAll();
@@ -110,12 +131,11 @@ export default {
         }
     },
     mounted() {
-        // Lấy dữ liệu Images 
-        this.Images = useDataStore().getImages
-        this.linkImage = this.Images.filter(image => image._idBook === this.book._id)[0].linkImage
+
     },
     created() {
         this.counterComment();
+        this.getImageArray();
     }
 }
 </script>
