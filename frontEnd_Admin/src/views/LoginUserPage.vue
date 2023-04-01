@@ -57,6 +57,8 @@ import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import UsersService from '@/services/users.service';
 import { useDataStore } from '../stores/dataStores';
+import axios from 'axios';
+
 export default {
     components: {
         Form,
@@ -122,7 +124,6 @@ export default {
                     }
                     // Lưu vào store
                     useDataStore().setUser(this.cookies);
-                    console.log(this.cookies);
                     // Lưu vào localStorage 
                     localStorage.setItem('name', this.cookies.name)
                     console.log("User: " + localStorage.getItem('name'))
@@ -147,6 +148,14 @@ export default {
                 // Xoá thông tin user từ localStorage
                 localStorage.removeItem("name");
                 localStorage.removeItem("_id");
+                // Xoá giỏ hàng
+                await axios
+                    .get(`http://localhost:3000/cookies/clear`, {
+                        withCredentials: true
+                    })
+                    .then((response) => {
+                        console.log(response)
+                    })
                 // Chuyển hướng về HomePage
                 this.$router.push('/');
             } catch (error) {

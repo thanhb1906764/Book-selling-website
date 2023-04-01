@@ -153,6 +153,7 @@ export default {
 
     },
     methods: {
+        // Đăng xuất 
         async logout() {
             try {
                 // Xoá thông tin user từ cookies
@@ -160,11 +161,17 @@ export default {
                 // Xoá thông tin user từ store
                 useDataStore().setUser([]);
                 // Xoá thông tin user từ localStorage
-                localStorage.removeItem("name")
-                localStorage.removeItem("_id")
-                // localStorage.setItem("name, _id")=null
+                localStorage.removeItem("name");
+                localStorage.removeItem("_id");
+                // Xoá giỏ hàng
+                await axios
+                    .get(`http://localhost:3000/cookies/clear`, {
+                        withCredentials: true
+                    })
+                    .then((response) => {
+                        console.log(response)
+                    })
                 // Chuyển hướng về HomePage
-                // this.$router.replace('/');
                 window.location.href = "http://localhost:3001/";
             } catch (error) {
                 console.log(error);

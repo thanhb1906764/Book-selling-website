@@ -195,7 +195,7 @@ export default {
         // Lấy carts từ cookies
         async getCart() {
             try {
-                axios
+                await axios
                     .get(`http://localhost:3000/cookies/read`, {
                         withCredentials: true
                     })
