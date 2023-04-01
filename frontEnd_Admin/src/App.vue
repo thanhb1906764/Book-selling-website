@@ -106,56 +106,23 @@ export default {
     }
 }
 </script>
-
-
 <template>
     <header>
         <HeaderVue />
     </header>
-    <main v-if="show" class="container py-2">
+    <main v-if="show">
         <!-- <HomePage /> -->
         <LoginUser />
         <RegisterUser />
         <router-view />
     </main>
-
     <footer>
         <FooterVue />
     </footer>
 </template>
-
 <style scoped>
-/* header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-} */
-
-/* @media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-} */
-
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+main {
+    background-color: #f0f2f5;
+    padding: 16px 0;
 }
 </style>

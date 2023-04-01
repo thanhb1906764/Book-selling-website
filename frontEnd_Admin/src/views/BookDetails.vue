@@ -1,5 +1,5 @@
 <template>
-    <div class="container shadow-sm rounded-3">
+    <div class="container shadow-sm rounded-2" style="background-color: white;">
         <!-- Chi tiết sản phẩm  -->
         <div style="display: flex;">
             <!-- Hiển thị Images của Book  -->
@@ -36,7 +36,9 @@
                 </div>
                 <!-- Số lượng Book trong kho  -->
                 <div class="row gx-5">
-                    <p>Số lượng sách còn lại: <strong>{{ Book.bookStock }}</strong></p>
+                    <p>Số lượng sách còn lại: <strong>{{ Book.bookStock }}</strong><strong class="px-3 text-danger"
+                            v-if="Book.bookStock <= 10"> Sắp hết
+                            hàng</strong></p>
                     <p class="">Đổi trả trong 30 ngày
                         <Modal />
                     </p>
@@ -49,7 +51,7 @@
                         </span>
                     </p>
                 </div> -->
-                <!-- Số lượng sách sẽ muaß  -->
+                <!-- Số lượng sách sẽ mua  -->
                 <div v-if="Book.bookStock !== 0" style="display: flex; justify-content: start; align-items: center;">
                     <div class="px-0 fs-5 me-3">Số lượng</div>
                     <div class="btn-group" role="group" aria-label="Basic outlined">

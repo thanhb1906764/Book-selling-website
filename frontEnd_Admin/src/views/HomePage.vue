@@ -10,7 +10,7 @@
                 <button type="button" data-bs-target="#carouselExampleInterval" data-bs-slide-to="2"
                     aria-label="Slide 3"></button>
             </div>
-            <div class="carousel-inner">
+            <div class="carousel-inner rounded-2 shadow-lg">
                 <div class="carousel-item active" data-bs-interval="3000">
                     <img src="https://theme.hstatic.net/200000343865/1000938429/14/ms_banner_img4.jpg?v=335"
                         class="d-block w-100" alt="...">
@@ -35,20 +35,18 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
-
         <!-- Các thành phần - nội dung chính trong trang   -->
-        <!-- <div id="content">
+        <div id="content">
             <div class="p-2 fw-semibold fs-5 text-center">
                 <a href="#product" class="text-danger text-decoration-none px-2 btn">Sản Phẩm</a>
             </div>
-        </div> -->
-
+        </div>
         <!-- Sản phẩm -->
-        <div id="product">
-            <div class="p-2 fw-semibold fs-5" style="background-color:  #e7f0fe;">
-                <a href="#" class="text-dark text-decoration-none">Sản Phẩm</a>
+        <div id="product" class="">
+            <div class="p-2 fw-semibold fs-5" style="background-color:  #55a1e7;">
+                <div class="text-white text-decoration-none">Sản Phẩm</div>
             </div>
-            <div v-if="loaded" class="container-fluid px-0 py-2">
+            <div v-if="loaded" class="px-0 py-2">
                 <v-row class="p-2 m-0" :equal="{ sm: true, md: false }">
                     <v-col v-for="item in Books" :key="item._id" class="d-flex align-center justify-center">
                         <Cards :book="item" />
