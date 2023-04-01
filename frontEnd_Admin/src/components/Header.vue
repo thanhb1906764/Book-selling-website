@@ -13,8 +13,6 @@
                             <category />
                         </a>
                     </li>
-
-
                 </ul>
                 <form class="d-flex w-50" role="search">
                     <div class="input-group">
@@ -23,32 +21,23 @@
                         <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
                     </div>
                 </form>
-
                 <!-- <div class="col-sm " style="max-width: 50%;">
-
           <v-text-field list="datalistOptions" variant="solo" append-inner-icon="mdi-magnify"  class="  me-2" 
                 label="Tìm kiếm theo tên sách..." @input="search"></v-text-field>
         </div> -->
-
-
-
-
-
                 <div class="nav-item">
-
-
                     <v-menu open-on-hover>
                         <template v-slot:activator="{ props }">
-                            <router-link v-if="login == 1" to="/acc/info" class="nav-link active" v-bind="props">
+                            <router-link v-if="login === true" to="/acc/info" class="nav-link active" v-bind="props">
                                 <v-icon icon="mdi-account"></v-icon>
                             </router-link>
-                            <router-link v-if="login == 0" to="/UserLogin" class="nav-link active" v-bind="props">
+                            <router-link v-if="login === false" to="/UserLogin" class="nav-link active" v-bind="props">
                                 <v-icon icon="mdi-account"></v-icon>
                             </router-link>
                         </template>
                         <v-list>
-
-                            <v-list-item v-if="login == 0"><!-- //  chưa đăng nhập -->
+                            <!-- //  chưa đăng nhập -->
+                            <v-list-item v-if="login === false">
                                 <v-list-item-title><a href="/UserLogin" class="nav-link" data-bs-toggle="modal"
                                         data-bs-target="#LoginUserModal">
                                         Đăng nhập</a>
@@ -57,17 +46,15 @@
                                         data-bs-target="#RegisterUserModal">
                                         Đăng ký</a>
                                 </v-list-item-title>
-
                             </v-list-item>
-                            <v-list-item v-if="login == 1"> <!--  // đã đăng nhập -->
+                            <!--  // đã đăng nhập -->
+                            <v-list-item v-if="login === true">
                                 <v-hover>
                                     <template v-slot:default="{ isHovering, props }">
                                         <a href="#" class="nav-link active">
                                             <v-sheet class="pb-2" v-bind="props" :color="isHovering ? '#d4d7d9' : undefined"
                                                 :value="0">
                                                 <v-list-item :title=getNameUser subtitle="Thành viên BookStore">
-
-
                                                 </v-list-item>
                                             </v-sheet>
                                         </a>
@@ -78,11 +65,9 @@
                                         <router-link to="/acc/order">
                                             <v-sheet class=" ms-2 pb-2 " v-bind="props"
                                                 :color="isHovering ? '#d4d7d9' : undefined">
-                                                Đơn hàng của
-                                                tôi
+                                                Đơn hàng của tôi
                                             </v-sheet>
                                         </router-link>
-
                                     </template>
                                 </v-hover>
                                 <v-hover>
@@ -95,22 +80,13 @@
                                         </div>
                                     </template>
                                 </v-hover>
-
-
-
-
                             </v-list-item>
-
                         </v-list>
                     </v-menu>
-
-
                 </div>
                 <div class="m-2">
-
                     <router-link class="text-decoration-none link-dark" to="/Cart"><v-icon
                             icon="mdi-cart"></v-icon></router-link>
-
                 </div>
             </div>
         </div>
@@ -131,7 +107,7 @@ export default {
     // }),
     data() {
         return {
-            login: "1",
+            login: false,
             user: [],
             userName: ""
         }
@@ -140,9 +116,7 @@ export default {
         // this.user = useDataStore().getUser
         // console.log(this.user)
         // if (this.user !== undefined) {
-
         //     this.userName = this.user
-
         // }
         // if (this.userName != "") {
         //     this.login = 1
@@ -150,7 +124,6 @@ export default {
         // else
         //     this.login = 0
         //this.user = useDataStore().getUser
-
     },
     methods: {
         // Đăng xuất 
@@ -180,27 +153,13 @@ export default {
     },
     computed: {
         getNameUser() {
-            // this.user = useDataStore().getUser
-            // if (this.user !== undefined) {
-            //     console.log(this.user)
-            //     this.userName = this.user
-            // }
-            // if (this.userName != "") {
-            //     this.login = 1
-            // }
-            // else
-            //     this.login = 0
-
-            if (localStorage.getItem('name') !== undefined) {
-
-                this.userName = localStorage.getItem('name')
+            this.userName = localStorage.getItem('name')
+            if (this.userName !== undefined) {
+                this.login = true
             }
-            if (this.userName != undefined) {
-                this.login = 1
+            else {
+                this.login = false
             }
-            else
-                this.login = 0
-
             return localStorage.getItem('name')
         }
     },
@@ -211,6 +170,11 @@ export default {
                 useDataStore().setBooks(response.data)
                 this.book = useDataStore().getBooks
             })
+    },
+    updated() {
+        if (localStorage.getItem('name')) {
+            this.login = true
+        }
     }
 }
 </script>

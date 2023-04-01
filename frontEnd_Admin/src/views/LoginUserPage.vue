@@ -8,21 +8,18 @@
                     <div class="fw-bold fs-5">Đăng Nhập</div>
                     <small>Sử dụng tài khoản người mua</small>
                 </div>
-
                 <!-- phone -->
                 <div class="form-group form-floating mb-2">
                     <Field name="phone" type="text" class="form-control" placeholder="Số điện thoại" v-model="user.phone" />
                     <label for="phone">Số điện thoại</label>
                     <ErrorMessage name="phone" class="error-feedback" />
                 </div>
-
                 <!-- name -->
                 <div class="form-group form-floating mb-2">
                     <Field name="name" type="text" class="form-control" placeholder="Tên" v-model="user.name" />
                     <label class="fs-6" for="name">Tên</label>
                     <ErrorMessage name="name" class="error-feedback" />
                 </div>
-
                 <!-- password -->
                 <div class="form-group mb-2">
                     <div class="input-group">
@@ -38,14 +35,12 @@
                     <!-- <p class="fw-lighter">Sử dụng 4 ký tự trở lên</p> -->
                     <ErrorMessage name="password" class="error-feedback" />
                 </div>
-
                 <!-- login -->
                 <hr />
                 <div class="form-group fs-6 mb-2 d-flex justify-content-between">
                     <router-link class="btn btn-outline-primary" to="/UserRegister">Tạo tài khoản</router-link>
                     <button type="submit" class="btn btn-primary text-white">Đăng nhập</button>
                 </div>
-
             </div>
         </div>
     </Form>
@@ -131,13 +126,13 @@ export default {
                     console.log("id_ " + localStorage.getItem('_id'))
                     console.log(useDataStore().getUser);
                     // Chuyển hướng về HomePage 
-                    this.$router.push('/');
+                    // this.$router.push('/');
+                    window.location.href = "http://localhost:3001/";
                 }
             } catch (error) {
                 console.log(error);
             }
         },
-
         // Đăng xuất 
         async logout() {
             try {
