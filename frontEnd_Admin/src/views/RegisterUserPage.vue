@@ -1,7 +1,14 @@
 <template>
-    <Form class="container form" @submit="submitRegister" :validation-schema="userSchema">
+    <Form class="container form shadow-sm round-4 pb-5" @submit="submitRegister" :validation-schema="userSchema">
         <div class="row">
             <div class="col">
+                <!-- Đăng ký  -->
+                <div class="form-group form-floating mb-3 text-center">
+                    <div class="fw-bold fs-6 text-danger py-3">Book Store</div>
+                    <div class="fw-bold fs-5">Đăng ký</div>
+                    <small>Đăng ký tài khoản người mua</small>
+                </div>
+
                 <!-- phone -->
                 <div class="form-group form-floating mb-2">
                     <Field name="phone" type="text" class="form-control" placeholder="Số điện thoại" v-model="user.phone" />
@@ -36,8 +43,8 @@
                 <div class="form-group mb-2">
                     <div class="input-group">
                         <div class="form-floating">
-                            <Field name="comfirmpassword" type="password" class="form-control"
-                                placeholder="Xác nhận mật khẩu" />
+                            <Field name="comfirmpassword" v-bind:type="showPassword ? 'text' : 'password'"
+                                class=" form-control" placeholder="Xác nhận mật khẩu" />
                             <label class="fs-6" for="comfirmpassword">Xác nhận mật khẩu</label>
                         </div>
                         <span @click="showPasswordF" class="input-group-text user-select-none">{{
@@ -66,10 +73,9 @@
                 <!-- register -->
                 <hr />
                 <div class="form-group fs-6 mb-2 d-flex justify-content-between">
-                    <a class="btn btn-outline-primary" href="/UserLogin">Đăng nhập</a>
+                    <router-link class="btn btn-outline-primary" to="/UserLogin">Đăng nhập</router-link>
                     <button type="submit" class="btn btn-primary text-white">Tạo tài khoản</button>
                 </div>
-
             </div>
         </div>
     </Form>
@@ -145,6 +151,11 @@ export default {
                     alert('Password or name not match')
                 else {
                     this.cookies = await UsersService.getCookies();
+                    // Lưu vào localStorage 
+                    localStorage.setItem('name', this.cookies.name)
+                    console.log("User: " + localStorage.getItem('name'))
+                    localStorage.setItem('_id', this.cookies._id)
+                    console.log("id_ " + localStorage.getItem('_id'))
                     // Lưu vào store
                     useDataStore().setUser(this.cookies);
                     console.log(this.cookies);
@@ -160,6 +171,6 @@ export default {
 </script>
 <style scoped>
 .form {
-    max-width: 400px;
+    max-width: 350px;
 }
 </style>

@@ -1,17 +1,15 @@
 <template>
-    <div class="container shadow-sm rounded-3">
+    <div class="container shadow-sm rounded-2" style="background-color: white;">
         <!-- Chi tiết sản phẩm  -->
         <div style="display: flex;">
             <!-- Hiển thị Images của Book  -->
             <div style="width: 30rem; padding: 10px;">
                 <Carousel_Img :id="this.id" />
             </div>
-
             <!-- Thông tin Book  -->
             <div class="p-2" style="width: 60rem;">
                 <!-- Tên Book  -->
                 <h4 class="fw-semibold">{{ Book.bookName }}</h4>
-
                 <!-- Nhà Cung cấp và Xuất bản -->
                 <div class="row gx-5">
                     <p class="col">
@@ -20,18 +18,15 @@
                     </p>
                     <p class="col">Nhà xuất bản: <strong>{{ Book.publisher }}</strong></p>
                 </div>
-
                 <!-- Tác giả  -->
                 <div class="row gx-5">
                     <p class="col">Tác giả: <strong>{{ Book.author }}</strong></p>
                 </div>
-
                 <!-- Kích cỡ Book và số trang  -->
                 <div class="row gx-5">
                     <p class="col">Kích cỡ: <strong>{{ Book.size }}</strong></p>
                     <p class="col">Số trang: <strong>{{ Book.quantityPage }}</strong></p>
                 </div>
-
                 <!-- Giá sách... -->
                 <div style="display: flex; justify-content: start; align-items: center;">
                     <h3 class="text-danger fw-bold">{{ Book.bookPrice }} &#8363;</h3>
@@ -39,15 +34,15 @@
                         {{ Book.originalPrice }} &#8363;</h6>
                     <h6><span class="badge bg-danger">New</span></h6>
                 </div>
-
                 <!-- Số lượng Book trong kho  -->
                 <div class="row gx-5">
-                    <p>Số lượng sách còn lại: <strong>{{ Book.bookStock }}</strong></p>
+                    <p>Số lượng sách còn lại: <strong>{{ Book.bookStock }}</strong><strong class="px-3 text-danger"
+                            v-if="(Book.bookStock <= 10) && (Book.bookStock !== 0)"> Sắp hết
+                            hàng</strong></p>
                     <p class="">Đổi trả trong 30 ngày
                         <Modal />
                     </p>
                 </div>
-
                 <!-- Địa chỉ giao hàng -->
                 <!-- <div class="row gx-5">
                     <p>Giao hàng đến
@@ -56,7 +51,6 @@
                         </span>
                     </p>
                 </div> -->
-
                 <!-- Số lượng sách sẽ mua  -->
                 <div v-if="Book.bookStock !== 0" style="display: flex; justify-content: start; align-items: center;">
                     <div class="px-0 fs-5 me-3">Số lượng</div>
@@ -67,27 +61,21 @@
                         <button @click="BookQuantityIncrease" type="button" class="btn btn-outline-primary">+</button>
                     </div>
                 </div>
-
                 <hr />
-
-                <!-- Button  -->
+                <!-- Button Mua Ngay, Thêm Vào Giỏ Hàng -->
                 <div v-if="Book.bookStock !== 0" class="py-3">
                     <span @click="PayClick" class="btn btn-danger">Mua Ngay</span>
                     <span @click="addProductToCart" class="px-2"><a @click="notify" class="btn btn-outline-danger">Thêm Vào
                             Giỏ Hàng</a></span>
                 </div>
-
                 <!-- Hết hàng  -->
                 <div v-if="Book.bookStock === 0" class="text-danger fs-3 fw-bold">
                     Hết hàng
                 </div>
             </div>
         </div>
-
-
         <!-- Thông tin sản phẩm và bình luận  -->
         <div class="" style="margin-top: 10px; padding: 10px;">
-
             <!-- Thanh điều hướng  -->
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -98,32 +86,33 @@
                         type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Đánh giá</button>
                 </div>
             </nav>
-
             <!-- Review -->
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                     {{ Book.bookDes }}
                 </div>
-
                 <!-- Bình luận  -->
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                    <CommentForm />
-                    <!-- <Comments :id="this.id" /> -->
+                    <CommentForm :idBook="this.id" @submitComment="getComment" />
+                    <div v-for="item in commentList" :key="item._id">
+                        <Comments :comment="item" />
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-// Import here 
+// Import
 import Carousel_Img from '../components/Carousel_Img.vue';
 import Modal from '../components/Modal.vue';
 import Comments from '../components/Comments.vue';
 import CommentForm from '../components/CommentForm.vue';
-import BooksService from '@/services/books.service'
-import ImagesService from '@/services/images.service'
+import BooksService from '@/services/books.service';
+import ImagesService from '@/services/images.service';
+import CommentsService from '@/services/comments.service';
 import { useDataStore } from '../stores/dataStores';
-import axios from 'axios'
+import axios from 'axios';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 export default {
@@ -145,8 +134,9 @@ export default {
                 limit: 1,
                 type: toast.TYPE.SUCCESS,
                 multiple: false,
-            }); // ToastOptions                            
+            });
             this.notify = function () {
+                // this.$router.replace('/Cart'); Lỗi
                 window.location.href = "/Cart";
                 return 0;
             };
@@ -157,11 +147,19 @@ export default {
             ImgaeArray: {},
             notify: notify,
             Cart: [],
+            commentList: []
         }
     },
     computed: {
     },
     methods: {
+        // Lấy bình luận của một quyển sách
+        async getComment() {
+            let doc = await CommentsService.getAll()
+            this.commentList = doc.filter(item => item._idBook === this.id)
+            console.log(this.commentList);
+        },
+
         // Cập nhật dữ liệu vào store và chuyển sang trang Pay
         PayClick() {
             this.addProductToCart();
@@ -197,9 +195,9 @@ export default {
         },
 
         // Lấy carts từ cookies
-        async getCookiesToCheck() {
+        async getCart() {
             try {
-                axios
+                await axios
                     .get(`http://localhost:3000/cookies/read`, {
                         withCredentials: true
                     })
@@ -232,7 +230,7 @@ export default {
 
         // Lấy tất cả những image của Book trong store (nếu có) hoặc từ DB
         async getImggeArray() {
-            if (useDataStore().getBooks.length !== 0) {
+            if (useDataStore().getImages.length !== 0) {
                 this.ImgaeArray = useDataStore().getImages.filter(image => image._idBook === this.id);
             }
             else {
@@ -249,9 +247,10 @@ export default {
     },
     mounted() {
     },
+    // Lấy dữ liệu trước khi kết xuất
     created() {
-        // Lấy dữ liệu trước khi kết xuất 
-        this.getCookiesToCheck(); // Do hàm này chỉ run 1 lần nên cần thêm code để xem Book có trong Cart hay không 
+        this.getComment();
+        this.getCart();
         this.getBook();
         this.getImggeArray();
     }
@@ -259,7 +258,7 @@ export default {
 </script>
 
 <style scoped>
-/* Chrome, Safari, Edge, Opera */
+/* Chrome, Safari, Edge, Opera - Khoá spin trên input, type number */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;

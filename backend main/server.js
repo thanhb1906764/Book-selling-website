@@ -10,7 +10,6 @@ async function startServer() {
         const PORT = config.app.port;
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
-            console.log(`http://localhost:3001`)
         });
     }
     catch (error) {

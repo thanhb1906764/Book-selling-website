@@ -100,15 +100,16 @@ export default {
         },
 
         // Xoá sản phẩm trong giỏ hàng 
-        deleteProductInCart(idBook) {
+        async deleteProductInCart(idBook) {
             try {
-                axios
+                await axios
                     .get(`http://localhost:3000/cookies/clear/${idBook}`, {
                         withCredentials: true
                     })
                     .then((response) => {
                         console.log(response.data)
                     });
+                this.$emit('updateCart', 'edu')
             } catch (error) {
                 console.log(error);
             }

@@ -46,43 +46,37 @@
                         <div class="col-3 border-end text-danger "><router-link
                                 :to="{ name: 'AddressEditVue', params: { id: address._id } }">Sửa địa chỉ </router-link>
                         </div>
-                        <div class="col-3 text-secondary"  @click="openDialog">Xóa địa chỉ</div>
+                        <div class="col-3 text-secondary" @click="openDialog">Xóa địa chỉ</div>
                         <div>
-    
-    <v-dialog v-model="dialog" persistent max-width="400">
-      <v-card>
-        <v-card-title class="headline">Are you sure?</v-card-title>
-        <v-card-text>
-          This action cannot be undone.
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="green darken-1" text @click="dialog = false; deleteAddress(address._id)">Yes</v-btn>
-          <v-btn color="red darken-1" text @click="dialog = false">No</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
+
+                            <v-dialog v-model="dialog" persistent max-width="400">
+                                <v-card>
+                                    <v-card-title class="headline">Are you sure?</v-card-title>
+                                    <v-card-text>
+                                        This action cannot be undone.
+                                    </v-card-text>
+                                    <v-card-actions>
+                                        <v-btn color="green darken-1" text
+                                            @click="dialog = false; deleteAddress(address._id)">Yes</v-btn>
+                                        <v-btn color="red darken-1" text @click="dialog = false">No</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                        </div>
                     </div>
                 </div>
             </div>
 
         </div>
     </div>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-    >
-     cập nhật thành công
+    <v-snackbar v-model="snackbar" :timeout="timeout">
+        cập nhật thành công
 
-      <template v-slot:actions>
-        <v-btn
-          color="blue"
-          variant="text"
-          @click="snackbar = false"
-        >
-          Close
-        </v-btn>
-      </template>
+        <template v-slot:actions>
+            <v-btn color="blue" variant="text" @click="snackbar = false">
+                Close
+            </v-btn>
+        </template>
     </v-snackbar>
 </template>
 
@@ -101,18 +95,18 @@ export default {
             timeout: 2000,
         };
     },
-    computed:{
-        
+    computed: {
+
     },
     // updated(){
     //     this.address = useDataStore().getAddress.filter(item => item.default == false);
     //    this.addressDefault = useDataStore().getAddress.filter(item => item.default == true);
     // },
     mounted() {
-       this.getAddress1()
+        this.getAddress1()
     },
     methods: {
-        async getAddress1 (){
+        async getAddress1() {
             this.address = await addressService.getAll()
             // useDataStore().getAPIAddress(this.address.filter(item => item._idUser == useDataStore().getUser._id));
             useDataStore().getAPIAddress(this.address.filter(item => item._idUser == localStorage.getItem('_id')));
@@ -129,8 +123,8 @@ export default {
 
         },
         openDialog() {
-      this.dialog = true;
-    },
+            this.dialog = true;
+        },
     },
     components: { RouterLink }
 };

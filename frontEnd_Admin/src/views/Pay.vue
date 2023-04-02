@@ -194,8 +194,8 @@ export default {
     data() {
         return {
             ImageArray: [],
-            name: null, // Tên user, nếu người dùng có đăng nhập 
-            shipFee: Number,
+            name: '', // Tên user, nếu người dùng có đăng nhập 
+            shipFee: this.getShipFee(),
             tempCost: 0,
             user: {},
             bookList: [],
@@ -209,7 +209,7 @@ export default {
                 reDate: new Date(0),
                 orderDate: new Date(),
                 orderStatus: 'Chờ xác nhận',
-                userId: localStorage.getItem('_id') || null,
+                userId: localStorage.getItem('_id'),
             },
         }
     },
@@ -222,6 +222,9 @@ export default {
         }
     },
     methods: {
+        orderTotal(tempCost, shipFee) {
+            return tempCost + shipFee;
+        },
         // Lấy địa chỉ của người dùng nếu có đăng nhập 
         async getAddressList() {
             let addressList = await AddressesService.getAll();
@@ -242,6 +245,7 @@ export default {
                 this.shipFee = temp[0].shipFee;
                 console.log('shipFee ' + this.shipFee)
                 this.order.shipFee = this.shipFee
+                return this.shipFee
             }
             catch (error) {
                 console.log(error);
@@ -252,11 +256,15 @@ export default {
         async retrieveBookOnCart() {
             try {
                 // Lấy tất cả sách trên DataBase 
-                this.bookList = await BooksService.getAll();
+                // this.bookList = await BooksService.getAll();
+                // Lấy tất cả sách từ store, để lấy giá khuyến mãi 
+                this.bookList = useDataStore().getBooks
 
                 // Lọc những sách có bookPrice, originalPrice và author
                 this.bookList = this.bookList.filter(itemBook => (itemBook.bookPrice && itemBook.originalPrice && itemBook.author))
-
+                console.log('useData');
+                console.log(this.bookList);
+                console.log(this.Cart);
                 // Lấy sách trong có trong giỏ hàng 
                 this.order.productList = []
                 for (let i = 0; i < this.Cart.length; i++) {
@@ -303,6 +311,8 @@ export default {
                         this.Cart = response.data
                         console.log('Cart on cookies');
                         console.log(this.Cart)
+                        // Lấy sách 
+                        this.retrieveBookOnCart();
                         return response.data
                     })
             } catch (error) {
@@ -319,6 +329,7 @@ export default {
                     return 0;
                 }
                 console.log(this.order);
+                this.order.orderTotal = this.orderTotal(this.tempCost, this.shipFee);
                 let order = await OrdersService.create(this.order)
                 if (order === undefined)
                     alert('Tạo đơn hàng không thành công');
@@ -327,15 +338,14 @@ export default {
                     console.log(order);
                     // Cập nhật bookStock cho book 
                     let book = Object
-                    // let quantityBook
-                    // // L
-
+                    let quantityBook
 
                     for (let i = 0; i < this.BookInCart.length; i++) {
-                        // quantityBook = this.Cart.find(book => book.idBook === this.BookInCart[i]._id).quantityBook
+                        quantityBook = this.Cart.find(book => book.idBook === this.BookInCart[i]._id).quantityBook
+                        let book = await BooksService.get(this.BookInCart[i]._id);
                         // console.log(quantityBook);
                         book = {
-                            bookStock: (parseInt(this.BookInCart[i].bookStock, 10) - parseInt(quantityBook, 10))
+                            bookStock: (parseInt(book.bookStock, 10) - parseInt(quantityBook, 10))
                         }
                         await BooksService.update(this.BookInCart[i]._id, book)
                     }
@@ -370,10 +380,11 @@ export default {
         // console.log(this.addressList);
     },
     created() {
-        this.name = localStorage.getItem('user');
+        this.name = localStorage.getItem('_id');
+        // this.name = '63fd659dfb9d13249a5499b5'
         this.Cart = this.getCartOnCookie();
         this.retrieveBookOnCart();
-        this.getShipFee()
+        // this.getShipFee()
         this.getAddressList();
     }
 

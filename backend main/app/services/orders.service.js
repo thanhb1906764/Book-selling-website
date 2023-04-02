@@ -8,7 +8,7 @@ class OrdersService {
     extractOrdersData(payload) {
         const orders = {
             reDate: payload.reDate,
-            orderTotal: payload.totalProductMoney,
+            orderTotal: payload.orderTotal,
             shipFee: payload.shipFee,
             totalProductMoney: payload.totalProductMoney,
             payment: payload.payment,

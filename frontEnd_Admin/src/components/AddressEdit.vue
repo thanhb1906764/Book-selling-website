@@ -45,16 +45,16 @@ export default {
             childComponent.setData(this.$route.params.id);
         },
         editAddress(formData) {
-            if (formData.default == true ) {
+            if (formData.default == true) {
                 console.log(this.idDefault)
-                if(this.idDefault!=""){
-                    addressesService.update(this.idDefault[0]._id, {default: false})
-                }              
+                if (this.idDefault != "") {
+                    addressesService.update(this.idDefault[0]._id, { default: false })
+                }
             }
             addressesService.create(formData)
             console.log(JSON.stringify(formData))
             useDataStore().setSnackbar(true)
-            this.$router.push({name:"AddressAcc"})
+            this.$router.push({ name: "AddressAcc" })
         },
     },
 }

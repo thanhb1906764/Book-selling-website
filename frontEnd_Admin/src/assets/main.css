@@ -1,33 +1,33 @@
 @import './base.css';
 
 #app {
-  /* max-width: 100%; */
-  margin: 0 auto;
-  /* padding: 2rem; */
+    /* max-width: 100%; */
+    margin: 0 auto;
+    /* padding: 2rem; */
 
-  font-weight: normal;
+    font-weight: normal;
 }
 
 a,
 .green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  cursor: pointer;
-  transition: 0.4s;
+    text-decoration: none;
+    color: hsla(160, 100%, 37%, 1);
+    cursor: pointer;
+    transition: 0.4s;
 }
 
 a:hover {
-  color: rgba(255, 68, 0, 0.694);
+    color: rgba(255, 68, 0, 0.694);
 }
 
-@media (hover: hover) {
+/* @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 75%, 47%, 0.2);
   }
-}
+} */
 
 p {
-  font-size: medium;
+    font-size: medium;
 }
 
 /* @media (min-width: 2000px) {

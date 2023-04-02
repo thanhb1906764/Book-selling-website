@@ -98,7 +98,7 @@ export default {
             checkDefault: false,
             streetName: "",
             check: false,
-            
+
 
         };
     },
@@ -122,8 +122,8 @@ export default {
         Wards(indexCity, indexDistrict) {
             return this.citys[indexCity].Districts[indexDistrict].Wards
         },
-        changeSnackbar(){
-            
+        changeSnackbar() {
+
         },
         submitAddress() {
             this.$emit("form-submitted", {
@@ -136,7 +136,7 @@ export default {
                 ward: this.citys[this.indexCity].Districts[this.indexDistrict].Wards[this.indexWard].Name,
                 streetName: this.streetName,
                 default: document.getElementById("flexCheckCheck").checked,
-                
+
             })
         },
         setData(id) {

@@ -81,7 +81,7 @@ exports.login = async (req, res, next) => {
                 return res.send(req.cookies.user)
             }
         }
-        return res.send("Password incorrect")
+        return res.send(false)
     }
     catch (error) {
         return next(

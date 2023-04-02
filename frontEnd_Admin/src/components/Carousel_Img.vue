@@ -2,8 +2,8 @@
     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner rounded-3">
             <div v-for="item in ImgaeArray" :key="item._id" class="carousel-item active text-center" data-bs-interval="3000"
-                style="max-width: 350px; max-height: 400px;">
-                <img :src="item.linkImage" style="height:400px;" class="text-center" alt="...">
+                style="max-width: 400px; max-height: 450px;">
+                <img :src="item.linkImage" style="width: 100%;" class="text-center" alt="...">
             </div>
         </div>
         <button v-if="ImgaeArray.length > 1" class="carousel-control-prev" type="button"
@@ -28,14 +28,13 @@ export default {
     },
     data() {
         return {
-            ImgaeArray: useDataStore().getImages.filter(image => image._idBook === this.id),
+            ImgaeArray: [],
         }
     },
     methods: {
-
-        // Lấy tất cả những Image của Book
+        // Lấy tất cả Image của của một Book cụ thể
         async getImageArray() {
-            if (useDataStore().getBooks.length !== 0) {
+            if (useDataStore().getImages.length !== 0) {
                 this.ImgaeArray = useDataStore().getImages.filter(image => image._idBook === this.id)
             }
             else {

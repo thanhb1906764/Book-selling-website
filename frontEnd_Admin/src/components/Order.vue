@@ -21,7 +21,7 @@
         <tbody>
             <tr v-for="item in orderList">
                 <td>{{ item._id }}</td>
-                <td>{{ item.orderDate }}</td>
+                <td>{{ formatDate(item.orderDate) }}</td>
                 <td>{{ item.orderTotal }}</td>
                 <td>{{ item.orderStatus }}</td>
                 <td>
@@ -41,10 +41,10 @@ export default {
     data() {
         return {
 
-            itemsOrder: ["Tất cả", "Chờ xác nhận","Lấy hàng", "Đang giao", "Đã nhận","Hoàn trả", "Đã hủy"],
+            itemsOrder: ["Tất cả", "Chờ xác nhận", "Lấy hàng", "Đang giao", "Đã nhận", "Hoàn trả", "Đã hủy"],
             item2: ["Mã đơn hàng", "Ngày mua", "Tổng tiền", "Trạng thái", ""],
             order: [],
-            orderList: this.order,
+            orderList: [],
             orderOfUser: [],
 
 
@@ -62,28 +62,32 @@ export default {
                 this.orderList = this.orderList.filter(i => i.orderStatus === item)
             }
 
+        },
+        async getOrder() {
+            await axios
+                .get("http://localhost:3000/api/orders/")
+                .then((response) => {
+                    this.orderOfUser = useDataStore().getUser
+                    useDataStore().getAPIOrder(response.data)
+                    this.order = useDataStore().getOrderList
+                    this.order = this.order.filter(i => i.userId === localStorage.getItem('_id'))
+                    this.orderList = this.order
+                })
+            // for (let index = 0; index <= this.orderList.length; index++) {
+            //     //console.log(this.orderList[index].orderDate)
+            //     var date = new Date(this.orderList[index].orderDate)
+            //     var dateString = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'numeric', year: 'numeric' }).replace(/\//g, '-');
+            //     this.orderList[index].orderDate = dateString
+            //     console.log(date)
+            // }
+        },
+        formatDate(time) {
+            var date = new Date(time)
+            return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'numeric', year: 'numeric' }).replace(/\//g, '-');
         }
     },
     mounted() {
-        axios
-            .get("http://localhost:3000/api/orders/")
-            .then((response) => {
-                this.orderOfUser = useDataStore().getUser
-                useDataStore().getAPIOrder(response.data)
-                this.order = useDataStore().getOrderList
-                this.order = this.order.filter(i => i.userId === localStorage.getItem('_id'))
-                this.orderList = this.order
-                for (let index = 0; index <= this.orderList.length; index++) {
-                    //console.log(this.orderList[index].orderDate)
-                    var date = new Date(this.orderList[index].orderDate)
-                    var dateString = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'numeric', year: 'numeric' }).replace(/\//g, '-');
-                    this.orderList[index].orderDate = dateString
-                    //console.log(dateString)
-                }
-
-
-
-            })
+        this.getOrder()
     },
 
 };

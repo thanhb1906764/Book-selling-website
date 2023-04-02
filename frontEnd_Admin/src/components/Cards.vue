@@ -14,18 +14,19 @@
                 :class="{ 'on-hover': isHovering }" v-bind="props">
 
                 <span class="badge text-bg-danger text-uppercase"
-                    style="position: absolute;z-index: 2;  margin: 5px; max-height: 30px;">
+                    style="position: absolute;z-index: 2;  margin: 5px; max-height: 30px; left: 20px;">
                     <h6 v-if="book.bookPrice !== book.originalPrice">Sale</h6>
                     <h6 v-else-if="!checkMonth(book.receiptDate)">New</h6>
                 </span>
 
                 <!-- <v-img :src="link"></v-img> -->
-                <img class="text-center" :src="linkImage" height="270">
+                <img v-if="linkImage !== null" class="text-center" :src="linkImage" height="270">
+                <div>{{ }}</div>
 
                 <v-card-title class="py-2" style="text-overflow: ellipsis;">{{ book.bookName }}</v-card-title>
 
                 <!-- Số lượng đánh giá sao của Book  -->
-                <v-card-subtitle class=""><span>0 đánh giá</span></v-card-subtitle>
+                <v-card-subtitle class=""><span>{{ counterComement }} đánh giá</span></v-card-subtitle>
 
                 <v-card-text class="py-3">
                     <div v-if="book.originalPrice !== book.bookPrice">
@@ -62,22 +63,50 @@
 import moment from 'moment';
 import { useDataStore } from "../stores/dataStores";
 import testTime from '../components/testTime.vue'
-import { Countdown } from 'vue3-flip-countdown'
+import { Countdown } from 'vue3-flip-countdown';
+import ImagesService from '@/services/images.service'
+import CommentsService from '@/services/comments.service'
 export default {
     components: {
         testTime, Countdown
     },
     data() {
         return {
+            ImageArray: [],
             linkImage: null, // linkImage của Book lấy từ store
             Images: [], // Lấy hình ảnh từ store hoặc cloud
             time: moment(new Date(), "YYYY-MM-DD HH:mm:ss"),
+            counterComement: Object
         }
     },
     props: {
         book: Object, // get book từ HomePage
     },
     methods: {
+        // Lấy tất cả Image của của một Book cụ thể
+        async getImageArray() {
+            if (useDataStore().getImages.length !== 0) {
+                this.ImageArray = useDataStore().getImages.find(image => image._idBook === this.book._id)
+            }
+            else {
+                try {
+                    this.ImageArray = await ImagesService.getAll();
+                    useDataStore().setImages(this.ImageArray);
+                    this.ImageArray = this.ImageArray.find(image => image._idBook === this.book._id)
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+            // Lấy dữ liệu Images
+            this.linkImage = this.ImageArray.linkImage
+        },
+        // Đếm số lượng comment của một cuốn sách cụ thể 
+        async counterComment() {
+            let commentList = await CommentsService.getAll();
+            this.counterComement = commentList.filter(item => item._idBook === this.book._id).length;
+        },
+        // New
         checkMonth(date) {
             const dateToCheck = new Date(date);
             // Lấy thời gian hiện tại
@@ -98,13 +127,18 @@ export default {
         },
         handleMessage() {
             // this.book.promotionTime = null
-            useDataStore().updateBook(this.book.id)
+            useDataStore().updateBook(this.book._id)
         }
     },
     mounted() {
-        // Lấy dữ liệu Images 
-        this.Images = useDataStore().getImages
-        this.linkImage = this.Images.filter(image => image._idBook === this.book._id)[0].linkImage
+        console.log(this.book)
+    },
+    created() {
+        this.counterComment();
+
+        var link = useDataStore().getImages.find(image => image._idBook === this.book._id)
+        console.log(link);
+        this.linkImage = link.linkImage
     }
 }
 </script>
