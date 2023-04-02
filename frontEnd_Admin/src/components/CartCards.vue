@@ -109,7 +109,7 @@ export default {
                     .then((response) => {
                         console.log(response.data)
                     });
-                this.$emit('updateCart', 'edu')
+                this.$emit('updateCart', '')
             } catch (error) {
                 console.log(error);
             }

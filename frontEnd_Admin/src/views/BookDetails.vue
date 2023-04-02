@@ -65,8 +65,8 @@
                 <!-- Button Mua Ngay, Thêm Vào Giỏ Hàng -->
                 <div v-if="Book.bookStock !== 0" class="py-3">
                     <span @click="PayClick" class="btn btn-danger">Mua Ngay</span>
-                    <span @click="addProductToCart" class="px-2"><a @click="notify" class="btn btn-outline-danger">Thêm Vào
-                            Giỏ Hàng</a></span>
+                    <a @click="addProductToCart" class="px-2 mx-4 btn btn-outline-danger">Thêm Vào
+                        Giỏ Hàng</a>
                 </div>
                 <!-- Hết hàng  -->
                 <div v-if="Book.bookStock === 0" class="text-danger fs-3 fw-bold">
@@ -134,6 +134,7 @@ export default {
                 limit: 1,
                 type: toast.TYPE.SUCCESS,
                 multiple: false,
+                hideProgressBar: true
             });
             this.notify = function () {
                 // this.$router.replace('/Cart'); Lỗi
@@ -182,13 +183,16 @@ export default {
         // Thêm sản phẩm vào giỏ hàng trong Cookies 
         async addProductToCart() {
             try {
-                axios
+                await axios
                     .get(`http://localhost:3000/cookies/set/${this.id}/${this.BookQuantity}`, {
                         withCredentials: true
                     })
                     .then((response) => {
-                        console.log(response.data)
+                        // console.log(response.data)
+                        // Thêm sản phẩm vào giỏ hàng thành công
+                        this.notify();
                     })
+
             } catch (error) {
                 console.log(error);
             }
