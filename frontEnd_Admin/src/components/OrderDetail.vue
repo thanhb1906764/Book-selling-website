@@ -179,10 +179,10 @@ export default {
             await orderService.update(this.orderDetail[0]._id, { orderStatus: "Đã hủy" })
 
             for (let i = 0; i <= this.orderDetail[0].productList.length - 1; i++) {
-                var quantity = this.orderDetail[0].productList[i].quantity //so luong cua 1 loai sach trong don hang
-                var _idBook = this.orderDetail[0].productList[i]._idBook
-                var bookStock = this.book.find(book => book._id == _idBook).bookStock //so luong kho cua sach theo id sach ben tren
-                var undoStock = bookStock + quantity    // khoi phuc so luong 
+                let quantity = this.orderDetail[0].productList[i].quantity //so luong cua 1 loai sach trong don hang
+                let _idBook = this.orderDetail[0].productList[i]._idBook
+                let bookStock = this.book.find(book => book._id == _idBook).bookStock //so luong kho cua sach theo id sach ben tren
+                let undoStock = bookStock + quantity    // khoi phuc so luong 
                 await BooksService.update(_idBook, { bookStock: undoStock })
                 console.log(undoStock)
 
