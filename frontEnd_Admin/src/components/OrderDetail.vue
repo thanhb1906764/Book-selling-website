@@ -1,4 +1,5 @@
-<template>
+<template >
+    <div v-if="this.load">
     <div class="container border rounded ps-5">
         <div class="text-uppercase fw-semibold"> Chi tiểt đơn hàng</div>
         <div class="row">
@@ -6,7 +7,7 @@
                 <div>Mã đơn hàng: {{ getIdOrder }}</div>
                 <div>{{ this.orderDetail[0].orderStatus }}</div>
 
-                <div>Ngày mua: {{ this.orderDetail[0].orderDate }}</div>
+                <div>Ngày mua: {{ showDate(this.orderDetail[0].orderDate )}}</div>
                 <div v-show="show">Ngày nhận: {{ showDate(this.orderDetail[0].reDate) }}</div>
                 <div>Tổng tiền: {{ this.orderDetail[0].orderTotal }}</div>
             </div>
@@ -67,8 +68,7 @@
             <tbody>
                 <tr v-for="items in this.orderDetail[0].productList">
                     <td><img :src="getImageArray(items._idBook)" width="60" class="rounded" alt="..."></td>
-                    <!-- <td v-if="this.book.length > 0">{{findBookNameById(items._id)}}</td>
-                    <td v-else>Loading...</td> -->
+                  
                     <td>{{ findBookNameById(items._idBook) }}</td>
 
 
@@ -89,6 +89,7 @@
         <div class="d-flex justify-content-end">Tổng số tiền {{ this.orderDetail[0].orderTotal.toLocaleString('vi-VN',
             { style: 'currency', currency: 'VND' }) }}</div>
     </div>
+    </div>
 </template>
 <script>
 
@@ -102,25 +103,20 @@ export default {
     data: () => {
         return {
             id: "",
-            orderDetail: null,
+            orderDetail: {},
             book: useDataStore().getBooks,
             isDisable: false,
             ImgaeArray: [],
             linkImage: "",
             show: true,
-            dialog: false
+            dialog: false,
+            orderList: null,
+            load: false
         }
     },
     mounted() {
-        this.test()
-
-        if (this.orderDetail[0].orderStatus !== "Chờ xác nhận")
-            this.isDisable = true
-
+        this.loadOrderData()
     },
-    // created(){
-    //     this.test()
-    // },
     methods: {
         openDialog() {
             this.dialog = true;
@@ -147,9 +143,26 @@ export default {
             return this.linkImage
 
         },
-        async test() {
-            this.ImgaeArray = await ImagesService.getAll();
-            useDataStore().setImages(this.ImgaeArray);
+        async loadOrderData() {
+            console.log(useDataStore().getImages)
+            // if(useDataStore().getImages=""){
+            //     this.ImgaeArray = await ImagesService.getAll();
+            //     useDataStore().setImages(this.ImgaeArray);
+            //     console.log("ko co hinh")
+            // }
+            if(useDataStore().getOrderList=="")
+            {
+                this.orderList= await orderService.get(this.id);
+                console.log(this.id)
+                useDataStore().getAPIOrder(this.orderList);
+                console.log("phai axios")
+            }
+            this.orderDetail= useDataStore().getOrderList
+            console.log("get ok")
+            this.load=true
+            if (this.orderDetail[0].orderStatus !== "Chờ xác nhận")
+            this.isDisable = true
+            
         },
         findBookNameById(id) {
 
@@ -182,7 +195,6 @@ export default {
         getIdOrder() {
             this.id = this.$route.params.id
             this.orderDetail = useDataStore().getOrderList.filter(items => items._id == this.id)
-
             return this.id
         }
     }
