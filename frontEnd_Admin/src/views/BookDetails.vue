@@ -37,7 +37,7 @@
                 <!-- Số lượng Book trong kho  -->
                 <div class="row gx-5">
                     <p>Số lượng sách còn lại: <strong>{{ Book.bookStock }}</strong><strong class="px-3 text-danger"
-                            v-if="Book.bookStock <= 10"> Sắp hết
+                            v-if="(Book.bookStock <= 10) && (Book.bookStock !== 0)"> Sắp hết
                             hàng</strong></p>
                     <p class="">Đổi trả trong 30 ngày
                         <Modal />
