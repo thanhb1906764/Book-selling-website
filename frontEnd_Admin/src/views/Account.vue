@@ -74,13 +74,13 @@ export default {
 
     },
     mounted() {
-        axios
-            .get("http://localhost:3000/api/books")
-            .then((response) => {
-                useDataStore().setBooks(response.data)
-                this.book = useDataStore().getBooks
+        // axios
+        //     .get("http://localhost:3000/api/books")
+        //     .then((response) => {
+        //         useDataStore().setBooks(response.data)
+        //         this.book = useDataStore().getBooks
 
-            })
+        //     })
     }
 };
 </script>
@@ -125,5 +125,6 @@ export default {
 .link {
     color: black;
     text-decoration: none;
-}</style>
+}
+</style>
   

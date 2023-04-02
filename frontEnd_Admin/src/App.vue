@@ -1,27 +1,11 @@
 <script >
-import Nav from './components/TheWelcome.vue';
-// import Card from './components/Cards.vue'
-// import BookDetails from './components/Book_Details.vue'
-// import UploadsFile from './components/UploadsFile.vue';
-// import Catalog_management from './view/Catalog_Management.vue';
-// import PromotionVue from './view/Promotion_Managemnet.vue';
-// import PromotionForm from './components/PromotionForm.vue'
-// import Account_Clients from './view/Clients_Management.vue';
-// import Book_Receipt from './components/Book_Receipt.vue';
-// import Order_Management from './view/Order_Management.vue';
-// import Receipt_List from './view/Receipt_Management.vue';
-// import Product_Management from './view/Product_Management.vue';
-// import ChartsVue from './components/Charts.vue';
-// import Statistical from './view/Statistical.vue';
-// import TestTime from './components/testTime.vue';
-
 import HomePage from './views/HomePage.vue';
 import HeaderVue from './components/Header.vue';
 import FooterVue from './components/Footer.vue';
 import { useDataStore } from './stores/dataStores';
 import BooksService from '@/services/books.service';
 import PromotionsService from '@/services/promotions.service';
-
+import ImagesService from '@/services/images.service'
 // model - Hiển thị đăng nhập, đăng ký mà không cần chuyển trang 
 import LoginUser from './components/LoginUser.vue';
 import RegisterUser from './components/RegisterUser.vue';
@@ -29,7 +13,6 @@ import moment from 'moment';
 
 export default {
     components: {
-        Nav,
         HeaderVue,
         HomePage,
         FooterVue,
@@ -46,12 +29,18 @@ export default {
     methods: {
         async retrieveBook() {
             try {
+                //Lấy ảnh
+                var Images = await ImagesService.getAll();
+                useDataStore().setImages(Images)
                 this.Books = await BooksService.getAll();
-                this.Books = this.Books.filter(itemBook => (itemBook.bookPrice && itemBook.originalPrice && itemBook.author))
+                this.Books = await this.Books.filter(itemBook => itemBook.author !== undefined)
                 useDataStore().setBooks(this.Books)
-                this.show = true
+
+
+
                 console.log(this.Books)
                 this.checkPromotion()
+                this.show = true
             } catch (error) {
                 console.log(error);
             }

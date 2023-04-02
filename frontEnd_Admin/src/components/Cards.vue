@@ -10,51 +10,51 @@
 
             <v-tooltip :text="book.bookName"></v-tooltip>
 
-            <v-card class="mx-auto text-center" width="15rem" :elevation="isHovering ? 16 : 2"
+            <v-card class="mx-auto text-center" width="17rem" :elevation="isHovering ? 16 : 2"
                 :class="{ 'on-hover': isHovering }" v-bind="props">
-                <!-- Khuyến mãi, new... -->
+
                 <span class="badge text-bg-danger text-uppercase"
-                    style="position: absolute;z-index: 2;  margin: 5px; max-height: 30px; left: -5px; top: -5px;">
+                    style="position: absolute;z-index: 2;  margin: 5px; max-height: 30px; left: 20px;">
                     <h6 v-if="book.bookPrice !== book.originalPrice">Sale</h6>
                     <h6 v-else-if="!checkMonth(book.receiptDate)">New</h6>
                 </span>
-                <!-- Hình ảnh  -->
-                <img class="" style="height: 250px;" :src="linkImage">
 
-                <!-- Tên sách  -->
-                <v-card-title class="py-0 pt-0 ps-2 fs-6 fw-bold" style="text-overflow: ellipsis;">{{
-                    book.bookName
-                }}</v-card-title>
+                <!-- <v-img :src="link"></v-img> -->
+                <img v-if="linkImage !== null" class="text-center" :src="linkImage" height="270">
+                <div>{{ }}</div>
+
+                <v-card-title class="py-2" style="text-overflow: ellipsis;">{{ book.bookName }}</v-card-title>
+
                 <!-- Số lượng đánh giá sao của Book  -->
-                <v-card-subtitle class="p-0"><span>{{ counterComement }} đánh giá</span></v-card-subtitle>
+                <v-card-subtitle class=""><span>{{ counterComement }} đánh giá</span></v-card-subtitle>
 
-                <v-card-text class="p-0">
-                    <div class="" v-if="book.originalPrice !== book.bookPrice">
-                        <div class="card-text d-flex justify-content-between m-0">
-                            <div class="fw-bold m-1 fs-6" style="color: orange; ">{{
-                                (book.bookPrice).toLocaleString('vi-VN', {
-                                    style: 'currency', currency:
-                                        'VND'
-                                }) }}
-                            </div>
-                            <div class="text-muted text-decoration-line-through m-1" style="font-size: 14px;">{{
-                                (book.originalPrice).toLocaleString('vi-VN',
-                                    {
-                                        style: 'currency', currency:
-                                            'VND'
-                                    }) }}</div>
+                <v-card-text class="py-3">
+                    <div v-if="book.originalPrice !== book.bookPrice">
+                        <div class="card-text" style=" display: flex;align-items: center;">
+                            <h4 class="fw-bold" style="color: orange; ">{{ (book.bookPrice).toLocaleString('vi-VN', {
+                                style: 'currency', currency:
+                                    'VND'
+                            }) }}</h4>
+                            <h6 style=" text-decoration: line-through;">{{ (book.originalPrice).toLocaleString('vi-VN', {
+                                style: 'currency', currency:
+                                    'VND'
+                            }) }}</h6>
+
                         </div>
-                        <testTime class="" :time="book.promotionTime" @messageSent="handleMessage" />
+                        <testTime class="text-center" :time="book.promotionTime" @messageSent="handleMessage" />
+
                     </div>
                     <div v-else>
-                        <h4 class="fw-bold fs-6 m-1" style="color: red;">{{ (book.bookPrice).toLocaleString('vi-VN', {
+                        <h4 class="fw-bold mb-0" style="color: red;">{{ (book.bookPrice).toLocaleString('vi-VN', {
                             style: 'currency',
                             currency: 'VND'
                         }) }}</h4>
                     </div>
                 </v-card-text>
             </v-card>
+
         </v-hover>
+
     </router-link>
 </template>
 
@@ -131,11 +131,14 @@ export default {
         }
     },
     mounted() {
-
+        console.log(this.book)
     },
     created() {
         this.counterComment();
-        this.getImageArray();
+
+        var link = useDataStore().getImages.find(image => image._idBook === this.book._id)
+        console.log(link);
+        this.linkImage = link.linkImage
     }
 }
 </script>

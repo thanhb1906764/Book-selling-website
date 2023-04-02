@@ -46,11 +46,14 @@
             <div class="p-2 fw-semibold fs-5" style="background-color:  #55a1e7;">
                 <div class="text-white text-decoration-none">Sản Phẩm</div>
             </div>
-            <div v-if="loaded" class="px-0 py-2">
+            <div class="px-0 py-2" v-if="Books">
                 <v-row class="p-2 m-0" :equal="{ sm: true, md: false }">
-                    <v-col v-for="item in Books" :key="item._id" class="d-flex align-center justify-center">
-                        <Cards :book="item" />
-                    </v-col>
+                    <keep-alive>
+                        <v-col v-for="item in Books" :key="item._id" class="d-flex align-center justify-center">
+                            <Cards :book="item" />
+                        </v-col>
+                    </keep-alive>
+
                 </v-row>
             </div>
         </div>
@@ -62,7 +65,7 @@
 import Cards from '../components/Cards.vue';
 import { mdiApps } from '@mdi/js'
 import moment from 'moment';
-import ImagesService from '@/services/images.service'
+
 import BooksService from '@/services/books.service'
 import { useDataStore } from '../stores/dataStores';
 export default {
@@ -71,17 +74,11 @@ export default {
     },
     data() {
         return {
-            Books: useDataStore().getBooks,
-            Images: [],
+            Books: useDataStore().getBooks.filter(itemBook => itemBook.author !== undefined),
+            Images: useDataStore().getImages,
             loaded: false,
             geneList: useDataStore().getGenes,
-            tagList: useDataStore().getTagList,
-            path: mdiApps,
-            title: 'tất cả',
-            dialog: false,
-            upDown: true,
-            selectTag: '',
-            flag: 0,
+
         }
     },
     methods: {
@@ -97,7 +94,8 @@ export default {
         },
     },
     mounted() {
-        this.retrieveImage();
+        // this.retrieveImage();
+        console.log(this.Books)
     },
     created() {
 

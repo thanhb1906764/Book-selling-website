@@ -5,7 +5,10 @@
                 aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand" href="/">BookStore</a>
+            <router-link to="/" class="nav-link active">
+                BookStore
+            </router-link>
+            <!-- <a class="navbar-brand" href="/">BookStore</a> -->
             <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
@@ -164,12 +167,12 @@ export default {
         }
     },
     created() {
-        axios
-            .get("http://localhost:3000/api/books")
-            .then((response) => {
-                useDataStore().setBooks(response.data)
-                this.book = useDataStore().getBooks
-            })
+        // axios
+        //     .get("http://localhost:3000/api/books")
+        //     .then((response) => {
+        //         useDataStore().setBooks(response.data)
+        //         this.book = useDataStore().getBooks
+        //     })
     },
     updated() {
         if (localStorage.getItem('name')) {
