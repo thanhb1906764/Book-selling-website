@@ -1,12 +1,12 @@
-<template>
-    <div class="container border rounded">
+<template >
+    <div v-if="load" class="container border rounded">
         <Form @submit="submitContact" :validation-schema="contactFormSchema">
             <div class="row g-3 m-2 form-group">
                 <div class="col-2">
-                    <label for="name" class="col-form-label">Họ và Tên</label>
+                    <label for="name" class="col-form-label" >Họ và Tên</label>
                 </div>
                 <div class="col-7">
-                    <Field name="name" type="text" id="name" class="form-control" />
+                    <Field name="name" type="text" id="name" class="form-control" v-model="user.name" />
                     <ErrorMessage name="name" class="error-feedback" />
                 </div>
             </div>
@@ -15,7 +15,7 @@
                     <label for="phone" class="col-form-label">Số điện thoại</label>
                 </div>
                 <div class="col-7">
-                    <Field name="phone" type="tel" id="phone" class="form-control" />
+                    <Field name="phone" type="tel" id="phone" class="form-control" v-model="user.phone"/>
                     <ErrorMessage name="phone" class="error-feedback" />
                 </div>
             </div>
@@ -25,19 +25,20 @@
                 </div>
                 <div class="col-7">
 
-                    <input type="radio" class="radio px-2" name="x" value="y" id="y" />
-                    <label class="px-2" for="y">Nam</label>
-                    <input type="radio" class="radio px-2" name="x" value="z" id="z" />
-                    <label class="px-2" for="z">Nữ</label>
-                    <!-- <ErrorMessage name="phone" class="error-feedback" /> -->
+                    <Field type="radio" class="radio px-2" name="sex" :value=true id="1"  v-model="user.sex"/>
+                    <label class="px-2" for="1">Nam</label>
+                    <Field type="radio" class="radio px-2" name="sex" :value=false id="0" v-model="user.sex"/>
+                    <label class="px-2" for="0">Nữ</label>
+                    <ErrorMessage name="sex" class="error-feedback" /> 
                 </div>
             </div>
             <div class="row g-3 m-2 form-group">
                 <div class="col-2">
-                    <label for="brith" class="col-form-label">Ngày sinh</label>
+                    <label for="dateOfBirth" class="col-form-label">Ngày sinh</label>
                 </div>
                 <div class="col-7">
-                    <input type="date" id="birth" name="birth">
+                    <Field name="dateOfBirth" type="date" id="dateOfBirth" class="form-control"  v-model="user.dateOfBirth" />
+                    <ErrorMessage name="dateOfBirth" class="error-feedback" />
                 </div>
             </div>
             <div class="form-group row align-items-cente">
@@ -51,6 +52,7 @@
     </div>
 </template>
 <script>
+import UsersService from "../services/users.service"
 import * as yup from "yup";
 import { Form, Field, ErrorMessage } from "vee-validate";
 export default {
@@ -59,10 +61,8 @@ export default {
         Field,
         ErrorMessage,
     },
-    emits: ["submit:contact", "delete:contact"],
-    props: {
-        contact: { type: Object, required: true }
-    },
+    emits: ["submit:user"],
+    
     data() {
         const contactFormSchema = yup.object().shape({
             name: yup
@@ -72,22 +72,56 @@ export default {
                 .max(50, "Tên có nhiều nhất 50 ký tự."),
             phone: yup
                 .string()
+                .required("Số điện thoại phải có giá trị.")
                 .matches(
                     /((09|03|07|08|05)+([0-9]{8})\b)/g,
-                    "Số điện thoại không hợp lệ."
-                ),
+                    "Số điện thoại không hợp lệ."),
+            sex: yup
+                .boolean()
+                .oneOf([true, false], 'Bạn phải chọn giới tính'),
+            dateOfBirth: yup
+                .date()
+                .required("Ngày sinh phải có giá trị.")
+                .min(new Date(Date.now() - 100*365*24*60*60*1000), "Bạn phải nhập ngày sinh hợp lệ.")
+                .max(new Date(Date.now() - 18*365*24*60*60*1000), "Bạn phải nhập ngày sinh hợp lệ."),
+
+                
         });
         return {
             // Chúng ta sẽ không muốn hiệu chỉnh props, nên tạo biến cục bộ
             // contactLocal để liên kết với các input trên form
-            contactLocal: this.contact,
+            
             contactFormSchema,
+            sex: false,
+            dateOfBirth: "",
+            user:{},
+            name:"",
+            phone:"",
+            load:false
+
         };
+        
+    },
+
+    mounted(){
+       
+          this.getUser()
+        
     },
     methods: {
-        submitContact() {
-            this.$emit("submit:contact", this.contactLocal);
+        async submitContact() {
+            this.$emit("submit:user");
+            await UsersService.updateUser(localStorage.getItem("_id"),this.user)
+            
         },
+        async getUser(){
+            this.user =await UsersService.get(localStorage.getItem("_id"))
+            this.load=true
+            this.name=this.user.name,
+            this.phone=this.user.phone,
+            this.dateOfBirth=this.user.dateOfBirth
+            this.sex=this.user.sex
+        }
 
     },
 };
