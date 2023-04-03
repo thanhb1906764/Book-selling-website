@@ -14,12 +14,6 @@
                     <label for="phone">Số điện thoại</label>
                     <ErrorMessage name="phone" class="error-feedback" />
                 </div>
-                <!-- name -->
-                <div class="form-group form-floating mb-2">
-                    <Field name="name" type="text" class="form-control" placeholder="Tên" v-model="user.name" />
-                    <label class="fs-6" for="name">Tên</label>
-                    <ErrorMessage name="name" class="error-feedback" />
-                </div>
                 <!-- password -->
                 <div class="form-group mb-2">
                     <div class="input-group">
@@ -44,7 +38,6 @@
             </div>
         </div>
     </Form>
-    <button @click="logout">Logout</button>
 </template>
 <script>
 // import here
@@ -62,11 +55,6 @@ export default {
     },
     data() {
         const userSchema = yup.object().shape({
-            name: yup
-                .string()
-                .required("Tên phải bắt buộc phải có")
-                .min(3, "Tên phải có ít nhất 3 ký tự")
-                .max(30, "Tên chứa nhiều nhất 30 ký tự"),
             password: yup
                 .string()
                 .required("Mật khẩu bắt buộc phải có")
@@ -92,6 +80,7 @@ export default {
         }
     },
     methods: {
+        // Ẩn và hiện mật khẩu trong input
         showPasswordF() {
             if (this.showPassword === false) {
                 this.showPassword = true
@@ -102,6 +91,7 @@ export default {
             }
 
         },
+        // Đăng nhập người dùng
         async submitLogin() {
             try {
                 let temp = await UsersService.login(this.user);

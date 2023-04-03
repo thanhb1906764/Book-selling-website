@@ -1,28 +1,26 @@
 <template>
-    <Form class="container form shadow-sm round-4 pb-5" @submit="submitRegister" :validation-schema="userSchema">
+    <Form class="container form shadow-sm pb-5 bg-light" @submit="submitRegister" :validation-schema="userSchema"
+        style="border-radius: 9999px;">
         <div class="row">
-            <div class="col">
+            <div class="col rounded-4 rounded-top-1 pb-1 bg-light">
                 <!-- Đăng ký  -->
                 <div class="form-group form-floating mb-3 text-center">
                     <div class="fw-bold fs-6 text-danger py-3">Book Store</div>
                     <div class="fw-bold fs-5">Đăng ký</div>
                     <small>Đăng ký tài khoản người mua</small>
                 </div>
-
                 <!-- phone -->
                 <div class="form-group form-floating mb-2">
                     <Field name="phone" type="text" class="form-control" placeholder="Số điện thoại" v-model="user.phone" />
                     <label for="phone">Số điện thoại</label>
                     <ErrorMessage name="phone" class="error-feedback" />
                 </div>
-
                 <!-- name -->
                 <div class="form-group form-floating mb-2">
                     <Field name="name" type="text" class="form-control" placeholder="Tên" v-model="user.name" />
                     <label class="fs-6" for="name">Tên</label>
                     <ErrorMessage name="name" class="error-feedback" />
                 </div>
-
                 <!-- password -->
                 <div class="form-group mb-2">
                     <div class="input-group">
@@ -31,14 +29,11 @@
                                 placeholder="Mật khẩu" v-model="user.password" />
                             <label class="fs-6" for="password">Mật khẩu</label>
                         </div>
-                        <!-- Sau khi xử lý summit sẽ đổi thành button  -->
                         <span @click="showPasswordF" class="input-group-text user-select-none">{{
                             msgShowPassword }}</span>
                     </div>
-                    <!-- <p class="fw-lighter">Sử dụng 4 ký tự trở lên</p> -->
                     <ErrorMessage name="password" class="error-feedback" />
                 </div>
-
                 <!-- password confirm -->
                 <div class="form-group mb-2">
                     <div class="input-group">
@@ -56,7 +51,7 @@
                 <!-- sex -->
                 <div v-show="true" class="form-group form-floating mb-2">
                     <select required class="form-select" aria-label="" v-model="user.sex">
-                        <option selected>Chọn giới tính</option>
+                        <option :value=undefined selected>Chọn giới tính</option>
                         <option :value='true'>Nam</option>
                         <option :value='false'>Nữ</option>
                     </select>
@@ -74,6 +69,7 @@
                 <hr />
                 <div class="form-group fs-6 mb-2 d-flex justify-content-between">
                     <router-link class="btn btn-outline-primary" to="/UserLogin">Đăng nhập</router-link>
+                    <!-- Lỗi khi sử dụng @click thay vì type='submit' -->
                     <button type="submit" class="btn btn-primary text-white">Tạo tài khoản</button>
                 </div>
             </div>
@@ -86,6 +82,7 @@ import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import UsersService from '@/services/users.service';
 import { useDataStore } from '../stores/dataStores';
+import { toast } from 'vue3-toastify';
 export default {
     components: {
         Form,
@@ -93,6 +90,7 @@ export default {
         ErrorMessage,
     },
     data() {
+        // Lượt đồ user, kiểm tra đầu vào của form 
         const userSchema = yup.object().shape({
             dateOfBirth: yup
                 .date(),
@@ -122,7 +120,17 @@ export default {
                     /((0)+([0-9])+([0-9]{8})\b)/g,
                     "Số điện thoại không hợp lệ."
                 ),
-        })
+        });
+        // Đinh nghĩa thông báo nổi 
+        const notifyPhoneExist = () => {
+            toast("Số điện thoại đã được đăng ký, hãy sử dụng số khác", {
+                autoClose: 1500,
+                limit: 1,
+                type: toast.TYPE.ERROR,
+                multiple: false,
+                hideProgressBar: true
+            });
+        };
         return {
             showPassword: false,
             msgShowPassword: 'Hiển thị',
@@ -131,9 +139,11 @@ export default {
             },
             userSchema,
             cookies: {},
+            notifyPhoneExist: notifyPhoneExist
         }
     },
     methods: {
+        // Ẩn và hiện mật khẩu trong input
         showPasswordF() {
             if (this.showPassword === false) {
                 this.showPassword = true
@@ -144,11 +154,19 @@ export default {
             }
 
         },
+        // Đăng ký người dùng
         async submitRegister() {
             try {
+                // Nếu không có số điện thoại thì không submit
+                if (!this.user.phone) {
+                    return;
+                }
+                // Tạo user
                 let temp = await UsersService.create(this.user);
+                // Thông báo nếu số điện thoai đã tồn tại
                 if (temp === false)
-                    alert('Password or name not match')
+                    this.notifyPhoneExist();
+                // alert('Số điện thoại đã được sử dụng');
                 else {
                     this.cookies = await UsersService.getCookies();
                     // Lưu vào localStorage 
@@ -160,7 +178,8 @@ export default {
                     useDataStore().setUser(this.cookies);
                     console.log(this.cookies);
                     // Chuyển hướng về HomePage 
-                    this.$router.push('/' || '/');
+                    // this.$router.push('/');
+                    window.location.href = "http://localhost:3001/";
                 }
             } catch (error) {
                 console.log(error);

@@ -108,10 +108,16 @@
                     <!-- Phí Ship  -->
                     <div class="d-flex justify-content-between">
                         <small class="text-muted">Phí Ship</small>
-                        <small class="" v-bind="order.orderTotal">{{ (shipFee).toLocaleString('vi-VN', {
-                            style: 'currency',
-                            currency: 'VND'
-                        }) }}</small>
+                        <small v-if="tempCost < 500000" class="" v-bind="order.orderTotal">{{
+                            (shipFee).toLocaleString('vi-VN', {
+                                style: 'currency',
+                                currency: 'VND'
+                            }) }}</small>
+                        <small v-else class="" v-bind="order.orderTotal">{{
+                            (0).toLocaleString('vi-VN', {
+                                style: 'currency',
+                                currency: 'VND'
+                            }) }}</small>
                     </div>
                 </div>
                 <div class="container px-5 text-danger py-4 fw-bold" v-else>
@@ -122,7 +128,7 @@
                     <hr />
                     <div class="d-flex justify-content-between">
                         <div class="text-muted fs-6">Tổng tiền</div>
-                        <div class="fw-bolder">{{ (shipFee + tempCost).toLocaleString('vi-VN', {
+                        <div class="fw-bolder">{{ (getOrderTotal).toLocaleString('vi-VN', {
                             style: 'currency',
                             currency: 'VND'
                         }) }}</div>
@@ -142,7 +148,6 @@ import ShipFeeService from '@/services/shipFee.service';
 import AddressesService from '@/services/addresses.service';
 import OrdersService from '@/services/orders.service';
 import axios from 'axios';
-import { number } from 'yup';
 import { toast } from 'vue3-toastify';
 export default {
     components: {
@@ -220,7 +225,10 @@ export default {
     },
     computed: {
         getOrderTotal() {
-            return this.shipFee + this.tempCost;
+            if (this.tempCost >= 500000)
+                return this.tempCost;
+            else
+                return this.shipFee + this.tempCost;
         },
         getTotalProductMoney() {
             return this.tempCost;
@@ -278,7 +286,10 @@ export default {
         },
         // Tổng giá trị đơn hàng 
         orderTotal(tempCost, shipFee) {
-            return tempCost + shipFee;
+            if (tempCost >= 500000)
+                return tempCost;
+            else
+                return tempCost + shipFee;
         },
         // Lấy địa chỉ của người dùng nếu có đăng nhập 
         async getAddressList() {
@@ -410,7 +421,7 @@ export default {
                     this.deleteCart();
                     // Chuyển hướng đến trang ...
                     // this.$router.push('/Pay');
-                    window.location.href('/Pay') // Do không có đủ thời gian nên tạm sử dụng load trang 
+                    window.location.href = "/Pay"; // Do không có đủ thời gian nên tạm sử dụng load trang 
                 }
             }
             catch (error) {
