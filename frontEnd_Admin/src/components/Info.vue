@@ -50,6 +50,15 @@
 
         </Form>
     </div>
+    <v-snackbar v-model="snackbar" :timeout="timeout">
+        cập nhật thành công
+
+        <template v-slot:actions>
+            <v-btn color="blue" variant="text" @click="snackbar = false">
+                Close
+            </v-btn>
+        </template>
+    </v-snackbar>
 </template>
 <script>
 import UsersService from "../services/users.service"
@@ -90,7 +99,8 @@ export default {
         return {
             // Chúng ta sẽ không muốn hiệu chỉnh props, nên tạo biến cục bộ
             // contactLocal để liên kết với các input trên form
-            
+            snackbar: false,
+            timeout: 2000,
             contactFormSchema,
             sex: false,
             dateOfBirth: "",
@@ -112,6 +122,7 @@ export default {
         async submitContact() {
             this.$emit("submit:user");
             await UsersService.updateUser(localStorage.getItem("_id"),this.user)
+            this.snackbar=true
             
         },
         async getUser(){
@@ -121,6 +132,7 @@ export default {
             this.phone=this.user.phone,
             this.dateOfBirth=this.user.dateOfBirth
             this.sex=this.user.sex
+            
         }
 
     },
