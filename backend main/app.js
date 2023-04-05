@@ -1,7 +1,10 @@
 const express = require("express");
 const cors = require("cors");
-const cookieParser = require('cookie-parser'); // kiz
-const carts = require('./app/controllers/carts.controller'); // kiz
+const cookieParser = require('cookie-parser');
+const carts = require('./app/controllers/carts.controller');
+// paypal 
+import * as paypal from "./app/paypal-api";
+import "dotenv/config"; // loads variables from .env file
 
 const adminsRouter = require("./app/routes/admins.route");
 const booksRouter = require("./app/routes/books.route");
@@ -22,7 +25,7 @@ const multer = require('multer')
 const app = express();
 var fs = require('fs');
 
-app.use(cookieParser()); // kiz
+app.use(cookieParser());
 app.set("trust proxy", 1);
 
 app.use(cors({
@@ -80,16 +83,13 @@ app.post('/api/uploads', upload.array('uploadsImg', 3), async function (req, res
     // for (let index = 0; index <= files.length; ++index) {
     //     var pathImg = "http://127.0.0.1:3000/uploads/" + files[index].filename
     // console.log(pathImg)
-}
-
-)
+})
 
 app.all("/", (req, res) => {
     res.json({ message: "Welcome to BooksStore." });
 });
 
-// kiz
-// Route để thiết lập cookie
+// Tạo cookie
 app.get('/cookies/set/:idBook/:quantityBook', (req, res) => {
     // console.log('set');
     // Lấy giỏ hàng từ req 
@@ -131,7 +131,7 @@ app.get('/cookies/set/:idBook/:quantityBook', (req, res) => {
     // Hiển thị vào trình duyệt 
     res.send(req.cookies.cart);
 });
-
+// Đọc cookie
 app.get('/cookies/read', (req, res) => {
     let cart
     if (req.cookies.cart === undefined) {
@@ -141,7 +141,7 @@ app.get('/cookies/read', (req, res) => {
     }
     res.send(cart);
 });
-
+// Xoá một cookie với idBook
 app.get('/cookies/clear/:idBook', (req, res) => {
     // Lấy giỏ hàng từ req 
     let cart
@@ -174,12 +174,30 @@ app.get('/cookies/clear/:idBook', (req, res) => {
     // Hiển thị vào trình duyệt 
     res.send(req.cookies.cart);
 })
-
+// Xoá cookie cart 
 app.get('/cookies/clear', (req, res) => {
     res.clearCookie('cart', { path: '/' })
     res.send(req.cookies)
 })
-
+// Create order - PayPal
+app.post("/my-server/create-paypal-order", async (req, res) => {
+    try {
+        const order = await paypal.createOrder();
+        res.json(order);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+//  capture order - PayPal
+app.post("/my-server/capture-paypal-order", async (req, res) => {
+    const { orderID } = req.body;
+    try {
+        const captureData = await paypal.capturePayment(orderID);
+        res.json(captureData);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
 
 app.use((req, res, next) => {
     return next(new ApiError(404, "Resource not found"));
@@ -188,7 +206,5 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
     return res.status(err.statusCode || 500).json({ message: err.message || "Internal Server Error" });
 });
-
-
 
 module.exports = app;
