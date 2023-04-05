@@ -1,10 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require('cookie-parser');
-const carts = require('./app/controllers/carts.controller');
-// paypal 
-import * as paypal from "./app/paypal-api";
-import "dotenv/config"; // loads variables from .env file
+// paypal
+require('dotenv').config(); // loads variables from .env file
 
 const adminsRouter = require("./app/routes/admins.route");
 const booksRouter = require("./app/routes/books.route");
@@ -180,23 +178,23 @@ app.get('/cookies/clear', (req, res) => {
     res.send(req.cookies)
 })
 // Create order - PayPal
-app.post("/my-server/create-paypal-order", async (req, res) => {
-    try {
-        const order = await paypal.createOrder();
-        res.json(order);
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
+app.post("/create-paypal-order", async (req, res) => {
+    // try {
+    //     const order = await paypal.createOrder();
+    //     res.json(order);
+    // } catch (err) {
+    //     res.status(500).send(err.message);
+    // }
 });
 //  capture order - PayPal
-app.post("/my-server/capture-paypal-order", async (req, res) => {
-    const { orderID } = req.body;
-    try {
-        const captureData = await paypal.capturePayment(orderID);
-        res.json(captureData);
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
+app.post("/capture-paypal-order", async (req, res) => {
+    // const { orderID } = req.body;
+    // try {
+    //     const captureData = await paypal.capturePayment(orderID);
+    //     res.json(captureData);
+    // } catch (err) {
+    //     res.status(500).send(err.message);
+    // }
 });
 
 app.use((req, res, next) => {
