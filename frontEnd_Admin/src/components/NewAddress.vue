@@ -1,7 +1,7 @@
 <template class="col-sm">
     <div class="container border rounded ps-5">
         <div class="text-uppercase fw-semibold"> Thêm địa chỉ mới</div>
-        <AddressAccEdit @form-submitted="addAddress" :show-button="true" />
+        <AddressAccEdit @form-submitted="addAddress"  />
         <!-- <button class="btn" @click="submitForm">Submit</button> -->
     </div>
 </template>
@@ -9,7 +9,7 @@
 import AddressAccEdit from './AddressForm.vue';
 import axios from 'axios';
 import { useDataStore } from '../stores/dataStores';
-import addressesService from '../services/addresses.service';
+import AddressesService from '../services/addresses.service';
 export default {
     components: {
         AddressAccEdit,
@@ -21,22 +21,38 @@ export default {
             idDefault: useDataStore().getAddress.filter(i => i.default == true),
         }
     },
+    mounted(){
+        if(useDataStore().getAddress=='')
+            this.loadData()
+    },
     methods: {
-        addAddress(formData) {
-            if (formData.default == true) {
-                console.log(this.idDefault)
-                if (this.idDefault != "") {
-                    addressesService.update(this.idDefault[0]._id, { default: false })
+        async addAddress(formData) {
+             //Nêu chọn địa chỉ mặc định
+             if (formData.default == true) {
+                //Đếm xem có bao nhiêu địa chỉ mặc đinh (đề phòng lỗi)
+                let countDefault= Object.keys ( this.idDefault).length
+                //Nếu đã c0 địa chỉ mặc định
+                if (this.idDefault!="") {
+                    //gán địa chỉ mặc định có sẵn thành false
+                    for(let i=0;i < countDefault;i++){
+                        await AddressesService.update(this.idDefault[i]._id, { default: false })
+                    }
+                    
                 }
             }
-            addressesService.create(formData)
+            //Tạo địa chỉ
+            await AddressesService.create(formData)
             console.log(JSON.stringify(formData))
             useDataStore().setSnackbar(true)
             this.$router.push({ name: "AddressAcc" })
         },
-        submitForm() {
-            this.$refs.AddressAccEdit.submitAddress()
+        async loadData(){
+             useDataStore().getAPIAddress(await AddressesService.getAll())
+             console.log("load Address useDataStore ok")
         }
+        // submitForm() {
+        //     this.$refs.AddressAccEdit.submitAddress()
+        // }
     }
 }
 </script>

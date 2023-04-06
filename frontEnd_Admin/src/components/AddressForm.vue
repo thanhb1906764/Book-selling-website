@@ -24,7 +24,7 @@
 
                         <div class="form-group form-floating mb-2 my-3 flex-nowrap">
                             <select v-model="indexCity" class="form-select" aria-label="Default select example">
-                                <option value="-1" selected>Chọn Tỉnh/Thành Phố</option>
+                                <option value="-1" selected>Chọn Tỉnh/Thành Phố </option>
                                 <option v-for="(city, index) in citys" :value="index">{{ city.Name }}</option>
                             </select>
                             <label class="fs-6" for="floatingInput">Tỉnh/Thành Phố</label>
@@ -71,13 +71,11 @@
 import axios from "axios";
 import { object } from "yup";
 import { useDataStore } from "@/stores/dataStores";
+import addressesService from "../services/addresses.service";
 export default {
     props: {
         id: String,
-        showButton: {
-            type: Boolean,
-            default: true,
-        },
+       
         hidenCheck: {
             type: Boolean,
             default: false,
@@ -98,6 +96,7 @@ export default {
             checkDefault: false,
             streetName: "",
             check: false,
+            addressAxios:'',
 
 
         };
@@ -107,7 +106,6 @@ export default {
             .get('https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json')
             .then((response) => {
                 this.citys = response.data
-
             })
     },
     computed: {
@@ -139,12 +137,30 @@ export default {
 
             })
         },
-        setData(id) {
+        async setData(id) {
+            
             var temp = useDataStore().getAddress.filter(item => item._id == id)
+            if(temp==''){
+               console.log("axios user setData")
+                var temp= [await addressesService.get(id)]
+                console.log(temp)
+            }
+            await axios 
+                    .get('https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json')
+                    .then((response) => {
+                        this.addressAxios=response.data
+                    })
             this.streetName = temp[0].streetName
             this.phone = temp[0].phone
             this.name = temp[0].name
             this.default = temp[0].default
+            for(let indexCity=0;indexCity<this.addressAxios.length;indexCity++){
+                 //console.log(indexCity)
+                // console.log(this.addressAxios[i].Name)
+                if(temp[0].city==this.addressAxios[indexCity].Name){
+                    this.indexCity=indexCity
+                }
+            }
         }
     }
 };

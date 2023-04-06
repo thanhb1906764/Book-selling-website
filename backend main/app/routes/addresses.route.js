@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.route('/').get(addresses.findAll).post(addresses.create).delete(addresses.deleteAll);
 
-router.route('/:id').get(addresses.findOne).put(addresses.update).delete(addresses.delete);
+router.route('/:id').get(addresses.findOne).patch(addresses.update).delete(addresses.delete);
 
 // router.route('/drop/:name').post(addresses.dropCollection)
 module.exports = router;

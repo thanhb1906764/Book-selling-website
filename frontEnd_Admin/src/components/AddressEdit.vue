@@ -10,7 +10,7 @@
 <script >
 import AddressAccEdit from './AddressForm.vue';
 import { useDataStore } from '@/stores/dataStores';
-import addressesService from '../services/addresses.service';
+import AddressesService from '../services/addresses.service';
 export default {
     components: {
         AddressAccEdit,
@@ -26,7 +26,11 @@ export default {
 
         }
     },
-    mounted() {
+    async mounted() {
+        if(!this.addressEdit){
+            this.AddressAccEdit = await AddressesService.get(this.$route.params.id)
+            console.log("axios addressEdit")
+        }
         if (this.addressEdit.find(address => address.default == true)) {
             this.hidenCheck = true
             this.checked = true
@@ -44,14 +48,21 @@ export default {
             // Gọi phương thức của component con
             childComponent.setData(this.$route.params.id);
         },
-        editAddress(formData) {
+        async editAddress(formData) {
+            //Nêu chọn địa chỉ mặc định
             if (formData.default == true) {
-                console.log(this.idDefault)
-                if (this.idDefault != "") {
-                    addressesService.update(this.idDefault[0]._id, { default: false })
+                //Đếm xem có bao nhiêu địa chỉ mặc đinh (đề phòng lỗi)
+                let countDefault= Object.keys ( this.idDefault).length
+                //Nếu đã c0 địa chỉ mặc định
+                if (this.idDefault!="") {
+                    //gán địa chỉ mặc định có sẵn thành false
+                    for(let i=0;i < countDefault;i++){
+                        await AddressesService.update(this.idDefault[i]._id, { default: false })
+                    }
+                    
                 }
             }
-            addressesService.create(formData)
+            await AddressesService.update(this.$route.params.id,formData)
             console.log(JSON.stringify(formData))
             useDataStore().setSnackbar(true)
             this.$router.push({ name: "AddressAcc" })
