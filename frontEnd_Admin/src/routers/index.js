@@ -157,6 +157,9 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
     // Đặt tiêu đề động cho từng trang 
     document.title = to.meta?.title ?? 'Web Application'
+    if (localStorage.getItem('_id') && to.path === '/UserLogin') {
+        next('/')
+    }
 
     const id = to.params.id;
     const publicPagesUser = ['/acc'];
@@ -164,10 +167,10 @@ router.beforeEach(async (to, from, next) => {
     const authRequiredUser = publicPagesUser.includes(to.path);
     const authRequiredAdmin = PagesAdmin.includes(to.path);
 
-    if (authRequiredUser && !localStorage.getItem('user')) {
+    if (authRequiredUser && !localStorage.getItem('_id')) {
         // redirect the user to the login page
         next('/UserLogin');
-    } else if ((authRequiredAdmin) && (!localStorage.getItem('admin'))) {
+    } else if ((authRequiredAdmin) && (!localStorage.getItem('_idAdmin'))) {
         // redirect the user to the login page
         next('/AdminLogin')
     }

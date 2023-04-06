@@ -7,36 +7,34 @@
     <!-- Modal -->
     <div class="modal fade" id="LoginUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <!-- position-absolute top-50 start-50 translate-middle -->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Đăng nhập</h5>
-
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <Form class="container form" @submit="submitLogin" :validation-schema="userSchema">
+                    <Form class="container form pb-5" @submit="submitLogin" :validation-schema="userSchema">
                         <div class="row">
                             <div class="col">
+
+                                <!-- Đăng nhập  -->
+                                <div class="form-group form-floating mb-6 text-center">
+                                    <div class="fw-bold fs-6 text-danger py-3">Book Store</div>
+                                    <div class="fw-bold fs-5">Đăng Nhập</div>
+                                    <small>Sử dụng tài khoản người mua</small>
+                                </div>
+
                                 <!-- phone -->
-                                <div class="form-group form-floating mb-2">
+                                <div class="form-group form-floating mb-6">
                                     <Field name="phone" type="text" class="form-control" placeholder="Số điện thoại"
                                         v-model="user.phone" />
                                     <label for="phone">Số điện thoại</label>
                                     <ErrorMessage name="phone" class="error-feedback" />
                                 </div>
 
-                                <!-- name -->
-                                <div class="form-group form-floating mb-2">
-                                    <Field name="name" type="text" class="form-control" placeholder="Tên"
-                                        v-model="user.name" />
-                                    <label class="fs-6" for="name">Tên</label>
-                                    <ErrorMessage name="name" class="error-feedback" />
-                                </div>
-
                                 <!-- password -->
-                                <div class="form-group mb-2">
+                                <div class="form-group mb-6">
                                     <div class="input-group">
                                         <div class="form-floating">
                                             <Field name="password" v-bind:type="showPassword ? 'text' : 'password'"
@@ -51,6 +49,18 @@
                                     <ErrorMessage name="password" class="error-feedback" />
                                 </div>
 
+                                <!-- Chưa xử lý  -->
+                                <div class="d-flex justify-content-between align-items-center mb-6">
+                                    <!-- Checkbox -->
+                                    <div class="form-check mb-0">
+                                        <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
+                                        <label class="form-check-label" for="form2Example3">
+                                            Nhớ tôi
+                                        </label>
+                                    </div>
+                                    <a href="#!" class="text-body">Quên mật khẩu?</a>
+                                </div>
+
                                 <!-- login -->
                                 <hr />
                                 <div class="form-group fs-6 mb-2 d-flex justify-content-between">
@@ -58,7 +68,6 @@
                                         khoản</router-link>
                                     <button type="submit" class="btn btn-primary text-white">Đăng nhập</button>
                                 </div>
-
                             </div>
                         </div>
                     </Form>
@@ -73,6 +82,7 @@ import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import UsersService from '@/services/users.service';
 import { useDataStore } from '../stores/dataStores';
+import axios from 'axios';
 export default {
     components: {
         Form,
@@ -81,11 +91,6 @@ export default {
     },
     data() {
         const userSchema = yup.object().shape({
-            name: yup
-                .string()
-                .required("Tên phải bắt buộc phải có")
-                .min(3, "Tên phải có ít nhất 3 ký tự")
-                .max(30, "Tên chứa nhiều nhất 30 ký tự"),
             password: yup
                 .string()
                 .required("Mật khẩu bắt buộc phải có")
@@ -99,7 +104,28 @@ export default {
                     /((0)+([0-9])+([0-9]{8})\b)/g,
                     "Số điện thoại không hợp lệ."
                 ),
-        })
+        });
+        // Đinh nghĩa thông báo nổi 
+        const notifyLoginError = () => {
+            toast("Mật khẩu hoặc số điện thoại không đúng", {
+                autoClose: 1500,
+                limit: 1,
+                type: toast.TYPE.ERROR,
+                multiple: false,
+                hideProgressBar: true
+            });
+        };
+
+        const notifyLoginBlock = () => {
+            toast("Tài khoản này đã bị khoá, liên hệ Quản trị viên để được hỗ trợ", {
+                autoClose: 1500,
+                limit: 1,
+                type: toast.TYPE.ERROR,
+                multiple: false,
+                hideProgressBar: true
+            });
+        };
+
         return {
             showPassword: false,
             msgShowPassword: 'Hiển thị',
@@ -108,9 +134,12 @@ export default {
             },
             userSchema,
             cookies: {},
+            notifyLoginError: notifyLoginError,
+            notifyLoginBlock: notifyLoginBlock,
         }
     },
     methods: {
+        // Ẩn và hiện mật khẩu trong input
         showPasswordF() {
             if (this.showPassword === false) {
                 this.showPassword = true
@@ -121,33 +150,37 @@ export default {
             }
 
         },
+        // Đăng nhập người dùng
         async submitLogin() {
             try {
                 let temp = await UsersService.login(this.user);
                 if (temp === false)
-                    alert('Password or name not match')
+                    this.notifyLoginError();
                 else {
                     this.cookies = await UsersService.getCookies();
+
                     // Kiểm tài khoản - có bị khoá hay không 
                     if (this.cookies.statusUser === false) {
-                        alert('Tài khoản đã bị khoá');
+                        this.notifyLoginBlock();
                         this.user.phone = '';
                         this.user.name = '';
                         this.user.password = '';
                         return 0;
                     }
+
                     // Lưu vào store
                     useDataStore().setUser(this.cookies);
-                    console.log(this.cookies);
+                    console.log(useDataStore().getUser);
+
                     // Lưu vào localStorage 
                     localStorage.setItem('name', this.cookies.name)
                     console.log("User: " + localStorage.getItem('name'))
                     localStorage.setItem('_id', this.cookies._id)
                     console.log("id_ " + localStorage.getItem('_id'))
-                    console.log(useDataStore().getUser);
+
                     // Chuyển hướng về HomePage 
                     // this.$router.push('/');
-                    window.location.href = "/";
+                    window.location.href = "http://localhost:3001/";
                 }
             } catch (error) {
                 console.log(error);
@@ -157,14 +190,29 @@ export default {
         // Đăng xuất 
         async logout() {
             try {
+
                 // Xoá thông tin user từ cookies
                 await UsersService.logout();
+
                 // Xoá thông tin user từ store
                 useDataStore().setUser([]);
+
                 // Xoá thông tin user từ localStorage
-                localStorage.removeItem("user")
+                localStorage.removeItem("name");
+                localStorage.removeItem("_id");
+
+                // Xoá giỏ hàng
+                await axios
+                    .get(`http://localhost:3000/cookies/clear`, {
+                        withCredentials: true
+                    })
+                    .then((response) => {
+                        console.log(response)
+                    })
+
                 // Chuyển hướng về HomePage
-                this.$router.push('/');
+                // this.$router.push('/');
+                window.location.href = "http://localhost:3001/";
             } catch (error) {
                 console.log(error);
             }
@@ -175,5 +223,38 @@ export default {
 <style scoped>
 .form {
     max-width: 350px;
+}
+
+.divider:after,
+.divider:before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+}
+
+.h-custom {
+    height: calc(100% - 73px);
+}
+
+@media (max-width: 450px) {
+    .h-custom {
+        height: 100%;
+    }
+}
+
+section {
+    background:
+        linear-gradient(217deg, #0196fa, rgba(255, 0, 0, 0) 70.71%),
+        linear-gradient(127deg, #fffefa, rgba(0, 255, 0, 0) 70.71%),
+        linear-gradient(336deg, #ffb07e, rgba(0, 0, 255, 0) 70.71%);
+}
+
+header::before {
+    display: none;
+}
+
+footer::before {
+    display: none;
 }
 </style>

@@ -1,80 +1,116 @@
 <template>
-    <Form class="container form shadow-sm pb-5 bg-light" @submit="submitRegister" :validation-schema="userSchema"
-        style="border-radius: 9999px;">
-        <div class="row">
-            <div class="col rounded-4 rounded-top-1 pb-1 bg-light">
-                <!-- Đăng ký  -->
-                <div class="form-group form-floating mb-3 text-center">
-                    <div class="fw-bold fs-6 text-danger py-3">Book Store</div>
-                    <div class="fw-bold fs-5">Đăng ký</div>
-                    <small>Đăng ký tài khoản người mua</small>
+    <section class="vh-100 mx-2">
+        <div class="container-fluid h-custom">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-md-9 col-lg-6 col-xl-5">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                        class="img-fluid" alt="Sample image">
                 </div>
-                <!-- phone -->
-                <div class="form-group form-floating mb-2">
-                    <Field name="phone" type="text" class="form-control" placeholder="Số điện thoại" v-model="user.phone" />
-                    <label for="phone">Số điện thoại</label>
-                    <ErrorMessage name="phone" class="error-feedback" />
-                </div>
-                <!-- name -->
-                <div class="form-group form-floating mb-2">
-                    <Field name="name" type="text" class="form-control" placeholder="Tên" v-model="user.name" />
-                    <label class="fs-6" for="name">Tên</label>
-                    <ErrorMessage name="name" class="error-feedback" />
-                </div>
-                <!-- password -->
-                <div class="form-group mb-2">
-                    <div class="input-group">
-                        <div class="form-floating">
-                            <Field name="password" v-bind:type="showPassword ? 'text' : 'password'" class="form-control"
-                                placeholder="Mật khẩu" v-model="user.password" />
-                            <label class="fs-6" for="password">Mật khẩu</label>
-                        </div>
-                        <span @click="showPasswordF" class="input-group-text user-select-none">{{
-                            msgShowPassword }}</span>
+                <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 pt-4 rounded-2" style="background-color: #ffffff;">
+                    <div
+                        class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start text-white">
+                        <p class="lead fw-normal mb-0 me-3 text-dark">Đăng ký với</p>
+                        <button type="button" class="btn btn-primary btn-floating mx-1">
+                            <i class="fab fa-facebook-f"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-primary btn-floating mx-1">
+                            <i class="fab fa-twitter"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-primary btn-floating mx-1">
+                            <i class="fab fa-linkedin-in"></i>
+                        </button>
                     </div>
-                    <ErrorMessage name="password" class="error-feedback" />
-                </div>
-                <!-- password confirm -->
-                <div class="form-group mb-2">
-                    <div class="input-group">
-                        <div class="form-floating">
-                            <Field name="comfirmpassword" v-bind:type="showPassword ? 'text' : 'password'"
-                                class=" form-control" placeholder="Xác nhận mật khẩu" />
-                            <label class="fs-6" for="comfirmpassword">Xác nhận mật khẩu</label>
-                        </div>
-                        <span @click="showPasswordF" class="input-group-text user-select-none">{{
-                            msgShowPassword }}</span>
+
+                    <div class="divider d-flex align-items-center mt-4">
+                        <p class="text-center fw-bold mx-3 mb-0">Hoặc</p>
                     </div>
-                    <ErrorMessage name="comfirmpassword" class="error-feedback" />
-                </div>
 
-                <!-- sex -->
-                <div v-show="true" class="form-group form-floating mb-2">
-                    <select required class="form-select" aria-label="" v-model="user.sex">
-                        <option :value=undefined selected>Chọn giới tính</option>
-                        <option :value='true'>Nam</option>
-                        <option :value='false'>Nữ</option>
-                    </select>
-                    <label class="fs-6" for="sex">Giới tính</label>
-                </div>
+                    <Form class="container form pb-5" @submit="submitRegister" :validation-schema="userSchema"
+                        style="border-radius: 9999px; background-color: white;">
+                        <div class="row">
+                            <div class="col rounded-4 rounded-top-1 pb-1" style="background-color: white;">
+                                <!-- Đăng ký  -->
+                                <div class="form-group form-floating mb-6 text-center">
+                                    <div class="fw-bold fs-6 text-danger py-3">Book Store</div>
+                                    <div class="fw-bold fs-5">Đăng ký</div>
+                                    <small>Đăng ký tài khoản người mua</small>
+                                </div>
+                                <!-- phone -->
+                                <div class="form-group form-floating mb-6">
+                                    <Field name="phone" type="text" class="form-control" placeholder="Số điện thoại"
+                                        v-model="user.phone" />
+                                    <label for="phone">Số điện thoại</label>
+                                    <ErrorMessage name="phone" class="error-feedback" />
+                                </div>
+                                <!-- name -->
+                                <div class="form-group form-floating mb-6">
+                                    <Field name="name" type="text" class="form-control" placeholder="Tên"
+                                        v-model="user.name" />
+                                    <label class="fs-6" for="name">Tên</label>
+                                    <ErrorMessage name="name" class="error-feedback" />
+                                </div>
+                                <!-- password -->
+                                <div class="form-group mb-6">
+                                    <div class="input-group">
+                                        <div class="form-floating">
+                                            <Field name="password" v-bind:type="showPassword ? 'text' : 'password'"
+                                                class="form-control" placeholder="Mật khẩu" v-model="user.password" />
+                                            <label class="fs-6" for="password">Mật khẩu</label>
+                                        </div>
+                                        <span @click="showPasswordF" class="input-group-text user-select-none">{{
+                                            msgShowPassword }}</span>
+                                    </div>
+                                    <ErrorMessage name="password" class="error-feedback" />
+                                </div>
+                                <!-- password confirm -->
+                                <div class="form-group mb-6">
+                                    <div class="input-group">
+                                        <div class="form-floating">
+                                            <Field name="comfirmpassword" v-bind:type="showPassword ? 'text' : 'password'"
+                                                class=" form-control" placeholder="Xác nhận mật khẩu" />
+                                            <label class="fs-6" for="comfirmpassword">Xác nhận mật khẩu</label>
+                                        </div>
+                                        <span @click="showPasswordF" class="input-group-text user-select-none">{{
+                                            msgShowPassword }}</span>
+                                    </div>
+                                    <ErrorMessage name="comfirmpassword" class="error-feedback" />
+                                </div>
 
-                <!-- birthday -->
-                <div class="form-group form-floating mb-2">
-                    <Field name="birthday" type="date" class="form-control" placeholder="Tên" v-model="user.dateOfBirth" />
-                    <label class="fs-6" for="birthday">Ngày Sinh</label>
-                    <ErrorMessage name="birthday" class="error-feedback" />
-                </div>
+                                <!-- sex -->
+                                <div v-show="true" class="form-group form-floating mb-6">
+                                    <select required class="form-select" aria-label="" v-model="user.sex">
+                                        <option :value=undefined selected>Chọn giới tính</option>
+                                        <option :value='true'>Nam</option>
+                                        <option :value='false'>Nữ</option>
+                                    </select>
+                                    <label class="fs-6" for="sex">Giới tính</label>
+                                </div>
 
-                <!-- register -->
-                <hr />
-                <div class="form-group fs-6 mb-2 d-flex justify-content-between">
-                    <router-link class="btn btn-outline-primary" to="/UserLogin">Đăng nhập</router-link>
-                    <!-- Lỗi khi sử dụng @click thay vì type='submit' -->
-                    <button type="submit" class="btn btn-primary text-white">Tạo tài khoản</button>
+                                <!-- birthday -->
+                                <div class="form-group form-floating mb-6">
+                                    <Field name="birthday" type="date" class="form-control" placeholder="Tên"
+                                        v-model="user.dateOfBirth" />
+                                    <label class="fs-6" for="birthday">Ngày Sinh</label>
+                                    <ErrorMessage name="birthday" class="error-feedback" />
+                                </div>
+
+                                <!-- register -->
+                                <hr />
+                                <div class="form-group fs-6 mb-2 d-flex justify-content-between">
+                                    <router-link class="btn btn-outline-primary" to="/UserLogin">Đăng nhập</router-link>
+                                    <!-- Lỗi khi sử dụng @click thay vì type='submit' -->
+                                    <button type="submit" class="btn btn-primary text-white">Tạo tài khoản</button>
+                                </div>
+                            </div>
+                        </div>
+                    </Form>
+
                 </div>
             </div>
         </div>
-    </Form>
+    </section>
 </template>
 <script>
 // import here
@@ -190,6 +226,31 @@ export default {
 </script>
 <style scoped>
 .form {
-    max-width: 350px;
+    max-width: 400px;
+}
+
+.divider:after,
+.divider:before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+}
+
+.h-custom {
+    height: calc(100% - 73px);
+}
+
+@media (max-width: 450px) {
+    .h-custom {
+        height: 100%;
+    }
+}
+
+section {
+    background:
+        linear-gradient(217deg, #0196fa, rgba(255, 0, 0, 0) 70.71%),
+        linear-gradient(127deg, #fffefa, rgba(0, 255, 0, 0) 70.71%),
+        linear-gradient(336deg, #ffb07e, rgba(0, 0, 255, 0) 70.71%);
 }
 </style>

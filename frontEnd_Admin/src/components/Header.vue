@@ -229,7 +229,7 @@ export default {
     }
 
     .btn-acc::before {
-        font-size: 24px;
+        font-size: 16px;
         padding: 8px;
         content: '\f007';
         font-family: 'Font Awesome 5 Free';
@@ -237,7 +237,7 @@ export default {
     }
 
     .btn-cart::before {
-        font-size: 24px;
+        font-size: 16px;
         padding: 8px;
         content: '\f07a';
         font-family: 'Font Awesome 5 Free';

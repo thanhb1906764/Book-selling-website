@@ -105,9 +105,7 @@ export default {
         <RegisterUser />
         <router-view />
     </main>
-    <footer>
-        <FooterVue />
-    </footer>
+    <FooterVue />
 </template>
 <style scoped>
 main {
