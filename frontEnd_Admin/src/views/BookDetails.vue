@@ -1,13 +1,17 @@
 <template>
     <div class="container shadow-sm rounded-2" style="background-color: white;">
         <!-- Chi tiết sản phẩm  -->
-        <div style="display: flex;">
+        <div class="row">
             <!-- Hiển thị Images của Book  -->
-            <div style="width: 30rem; padding: 10px;">
+            <div class="col" style="30%">
                 <Carousel_Img :id="this.id" />
             </div>
+
+            <!-- Force next columns to break to new line -->
+            <div class="w-100 column-breaks"></div>
+
             <!-- Thông tin Book  -->
-            <div class="p-2" style="width: 60rem;">
+            <div class="col pt-2">
                 <!-- Tên Book  -->
                 <h4 class="fw-semibold">{{ Book.bookName }}</h4>
                 <!-- Nhà Cung cấp và Xuất bản -->
@@ -267,5 +271,15 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+
+.column-breaks {
+    display: flex;
+}
+
+@media (min-width: 576px) {
+    .column-breaks {
+        display: none;
+    }
 }
 </style>

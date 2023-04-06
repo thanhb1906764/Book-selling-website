@@ -4,57 +4,51 @@
         name: 'BookDetails',
         params: { id: book._id },
     }">
-
         <!-- Phần hiển thị của Cart trên HomePage  -->
-        <v-hover v-slot="{ isHovering, props }" open-delay="200">
-
+        <v-hover v-slot="{ isHovering, props }" open-delay="10">
             <v-tooltip :text="book.bookName"></v-tooltip>
-
+            <!-- Tag  -->
             <v-card class="mx-auto text-center" width="17rem" :elevation="isHovering ? 16 : 2"
                 :class="{ 'on-hover': isHovering }" v-bind="props">
-
-                <span class="badge text-bg-danger text-uppercase"
-                    style="position: absolute;z-index: 2;  margin: 5px; max-height: 30px; left: 20px;">
+                <span class="badge text-bg-danger"
+                    style="position: absolute;z-index: 2;  margin: 5px; max-height: 30px; top: -5px; left: -8px; width: 50px;">
                     <h6 v-if="book.bookPrice !== book.originalPrice">Sale</h6>
                     <h6 v-else-if="!checkMonth(book.receiptDate)">New</h6>
                 </span>
-
-                <!-- <v-img :src="link"></v-img> -->
-                <img v-if="linkImage !== null" class="text-center" :src="linkImage" height="270">
-                <div>{{ }}</div>
-
-                <v-card-title class="py-2" style="text-overflow: ellipsis;">{{ book.bookName }}</v-card-title>
-
+                <img v-if="linkImage !== null" class="" :src="linkImage" style="height: 355px;">
+                <!-- Tên sách -->
+                <v-card-title class="py-0 fs-6 border-top border-danger-subtle border-2"
+                    style="text-overflow: ellipsis; border-color: #f1aeb5 !important;">{{
+                        book.bookName
+                    }}</v-card-title>
                 <!-- Số lượng đánh giá sao của Book  -->
-                <v-card-subtitle class=""><span>{{ counterComement }} đánh giá</span></v-card-subtitle>
-
-                <v-card-text class="py-3">
+                <v-card-subtitle class="py-0 fs-6"><span>{{ counterComement }} đánh giá</span></v-card-subtitle>
+                <!-- Giá  -->
+                <v-card-text class="py-1 fs-5">
                     <div v-if="book.originalPrice !== book.bookPrice">
-                        <div class="card-text" style=" display: flex;align-items: center;">
-                            <h4 class="fw-bold" style="color: orange; ">{{ (book.bookPrice).toLocaleString('vi-VN', {
+                        <div class="card-text" style=" display: flex; align-items: center; justify-content: space-between;">
+                            <div class="fw-bold fs-5" style="color: orange; ">{{ (book.bookPrice).toLocaleString('vi-VN', {
                                 style: 'currency', currency:
                                     'VND'
-                            }) }}</h4>
-                            <h6 style=" text-decoration: line-through;">{{ (book.originalPrice).toLocaleString('vi-VN', {
-                                style: 'currency', currency:
-                                    'VND'
-                            }) }}</h6>
-
+                            }) }}</div>
+                            <div class="fw-bold fs-6" style=" text-decoration: line-through;">{{
+                                (book.originalPrice).toLocaleString('vi-VN', {
+                                    style: 'currency', currency:
+                                        'VND'
+                                }) }}</div>
                         </div>
+                        <!-- Thời gian khuyến mãi  -->
                         <testTime class="text-center" :time="book.promotionTime" @messageSent="handleMessage" />
-
                     </div>
                     <div v-else>
-                        <h4 class="fw-bold mb-0" style="color: red;">{{ (book.bookPrice).toLocaleString('vi-VN', {
+                        <div class="fw-bold fs-5" style="color: red;">{{ (book.bookPrice).toLocaleString('vi-VN', {
                             style: 'currency',
                             currency: 'VND'
-                        }) }}</h4>
+                        }) }}</div>
                     </div>
                 </v-card-text>
             </v-card>
-
         </v-hover>
-
     </router-link>
 </template>
 

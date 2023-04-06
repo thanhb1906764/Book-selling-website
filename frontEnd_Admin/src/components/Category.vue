@@ -1,7 +1,7 @@
 <template>
-    <v-menu open-on-hover>
+    <v-menu open-on-hover open-delay="0" close-delay="50">
         <template v-slot:activator="{ props }">
-            <div v-bind="props">
+            <div v-bind="props" class="fw-bold fs-6 category">
                 Danh mục sản phẩm
             </div>
         </template>
@@ -11,11 +11,9 @@
                 <v-menu :location="location" open-on-hover>
                     <template v-slot:activator="{ props }">
                         <router-link to="/category"><v-list-item-title v-bind="props" class="hover-item">
-
                                 {{ category.genreName }}
-
-
-                            </v-list-item-title> </router-link>
+                            </v-list-item-title>
+                        </router-link>
                     </template>
                     <v-list>
                         <v-list-item v-for="(subGenre, index) in category.subGenre" :key="index" :value="index"
@@ -84,4 +82,11 @@ export default {
 .v-sheet {
     background-color: transparent;
 }
+
+.v-list-item,
+.v-list-item-title {
+    color: #000000;
+}
+
+@media (min-width: 576px) {}
 </style>
