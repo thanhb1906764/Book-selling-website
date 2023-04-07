@@ -1,6 +1,6 @@
 <template>
     <title>Thông tin vận chuyển - Đặt hàng</title>
-    <div class="container-sm text-dark py-2">
+    <div class="container-sm text-dark">
         <div class="row">
             <!-- Nội dung bên trái: Thông tin khách hàng và địa chỉ giao hàng -->
             <div class="col-auto col-sm-6">
@@ -30,7 +30,7 @@
                     </div>
                 </div>
                 <!-- Thẻ, chứa thông tin người dùng (Tên, email, nút đăng xuất), nếu người dùng chưa đăng nhập sẽ không hiển thị -->
-                <div v-if="name !== null" class="container">
+                <div v-if="name !== null" class="container mb-2">
                     <ul class="list-group px-2">
                         <li class="list-group-item fw-bolder">
                             <div><a class="me-2 fa-solid fa-user pe-2"></a>{{ name }}
@@ -43,7 +43,7 @@
                 <div class="container">
                     <div class="p-2">
                         <!-- Địa chỉ giao hàng, nếu đã đăng nhập -->
-                        <div v-if="name !== null" class="form-group form-floating mb-2">
+                        <div v-if="name !== null" class="form-group form-floating mb-4">
                             <select class="form-select" aria-label="" @change="addressSelect" v-model="addressIndex">
                                 <option selected :value=-1>Chọn địa chỉ</option>
                                 <option v-for="(address, index) in addressList" :value="index" :key="address._id">
@@ -53,38 +53,38 @@
                             <label class="fs-6" for="floatingInput">Địa chỉ</label>
                         </div>
                         <!-- Tên khách hàng -->
-                        <div class="form-floating mb-2">
+                        <div class="form-floating my-4">
                             <input type="email" class="form-control" v-model="order.userName">
                             <label class="fs-6" for="floatingInput">Họ tên</label>
                         </div>
                         <!-- Số điện thoại  -->
-                        <div class="form-floating mb-2">
+                        <div class="form-floating my-4">
                             <input type="text" class="form-control" v-model="order.phone">
                             <label class="fs-6" for="floatingInput">Số điện thoại</label>
                         </div>
                         <!-- Địa chỉ - input-->
-                        <div class="form-floating mb-2">
+                        <div class="form-floating my-4">
                             <input type="text" class="form-control" v-model="order.reAddress">
                             <label class="fs-6" for="floatingInput">Địa chỉ</label>
                         </div>
                         <!-- Chọn Tỉnh, Quận, Huyện theo Select -->
-                        <!-- <AddressVue @addressEmit="(address) => addressEmit = address" /> -->
-                        <AddressVue :drop-index-city="indexCity" :drop-index-district="indexDistrict"
+                        <AddressVue class="my-4" :drop-index-city="indexCity" :drop-index-district="indexDistrict"
                             :drop-index-ward="indexWard" @addressEmit="(address) => {
                                 addressEmit = address;
                                 addressSelect();
                             }" />
                         <!-- Chọn phương thức thanh toán -->
-                        <div class="form-group form-floating mb-2">
+                        <div class="form-group form-floating my-4">
                             <select required class="form-select" aria-label="" v-model="order.payment">
                                 <!-- <option selected value="payment">Chọn phương thức thanh toán</option> -->
                                 <option value="Thanh toán khi nhận hàng">Thanh toán khi nhận hàng</option>
                                 <option value="Chuyển khoản">Chuyển khoản</option>
                             </select>
                             <label class="fs-6" for="payment">Phương thức thanh toán</label>
+                            <PayPalVue :item="dropItem" class="mt-4" v-if="order.payment === 'Chuyển khoản'" />
                         </div>
                         <!-- Nút Giỏ hàng và Chọn phương thức thanh toán -->
-                        <div class="d-flex justify-content-end">
+                        <div class="d-flex justify-content-end mt-4">
                             <button @click="submitOrder" class="btn btn-primary">Đặt hàng</button>
                         </div>
                     </div>
@@ -142,6 +142,7 @@
 // import here
 import AddressVue from '../components/Address.vue';
 import PayCardsVue from '../components/PayCards.vue';
+import PayPalVue from '../components/PayPal.vue';
 import { useDataStore } from '../stores/dataStores';
 import BooksService from '@/services/books.service';
 import ShipFeeService from '@/services/shipFee.service';
@@ -153,6 +154,7 @@ export default {
     components: {
         AddressVue,
         PayCardsVue,
+        PayPalVue,
     },
     data() {
         // Đinh nghĩa thông báo nổi 
@@ -220,7 +222,8 @@ export default {
             indexWard: undefined,
             addressAxios: Object,
             notifyOrderComplete: notifyOrderComplete,
-            notifyOrderEmpty: notifyOrderEmpty
+            notifyOrderEmpty: notifyOrderEmpty,
+            dropItem: undefined,
         }
     },
     computed: {
@@ -370,7 +373,7 @@ export default {
         // Lấy giỏ hàng trên cookies
         async getCartOnCookie() {
             try {
-                axios
+                await axios
                     .get(`http://localhost:3000/cookies/read`, {
                         withCredentials: true
                     })
@@ -421,7 +424,7 @@ export default {
                     this.deleteCart();
                     // Chuyển hướng đến trang ...
                     // this.$router.push('/Pay');
-                    window.location.href = "/Pay"; // Do không có đủ thời gian nên tạm sử dụng load trang 
+                    window.location.href = "/Pay"; // Do không có đủ thời gian nên tạm sử dụng load trang
                 }
             }
             catch (error) {
@@ -445,7 +448,7 @@ export default {
     },
     mounted() {
     },
-    created() {
+    async created() {
         this.name = localStorage.getItem('name');
         this.Cart = this.getCartOnCookie();
         this.retrieveBookOnCart();

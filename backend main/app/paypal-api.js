@@ -3,7 +3,9 @@ require('dotenv').config(); // loads variables from .env file
 const { CLIENT_ID, APP_SECRET } = process.env;
 const base = "https://api-m.sandbox.paypal.com";
 
-async function createOrder() {
+// Tạo đơn hàng
+async function createOrder(data) {
+    console.log(data);
     const accessToken = await generateAccessToken();
     const url = `${base}/v2/checkout/orders`;
     const response = await fetch(url, {
@@ -13,38 +15,15 @@ async function createOrder() {
             Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
-            intent: "CAPTURE",
-            purchase_units: [
-                {
-                    items: [
-                        {
-                            name: "T-Shirt",
-                            description: "Green XL",
-                            quantity: "1",
-                            unit_amount: {
-                                currency_code: "USD",
-                                value: "10.00"
-                            }
-                        }
-                    ],
-                    amount: {
-                        currency_code: "USD",
-                        value: "10.00",
-                        breakdown: {
-                            item_total: {
-                                currency_code: "USD",
-                                value: "10.00"
-                            }
-                        }
-                    },
-                },
-            ],
+            intent: data.intent,
+            purchase_units: data.purchase_units,
         }),
     });
 
     return handleResponse(response);
 }
 
+// Xác nhận
 async function capturePayment(orderId) {
     const accessToken = await generateAccessToken();
     const url = `${base}/v2/checkout/orders/${orderId}/capture`;
@@ -59,6 +38,7 @@ async function capturePayment(orderId) {
     return handleResponse(response);
 }
 
+// Tạo mã 
 async function generateAccessToken() {
     const auth = Buffer.from(CLIENT_ID + ":" + APP_SECRET).toString("base64");
     const response = await fetch(`${base}/v1/oauth2/token`, {
@@ -73,6 +53,7 @@ async function generateAccessToken() {
     return jsonData.access_token;
 }
 
+// Xử lý phản hồi
 async function handleResponse(response) {
     if (response.status === 200 || response.status === 201) {
         return response.json();

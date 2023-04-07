@@ -71,7 +71,7 @@ export default {
 <template>
     <div class="d-flex text-dark">
         <!-- Chọn thành phố  -->
-        <div class="form-group form-floating mb-2 me-1 col">
+        <div class="form-group form-floating me-1 col">
             <select v-model="indexCity" class="form-select" aria-label="City" @change="addressSelect">
                 <!-- <option value="-1" selected>Chọn Tỉnh/Thành Phố</option> -->
                 <option v-for="(city, index) in citys" :value="index">{{ city.Name }}</option>
@@ -80,7 +80,7 @@ export default {
         </div>
 
         <!-- Chọn quận -->
-        <div class="form-group form-floating mb-2 me-1 col">
+        <div class="form-group form-floating me-1 col">
             <select v-model="indexDistrict" class="form-select" aria-label="District" @change="addressSelect">
                 <!-- <option value="-1" selected>Chọn Quận/Huyện</option> -->
                 <template v-if="get">
@@ -91,7 +91,7 @@ export default {
         </div>
 
         <!-- Chọn phường  -->
-        <div class="form-group form-floating mb-2 col">
+        <div class="form-group form-floating col">
             <select v-model="indexWard" class="form-select" aria-label="Ward" @change="addressSelect">
                 <!-- <option value="-1" selected>Chọn Phường/Xã</option> -->
                 <template v-if="get">

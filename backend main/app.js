@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require('cookie-parser');
+const axios = require('axios');
 // paypal
 // import * as paypal from "./paypal-api.js";
 const paypal = require("./app/paypal-api");
@@ -182,7 +183,8 @@ app.get('/cookies/clear', (req, res) => {
 // Create order - PayPal
 app.post("/create-paypal-order", async (req, res) => {
     try {
-        const order = await paypal.createOrder();
+        console.log(req.body.cart[0]);
+        const order = await paypal.createOrder(req.body.cart[0]);
         res.json(order);
     } catch (err) {
         res.status(500).send(err.message);
@@ -197,6 +199,12 @@ app.post("/capture-paypal-order", async (req, res) => {
     } catch (err) {
         res.status(500).send(err.message);
     }
+});
+
+// Lấy dữ liệu chuyển đổi USD/VND từ Google Finance 
+app.get('/google-finance', async (req, res) => {
+    const { data } = await axios.get('https://www.google.com/finance/quote/USD-VND?hl=vi');
+    res.send(data);
 });
 
 app.use((req, res, next) => {

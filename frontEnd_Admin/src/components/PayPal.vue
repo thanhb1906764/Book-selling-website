@@ -1,15 +1,26 @@
-<template >
-    <div class="text-center" id="your-container-element" style="margin: auto; width: 20%;"></div>
+<template>
+    <div class="text-center" id="your-container-element" style="margin: auto;"></div>
 </template>
 
 <script>
 import { loadScript } from "@paypal/paypal-js";
+import { useDataStore } from '../stores/dataStores';
+import axios from 'axios';
 
 export default {
+    props: {
+        item: Object
+    },
+    watch: {
+        item: function (newValue, oldValue) {
+            console.log(newValue);
+            this.itemList = newValue;
+        }
+    },
     data() {
         return {
-            YOUR_PRODUCT_STOCK_KEEPING_UNIT: 10,
-            YOUR_PRODUCT_QUANTITY: 2
+            itemList: this.item || {},
+            bookList: useDataStore().getBooks
         }
     },
     mounted() {
@@ -53,26 +64,27 @@ export default {
                                                 intent: "CAPTURE",
                                                 purchase_units: [
                                                     {
-                                                        items: [
-                                                            {
-                                                                name: "T-Shirt",
-                                                                description: "Green XL",
-                                                                quantity: "1",
-                                                                unit_amount: {
-                                                                    currency_code: "USD",
-                                                                    value: "1.00"
-                                                                }
-                                                            }
-                                                        ],
+                                                        items: this.itemList,
+                                                        // items: [
+                                                        //     {
+                                                        //         name: "T-Shirt",
+                                                        //         description: "Green XL",
+                                                        //         quantity: "1",
+                                                        //         unit_amount: {
+                                                        //             currency_code: "USD",
+                                                        //             value: "1.00"
+                                                        //         }
+                                                        //     }
+                                                        // ],
                                                         amount: {
                                                             currency_code: "USD",
-                                                            value: "1.00",
-                                                            breakdown: {
-                                                                item_total: {
-                                                                    currency_code: "USD",
-                                                                    value: "1.00"
-                                                                }
-                                                            }
+                                                            value: "1453.00",
+                                                            // breakdown: {
+                                                            //     item_total: {
+                                                            //         currency_code: "USD",
+                                                            //         value: "1.00"
+                                                            //     }
+                                                            // }
                                                         },
                                                     },
                                                 ],
@@ -117,8 +129,45 @@ export default {
             }
         }
     },
-    created() {
+    async created() {
         this.paypalHanler();
+        // // Lấy dữ liệu chuyển đổi USD/VND từ Google Finance
+        // let USDToVND
+        // await axios
+        //     .get(`http://localhost:3000/google-finance`, {
+        //         withCredentials: true
+        //     })
+        //     .then((response) => {
+        //         const data = response.data;
+        //         const exchangeRateRegex = /<div class="YMlKec fxKbKc">([\d.,]+)<\/div>/;
+        //         const exchangeRateMatch = data.match(exchangeRateRegex);
+        //         if (exchangeRateMatch) {
+        //             const exchangeRate = exchangeRateMatch[1];
+        //             USDToVND = parseFloat(exchangeRate, 10);
+
+        //         }
+        //         // console.log(JSON.stringify(response.data));
+        //     })
+        // console.log(USDToVND);
+        // // Thêm sản phẩm vào dropitem để có thể thanh toán bằng PayPal
+        // this.dropItem = []
+        // for (let i = 0; i < this.order.productList.length; i++) {
+        //     let bookName = this.bookList.find(Book => Book._id === this.order.productList[i]._idBook).bookName;
+        //     console.log(bookName);
+        //     console.log(this.order.productList[i]);
+        //     this.dropItem.push({
+        //         name: bookName,
+        //         description: "",
+        //         quantity: (this.order.productList[i].quantity).toString(10),
+        //         unit_amount: {
+        //             currency_code: "USD",
+        //             value: (this.order.productList[i].price).toString(10)
+        //         }
+        //     })
+        // }
+        // console.log(this.dropItem);
+    },
+    updated() {
     }
 };
 </script>
