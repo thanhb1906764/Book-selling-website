@@ -1,7 +1,7 @@
 <template class="col-sm">
     <div class="container border rounded ps-5">
         <div class="text-uppercase fw-semibold"> Sửa địa chỉ </div>
-        <AddressAccEdit @form-submitted="editAddress" :hidenCheck="this.hidenCheck" :check="checked" ref="myComponentRef" />
+        <AddressAccEdit @form-submitted="editAddress" :hidenCheck="this.hidenCheck"  ref="myComponentRef" />
         <!-- <button class="btn" @click="submitForm">Submit</button> -->
         <!-- <button class="btn" @click="test()">Submit</button>  -->
 
@@ -27,11 +27,8 @@ export default {
         }
     },
     async mounted() {
-        if(!this.addressEdit){
-            this.AddressAccEdit = await AddressesService.get(this.$route.params.id)
-            console.log("axios addressEdit")
-        }
-        if (this.addressEdit.find(address => address.default == true)) {
+        
+        if ( this.addressEdit.find(address => address.default == true)) {
             this.hidenCheck = true
             this.checked = true
         }
@@ -49,6 +46,12 @@ export default {
             childComponent.setData(this.$route.params.id);
         },
         async editAddress(formData) {
+            if(this.addressEdit==""){
+             useDataStore().getAPIAddress(await AddressesService.getAll())
+            this.AddressAccEdit = useDataStore().getAddress.filter(address => address._id == this.$route.params.id)
+            this.idDefault= useDataStore().getAddress.filter(i => i.default == true),
+            console.log("axios addressEdit")
+        }
             //Nêu chọn địa chỉ mặc định
             if (formData.default == true) {
                 //Đếm xem có bao nhiêu địa chỉ mặc đinh (đề phòng lỗi)
@@ -63,7 +66,7 @@ export default {
                 }
             }
             await AddressesService.update(this.$route.params.id,formData)
-            console.log(JSON.stringify(formData))
+            //console.log(JSON.stringify(formData))
             useDataStore().setSnackbar(true)
             this.$router.push({ name: "AddressAcc" })
         },

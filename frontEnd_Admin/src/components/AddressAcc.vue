@@ -33,7 +33,7 @@
             </div>
             <div class="col">
                 <div v-for="address in addresses" :key="address._id">
-                    <div>{{ address._id }}</div>
+                    
                     <div>{{ address.name }}</div>
 
                     <div>{{ address.streetName }}</div>

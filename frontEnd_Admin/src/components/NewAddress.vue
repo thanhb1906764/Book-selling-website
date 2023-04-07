@@ -21,12 +21,15 @@ export default {
             idDefault: useDataStore().getAddress.filter(i => i.default == true),
         }
     },
-    mounted(){
-        if(useDataStore().getAddress=='')
-            this.loadData()
-    },
+    
     methods: {
         async addAddress(formData) {
+            if(useDataStore().getAddress==''){
+                await this.loadData()
+                this.addressEdit= useDataStore().getAddress.filter(address => address._id == this.$route.params.id)
+                this.idDefault= useDataStore().getAddress.filter(i => i.default == true)
+            }
+                
              //Nêu chọn địa chỉ mặc định
              if (formData.default == true) {
                 //Đếm xem có bao nhiêu địa chỉ mặc đinh (đề phòng lỗi)
