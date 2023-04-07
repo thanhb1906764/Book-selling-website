@@ -73,15 +73,25 @@ export default {
                                                                     currency_code: "USD",
                                                                     value: "1.00"
                                                                 }
+                                                            },
+                                                            {
+                                                                name: "a-Shirt",
+                                                                description: "Green XL",
+                                                                quantity: "1",
+                                                                unit_amount: {
+                                                                    currency_code: "USD",
+                                                                    value: "12.00"
+                                                                }
                                                             }
                                                         ],
                                                         amount: {
                                                             currency_code: "USD",
-                                                            value: "1.00",
+                                                            // value: (localStorage.getItem('test').toString(10)),
+                                                            value: "13.00",
                                                             breakdown: {
                                                                 item_total: {
                                                                     currency_code: "USD",
-                                                                    value: "1.00"
+                                                                    value: "13.00"
                                                                 }
                                                             }
                                                         },
@@ -159,7 +169,7 @@ export default {
                             // Error
                             onError(err) {
                                 // For example, redirect to a specific error page
-                                window.location.href = "/your-error-page-here";
+                                // window.location.href = "/your-error-page-here";
                             },
                         })
                         .render("#your-container-element");
@@ -170,6 +180,7 @@ export default {
         }
     },
     created() {
+        localStorage.setItem('test', 100)
         this.paypalHanler();
     }
 };
