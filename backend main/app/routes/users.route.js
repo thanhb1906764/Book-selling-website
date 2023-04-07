@@ -27,7 +27,7 @@ router.route("/cookies")
 // Tìm người dùng theo id, cập nhật và xoá người dùng 
 router.route('/:id')
     .get(users.findOne)
-    .put(users.authenticationLogin, users.update)
+    .put(users.update)
     .delete(users.delete);
 
 // router.route('/drop/:name').post(users.dropCollection)
