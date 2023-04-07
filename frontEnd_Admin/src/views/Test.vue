@@ -34,6 +34,17 @@ export default {
                 try {
                     await paypal
                         .Buttons({
+
+                            // style
+                            style: {
+                                layout: 'horizontal',
+                                // color: 'blue',
+                                shape: 'rect',
+                                label: 'checkout',
+                                height: 32,
+                                tagline: false
+                            },
+
                             // Sets up the transaction when a payment button is clicked
                             createOrder: async function () {
                                 const response = await fetch("http://localhost:3000/create-paypal-order", {
@@ -90,6 +101,7 @@ export default {
                                 );
                                 return order.id;
                             },
+
                             // Finalize the transaction after payer approval
                             onApprove: async function (data) {
                                 const response = await fetch("http://localhost:3000/capture-paypal-order", {
@@ -108,6 +120,46 @@ export default {
                                     orderData,
                                     JSON.stringify(orderData, null, 2)
                                 );
+                            },
+
+                            // onInit is called when the button first renders
+                            onInit(data, actions) {
+
+                                // // Disable the buttons
+                                // actions.disable();
+
+                                // // Listen for changes to the checkbox
+                                // document.querySelector('#check')
+                                //     .addEventListener('change', function (event) {
+
+                                //         // Enable or disable the button when it is checked or unchecked
+                                //         if (event.target.checked) {
+                                //             actions.enable();
+                                //         } else {
+                                //             actions.disable();
+                                //         }
+                                //     });
+                            },
+
+                            // onClick is called when the button is clicked
+                            onClick() {
+
+                                // // Show a validation error if the checkbox is not checked
+                                // if (!document.querySelector('#check').checked) {
+                                //     document.querySelector('#error').classList.remove('hidden');
+                                // }
+                            },
+
+                            // Cancel 
+                            onCancel(data) {
+                                // Thanh toán lỗi
+                                window.location.href = "http://localhost:3001/Test";
+                            },
+
+                            // Error
+                            onError(err) {
+                                // For example, redirect to a specific error page
+                                window.location.href = "/your-error-page-here";
                             },
                         })
                         .render("#your-container-element");
