@@ -165,10 +165,10 @@ export default {
             console.log(this.commentList);
         },
 
-        // Cập nhật dữ liệu vào store và chuyển sang trang Pay
+        // Cập nhật dữ liệu vào store và chuyển sang trang Thông tin đơn hàng - Vận chuyển
         PayClick() {
             this.addProductToCart();
-            this.$router.push('/Pay');
+            this.$router.push('/Inform');
         },
 
         // Tăng số lượng sách

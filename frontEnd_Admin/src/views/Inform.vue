@@ -8,7 +8,6 @@
                 <nav class="navbar navbar-expand-lg bg-body-tertiary">
                     <div class="container-fluid">
                         <div class="collapse navbar-collapse" id="navbarNav">
-                            <!-- Thanh điều hướng nhỏ  -->
                             <ul class="navbar-nav">
                                 <li class="nav-item">
                                     <small>
@@ -22,18 +21,8 @@
                                 </li>
                                 <li class="nav-item">
                                     <small>
-                                        <router-link class="nav-link" to="/Inform">Thông tin vận chuyển - Đặt
+                                        <router-link class="nav-link active" to="/Inform">Thông tin vận chuyển - Đặt
                                             hàng</router-link>
-                                    </small>
-                                </li>
-                                <li class="nav-item">
-                                    <small>
-                                        <router-link class="nav-link disabled user-select-none" to="">></router-link>
-                                    </small>
-                                </li>
-                                <li class="nav-item">
-                                    <small>
-                                        <router-link class="nav-link active" to="/Inform">Thanh toán đơn hàng</router-link>
                                     </small>
                                 </li>
                             </ul>
@@ -43,7 +32,7 @@
                 <!-- Tiêu đề -->
                 <div class="container">
                     <div class="p-2 fs-5">
-                        Chọn phương thức thanh toán
+                        Thông tin đơn hàng
                     </div>
                 </div>
                 <!-- Thẻ, chứa thông tin người dùng (Tên, email, nút đăng xuất), nếu người dùng chưa đăng nhập sẽ không hiển thị -->
@@ -56,39 +45,62 @@
                         </li>
                     </ul>
                 </div>
-
                 <!-- Input thông tin người dùng -->
                 <div class="container">
                     <div class="p-2">
-
+                        <!-- Địa chỉ giao hàng, nếu đã đăng nhập -->
+                        <div v-if="name !== null" class="form-group form-floating mb-4">
+                            <select class="form-select" aria-label="" @change="addressSelect" v-model="addressIndex">
+                                <option selected :value=-1>Chọn địa chỉ</option>
+                                <option v-for="(address, index) in addressList" :value="index" :key="address._id">
+                                    {{ address?.streetName }}, {{ address.ward }}, {{ address.district }}, {{ address.city
+                                    }}</option>
+                            </select>
+                            <label class="fs-6" for="floatingInput">Địa chỉ</label>
+                        </div>
+                        <!-- Tên khách hàng -->
+                        <div class="form-floating my-4">
+                            <input type="email" class="form-control" v-model="order.userName">
+                            <label class="fs-6" for="floatingInput">Họ tên</label>
+                        </div>
+                        <!-- Số điện thoại  -->
+                        <div class="form-floating my-4">
+                            <input type="text" class="form-control" v-model="order.phone">
+                            <label class="fs-6" for="floatingInput">Số điện thoại</label>
+                        </div>
+                        <!-- Địa chỉ - input-->
+                        <div class="form-floating my-4">
+                            <input type="text" class="form-control" v-model="order.reAddress">
+                            <label class="fs-6" for="floatingInput">Địa chỉ</label>
+                        </div>
+                        <!-- Chọn Tỉnh, Quận, Huyện theo Select -->
+                        <AddressVue class="my-4" :drop-index-city="indexCity" :drop-index-district="indexDistrict"
+                            :drop-index-ward="indexWard" @addressEmit="(address) => {
+                                addressEmit = address;
+                                addressSelect();
+                            }" />
                         <!-- Chọn phương thức thanh toán -->
-                        <div class="form-group form-floating my-4">
-                            <!-- <select required class="form-select" aria-label="" v-model="order.payment">
+                        <!-- <div class="form-group form-floating my-4">
+                            <select required class="form-select" aria-label="" v-model="order.payment">
                                 <option value="Thanh toán khi nhận hàng">Thanh toán khi nhận hàng</option>
                                 <option value="Chuyển khoản">Chuyển khoản</option>
                             </select>
-                            <label class="fs-6" for="payment">Phương thức thanh toán</label> -->
-                            <PayPalVue :item="dropItem" class="mt-4" />
-                        </div>
-
+                            <label class="fs-6" for="payment">Phương thức thanh toán</label>
+                            <PayPalVue :item="dropItem" class="mt-4" v-if="order.payment === 'Chuyển khoản'" />
+                        </div> -->
                         <!-- Nút Giỏ hàng và Chọn phương thức thanh toán -->
                         <div class="d-flex justify-content-end mt-4">
-                            <button @click="payment" class="btn btn-primary" v-if="order.payment === 'Chuyển khoản'">Đặt
-                                hàng</button>
+                            <button @click="paymentClick" class="btn btn-primary">Đặt hàng</button>
                         </div>
-
                     </div>
                 </div>
             </div>
-
             <!-- Nội dung bên phải: Thông tin thông tin sản phẩm, giảm giá -->
             <div class="col-auto col-sm-6 border-start">
-
                 <!-- Danh sách sản phẩm - sách  -->
                 <div v-for="item in BookInCart" :key="item._id" class="container">
                     <PayCardsVue :Book="item" :Cart="Cart" />
                 </div>
-
                 <!-- Tạm tính, Phi Ship -->
                 <div v-if="Cart.length !== 0" class="container px-5">
                     <div class="d-flex justify-content-between py-2">
@@ -98,7 +110,6 @@
                             currency: 'VND'
                         }) }}</small>
                     </div>
-
                     <!-- Phí Ship  -->
                     <div class="d-flex justify-content-between">
                         <small class="text-muted">Phí Ship</small>
@@ -113,7 +124,6 @@
                                 currency: 'VND'
                             }) }}</small>
                     </div>
-
                 </div>
                 <div class="container px-5 text-danger py-4 fw-bold" v-else>
                     Không có Sản phẩm nào trong Giỏ hàng
@@ -346,8 +356,11 @@ export default {
                         this.BookInCart.push(temp)
                     }
                 }
-                // console.log('BookList in cart');
-                // console.log(this.BookInCart);
+                // lưu BookInCart vào store
+                useDataStore().setBookInCart(this.BookInCart)
+                console.log('BookList in cart');
+                console.log(useDataStore().getBookInCart);
+
                 let quantity
                 // Tính tạm giá trị các Book trong Cart, chưa tính shipFee 
                 for (let i = 0; i < this.BookInCart.length; i++) {
@@ -373,7 +386,10 @@ export default {
                     .then((response) => {
                         this.Cart = response.data
                         console.log('Cart on cookies');
-                        console.log(this.Cart)
+                        // Lưu Cart vào store 
+                        useDataStore().setCart(this.Cart)
+                        console.log(useDataStore().getCart);
+
                         // Lấy sách 
                         this.retrieveBookOnCart();
                         return response.data
@@ -382,50 +398,6 @@ export default {
                 console.log(error);
             }
         },
-
-        // submit order
-        async submitOrder() {
-            try {
-                // Nếu không có sách trong giỏ hàng thì không được đặt hàng
-                if (this.BookInCart.length === 0) {
-                    // alert('Không có sản phẩm nào trong giỏ');
-                    this.notifyOrderEmpty()
-                    return 0;
-                }
-                console.log(this.order);
-                this.order.orderTotal = this.orderTotal(this.tempCost, this.shipFee);
-                // let total = await OrdersService.create(this.order)
-                if (total === undefined)
-                    alert('Tạo đơn hàng không thành công');
-                else {
-                    // Kiểm tra order
-                    console.log(total);
-                    // Cập nhật bookStock cho book
-                    let book = Object
-                    let quantityBook
-                    for (let i = 0; i < this.BookInCart.length; i++) {
-                        quantityBook = this.Cart.find(book => book.idBook === this.BookInCart[i]._id).quantityBook
-                        let book = await BooksService.get(this.BookInCart[i]._id);
-                        // console.log(quantityBook);
-                        book = {
-                            bookStock: (parseInt(book.bookStock, 10) - parseInt(quantityBook, 10))
-                        }
-                        await BooksService.update(this.BookInCart[i]._id, book)
-                        // Thông báo đặt hàng thành công
-                        this.notifyOrderComplete()
-                    }
-                    // Destroy cookies giỏ hàng - cart sau khi đặt hàng thành công
-                    this.deleteCart();
-                    // Chuyển hướng đến trang ...
-                    this.$router.push('/Inform');
-                    window.location.href = "/Inform"; // Do không có đủ thời gian nên tạm sử dụng load trang
-                }
-            }
-            catch (error) {
-                console.log(error);
-            }
-        },
-
         // Xoá cookie giỏ hàng 
         async deleteCart() {
             try {
@@ -437,6 +409,70 @@ export default {
                         console.log(response.data)
                     })
             } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async paymentClick() {
+            try {
+                // Nếu không có sách trong giỏ hàng thì không được đặt hàng
+                if (this.BookInCart.length === 0) {
+                    // alert('Không có sản phẩm nào trong giỏ');
+                    this.notifyOrderEmpty()
+                    return;
+                }
+                this.order.orderTotal = this.orderTotal(this.tempCost, this.shipFee);
+
+                // Lưu vào store
+                await useDataStore().setOrder(this.order);
+                let order = await useDataStore().getOrder
+                if (order === undefined)
+                    alert('Lỗi khi chuyển đến thanh toán');
+                else {
+                    // Lấy dữ liệu chuyển đổi USD/VND từ Google Finance
+                    let USDToVND
+                    await axios
+                        .get(`http://localhost:3000/google-finance`, {
+                            withCredentials: true
+                        })
+                        .then((response) => {
+                            const data = response.data;
+                            const exchangeRateRegex = /<div class="YMlKec fxKbKc">([\d.,]+)<\/div>/;
+                            const exchangeRateMatch = data.match(exchangeRateRegex);
+                            if (exchangeRateMatch) {
+                                const exchangeRate = exchangeRateMatch[1];
+                                USDToVND = parseFloat(exchangeRate, 10) * 1000;
+                            }
+                            // console.log(JSON.stringify(response.data));
+                        })
+                    console.log(USDToVND);
+                    // Thêm sản phẩm vào dropitem để có thể thanh toán bằng PayPal
+                    this.dropItem = []
+                    let orderTotal = 0
+                    for (let i = 0; i < this.order.productList.length; i++) {
+                        let bookName = this.bookList.find(Book => Book._id === this.order.productList[i]._idBook).bookName;
+
+                        this.dropItem.push({
+                            name: bookName,
+                            description: "",
+                            quantity: (this.order.productList[i].quantity),
+                            unit_amount: {
+                                currency_code: "USD",
+                                value: parseFloat(Number.parseFloat(this.order.productList[i].price / USDToVND).toFixed(2))
+                            }
+                        })
+                        orderTotal = Number.parseFloat(parseFloat(orderTotal) + parseFloat(this.dropItem[i].unit_amount.value)).toFixed(2)
+                    }
+                    // Cập nhật dữ liệu đơn hàng vào store
+                    await useDataStore().setOrderTotal(Number.parseFloat(orderTotal).toFixed(2))
+                    console.log(Number.parseFloat(orderTotal).toFixed(2));
+                    await useDataStore().setItemsPayPal(this.dropItem);
+                    console.log(useDataStore().getItemsPayPal);
+                    // Chuyển hướng đến trang Thanh toán
+                    this.$router.push('/Pay');
+                }
+            }
+            catch (error) {
                 console.log(error);
             }
         },

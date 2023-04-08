@@ -24,6 +24,14 @@ const routes = [
         },
     },
     {
+        path: "/Inform",
+        name: "Inform",
+        component: () => import("@/views/Inform.vue"),
+        meta: {
+            title: 'Thông tin đơn hàng - Vận chuyển',
+        },
+    },
+    {
         path: "/Pay",
         name: "Pay",
         component: () => import("@/views/Pay.vue"),

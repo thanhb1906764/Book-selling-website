@@ -16,7 +16,32 @@ export const useDataStore = defineStore('data', {
         orderList: [],
         receiptList: [],
         tagList: [],
+        itemsPayPal: [
+            // {
+            //     name: "T-Shirt",
+            //     description: "Green XL",
+            //     quantity: "1",
+            //     unit_amount: {
+            //         currency_code: "USD",
+            //         value: "1.00"
+            //     }
+            // },
+            // {
+            //     name: "a-Shirt",
+            //     description: "Green XL",
+            //     quantity: "1",
+            //     unit_amount: {
+            //         currency_code: "USD",
+            //         value: "12.00"
+            //     }
+            // }
+        ],
+        order: undefined,
+        orderTotal: 0,
+        BookInCart: undefined,
+        Cart: undefined,
     }),
+
     getters: {
         getImages: state => state.Images,
         getUser: state => state.user,
@@ -32,8 +57,39 @@ export const useDataStore = defineStore('data', {
         getAddress: state => state.address,
         getGenreSelected: state => state.genreSelected,
         getSnackbar: state => state.snackbar,
+        getItemsPayPal: state => state.itemsPayPal,
+        getOrder: state => state.order,
+        getOrderTotal: state => state.orderTotal,
+        getBookInCart: state => state.BookInCart,
+        getCart: state => state.Cart,
     },
+
     actions: {
+        setBookInCart(data) {
+            this.$patch((state) => {
+                state.BookInCart = data;
+            })
+        },
+        setCart(data) {
+            this.$patch((state) => {
+                state.Cart = data;
+            })
+        },
+        setOrderTotal(data) {
+            this.$patch((state) => {
+                state.orderTotal = data;
+            })
+        },
+        setOrder(data) {
+            this.$patch((state) => {
+                state.order = data;
+            })
+        },
+        setItemsPayPal(data) {
+            this.$patch((state) => {
+                state.itemsPayPal = data;
+            })
+        },
         setBooks(data) {
             this.$patch((state) => {
                 state.Books = data;

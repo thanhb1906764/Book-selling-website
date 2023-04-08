@@ -30,7 +30,7 @@
                 <td colspan="3"></td>
                 <td class="align-middle text-center"></td>
                 <td class="align-middle text-center">
-                    <a class="link-light btn btn-danger" href="/Pay">Thanh toán</a>
+                    <a class="link-light btn btn-danger" href="/Inform">Thanh toán</a>
                 </td>
                 <td colspan=""></td>
             </tr>

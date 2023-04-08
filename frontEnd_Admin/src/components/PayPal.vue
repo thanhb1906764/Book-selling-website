@@ -1,26 +1,19 @@
-<template>
+<template >
     <div class="text-center" id="your-container-element" style="margin: auto;"></div>
 </template>
 
 <script>
 import { loadScript } from "@paypal/paypal-js";
-import { useDataStore } from '../stores/dataStores';
+import OrdersService from '@/services/orders.service';
+import BooksService from '@/services/books.service';
+import { useDataStore } from "../stores/dataStores";
 import axios from 'axios';
 
 export default {
-    props: {
-        item: Object
-    },
-    watch: {
-        item: function (newValue, oldValue) {
-            console.log(newValue);
-            this.itemList = newValue;
-        }
-    },
     data() {
         return {
-            itemList: this.item || {},
-            bookList: useDataStore().getBooks
+            Cart: useDataStore().getCart,
+            BookInCart: useDataStore().getBookInCart,
         }
     },
     mounted() {
@@ -45,6 +38,17 @@ export default {
                 try {
                     await paypal
                         .Buttons({
+
+                            // style
+                            style: {
+                                // layout: 'horizontal',
+                                color: 'blue',
+                                shape: 'rect',
+                                label: 'checkout',
+                                // height: 32,
+                                tagline: false
+                            },
+
                             // Sets up the transaction when a payment button is clicked
                             createOrder: async function () {
                                 const response = await fetch("http://localhost:3000/create-paypal-order", {
@@ -58,37 +62,22 @@ export default {
                                     body: JSON.stringify({
                                         cart: [
                                             {
-                                                // sku: this.YOUR_PRODUCT_STOCK_KEEPING_UNIT,
-                                                // quantity: this.YOUR_PRODUCT_QUANTITY,
-
                                                 intent: "CAPTURE",
                                                 purchase_units: [
                                                     {
-                                                        items: this.itemList,
-                                                        // items: [
-                                                        //     {
-                                                        //         name: "T-Shirt",
-                                                        //         description: "Green XL",
-                                                        //         quantity: "1",
-                                                        //         unit_amount: {
-                                                        //             currency_code: "USD",
-                                                        //             value: "1.00"
-                                                        //         }
-                                                        //     }
-                                                        // ],
+                                                        items: useDataStore().getItemsPayPal,
                                                         amount: {
                                                             currency_code: "USD",
-                                                            value: "1453.00",
-                                                            // breakdown: {
-                                                            //     item_total: {
-                                                            //         currency_code: "USD",
-                                                            //         value: "1.00"
-                                                            //     }
-                                                            // }
+                                                            value: useDataStore().getOrderTotal,
+                                                            breakdown: {
+                                                                item_total: {
+                                                                    currency_code: "USD",
+                                                                    value: useDataStore().getOrderTotal
+                                                                }
+                                                            }
                                                         },
                                                     },
                                                 ],
-
                                             },
                                         ],
                                     }),
@@ -102,8 +91,61 @@ export default {
                                 );
                                 return order.id;
                             },
+
                             // Finalize the transaction after payer approval
                             onApprove: async function (data) {
+                                // submit order
+                                async function submitOrder() {
+                                    try {
+
+                                        let order = await useDataStore().getOrder
+                                        if (order === undefined) {
+                                            alert('Đơn hàng rỗng')
+                                        }
+
+                                        let total = await OrdersService.create(order)
+                                        if (total === undefined)
+                                            alert('Tạo đơn hàng không thành công');
+                                        else {
+                                            // Kiểm tra order
+                                            console.log(total);
+
+                                            // Khai báo cần thiết
+                                            let book = Object
+                                            let quantityBook
+                                            let Cart = useDataStore().getCart;
+                                            let BookInCart = useDataStore().getBookInCart;
+
+                                            // Cập nhật bookStock cho book
+                                            for (let i = 0; i < BookInCart.length; i++) {
+                                                quantityBook = Cart.find(book => book.idBook === BookInCart[i]._id).quantityBook
+                                                let book = await BooksService.get(BookInCart[i]._id);
+                                                book = {
+                                                    bookStock: (parseInt(book.bookStock, 10) - parseInt(quantityBook, 10))
+                                                }
+                                                await BooksService.update(BookInCart[i]._id, book)
+                                                // Thông báo đặt hàng thành công
+                                                alert('Đặt hàng thành công')
+                                            }
+
+                                            // Destroy cookies giỏ hàng - cart sau khi đặt hàng thành công
+                                            axios
+                                                .get(`http://localhost:3000/cookies/clear`, {
+                                                    withCredentials: true
+                                                })
+                                                .then((response) => {
+                                                    console.log(response.data)
+                                                })
+
+                                            // Chuyển hướng đến trang ...
+                                            this.$router.push('/Inform');
+                                        }
+                                    }
+                                    catch (error) {
+                                        console.log(error);
+                                    }
+                                }
+
                                 const response = await fetch("http://localhost:3000/capture-paypal-order", {
                                     method: "post",
                                     headers: {
@@ -120,6 +162,49 @@ export default {
                                     orderData,
                                     JSON.stringify(orderData, null, 2)
                                 );
+
+                                // submit order
+                                submitOrder()
+                            },
+
+                            // onInit is called when the button first renders
+                            onInit(data, actions) {
+
+                                // // Disable the buttons
+                                // actions.disable();
+
+                                // // Listen for changes to the checkbox
+                                // document.querySelector('#check')
+                                //     .addEventListener('change', function (event) {
+
+                                //         // Enable or disable the button when it is checked or unchecked
+                                //         if (event.target.checked) {
+                                //             actions.enable();
+                                //         } else {
+                                //             actions.disable();
+                                //         }
+                                //     });
+                            },
+
+                            // onClick is called when the button is clicked
+                            onClick() {
+
+                                // // Show a validation error if the checkbox is not checked
+                                // if (!document.querySelector('#check').checked) {
+                                //     document.querySelector('#error').classList.remove('hidden');
+                                // }
+                            },
+
+                            // Cancel 
+                            onCancel(data) {
+                                // Thanh toán lỗi
+                                window.location.href = "/Inform";
+                            },
+
+                            // Error
+                            onError(err) {
+                                // For example, redirect to a specific error page
+                                window.location.href = "/Inform";
                             },
                         })
                         .render("#your-container-element");
@@ -130,44 +215,10 @@ export default {
         }
     },
     async created() {
+        if (useDataStore().getOrderTotal === 0) {
+            this.$router.push('/Inform');
+        }
         this.paypalHanler();
-        // // Lấy dữ liệu chuyển đổi USD/VND từ Google Finance
-        // let USDToVND
-        // await axios
-        //     .get(`http://localhost:3000/google-finance`, {
-        //         withCredentials: true
-        //     })
-        //     .then((response) => {
-        //         const data = response.data;
-        //         const exchangeRateRegex = /<div class="YMlKec fxKbKc">([\d.,]+)<\/div>/;
-        //         const exchangeRateMatch = data.match(exchangeRateRegex);
-        //         if (exchangeRateMatch) {
-        //             const exchangeRate = exchangeRateMatch[1];
-        //             USDToVND = parseFloat(exchangeRate, 10);
-
-        //         }
-        //         // console.log(JSON.stringify(response.data));
-        //     })
-        // console.log(USDToVND);
-        // // Thêm sản phẩm vào dropitem để có thể thanh toán bằng PayPal
-        // this.dropItem = []
-        // for (let i = 0; i < this.order.productList.length; i++) {
-        //     let bookName = this.bookList.find(Book => Book._id === this.order.productList[i]._idBook).bookName;
-        //     console.log(bookName);
-        //     console.log(this.order.productList[i]);
-        //     this.dropItem.push({
-        //         name: bookName,
-        //         description: "",
-        //         quantity: (this.order.productList[i].quantity).toString(10),
-        //         unit_amount: {
-        //             currency_code: "USD",
-        //             value: (this.order.productList[i].price).toString(10)
-        //         }
-        //     })
-        // }
-        // console.log(this.dropItem);
-    },
-    updated() {
     }
 };
 </script>
