@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <!-- Thẻ, chứa thông tin người dùng (Tên, email, nút đăng xuất), nếu người dùng chưa đăng nhập sẽ không hiển thị -->
-                <div v-if="name !== null" class="container mb-2">
+                <div v-if="name !== null" class="container">
                     <ul class="list-group px-2">
                         <li class="list-group-item fw-bolder">
                             <div><a class="me-2 fa-solid fa-user pe-2"></a>{{ name }}
@@ -59,21 +59,23 @@
 
                 <!-- Input thông tin người dùng -->
                 <div class="container">
-                    <div class="p-2">
+                    <div class="px-2">
 
                         <!-- Chọn phương thức thanh toán -->
                         <div class="form-group form-floating my-4">
-                            <!-- <select required class="form-select" aria-label="" v-model="order.payment">
+                            <select required class="form-select" aria-label="" v-model="order.payment">
+                                <option selected value="null">Chọn phương thức thanh toán</option>
                                 <option value="Thanh toán khi nhận hàng">Thanh toán khi nhận hàng</option>
                                 <option value="Chuyển khoản">Chuyển khoản</option>
                             </select>
-                            <label class="fs-6" for="payment">Phương thức thanh toán</label> -->
-                            <PayPalVue :item="dropItem" class="mt-4" />
+                            <label class="fs-6" for="payment">Phương thức thanh toán</label>
+                            <PayPalVue :item="dropItem" class="mt-4" v-if="order.payment === 'Chuyển khoản'" />
                         </div>
 
                         <!-- Nút Giỏ hàng và Chọn phương thức thanh toán -->
                         <div class="d-flex justify-content-end mt-4">
-                            <button @click="payment" class="btn btn-primary" v-if="order.payment === 'Chuyển khoản'">Đặt
+                            <button @click="submitOrder" class="btn btn-primary"
+                                v-if="order.payment === 'Thanh toán khi nhận hàng'">Đặt
                                 hàng</button>
                         </div>
 
@@ -208,6 +210,7 @@ export default {
                 orderDate: new Date(),
                 orderStatus: 'Chờ xác nhận',
                 userId: localStorage.getItem('_id'),
+                payment: null
             },
 
             addressIndex: -1,
@@ -394,7 +397,7 @@ export default {
                 }
                 console.log(this.order);
                 this.order.orderTotal = this.orderTotal(this.tempCost, this.shipFee);
-                // let total = await OrdersService.create(this.order)
+                let total = await OrdersService.create(this.order)
                 if (total === undefined)
                     alert('Tạo đơn hàng không thành công');
                 else {
@@ -417,7 +420,7 @@ export default {
                     // Destroy cookies giỏ hàng - cart sau khi đặt hàng thành công
                     this.deleteCart();
                     // Chuyển hướng đến trang ...
-                    this.$router.push('/Inform');
+                    // this.$router.push('/Inform');
                     window.location.href = "/Inform"; // Do không có đủ thời gian nên tạm sử dụng load trang
                 }
             }
@@ -443,6 +446,10 @@ export default {
     },
 
     created() {
+        // Nếu chưa có đơn hàng trong store, trở về trang inform
+        if (useDataStore().getOrderTotal === 0) {
+            this.$router.push('/Inform');
+        }
         this.name = localStorage.getItem('name');
         this.Cart = this.getCartOnCookie();
         this.retrieveBookOnCart();
