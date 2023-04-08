@@ -22,21 +22,20 @@
                 </ul>
                 <!-- Tìm kiếm  -->
                 <div class="bd-search pe-2">
-                    <form class="d-flex w-100" role="search">
+                    <form class="d-flex w-100" role="search" @submit.prevent="Submit">
                         <div class="input-group">
-                            <input class="form-control" style="border-color: #0d6efd;" type="search"
-                                placeholder="Nhập tên sản phẩm" aria-label="Nhập tên sản phẩm"
-                                aria-describedby="button-addon2">
-                            <button class="btn btn-primary text-white" type="button" id="button-addon2">Tìm
+                            <input class="form-control" v-model="value" style="border-color: #0d6efd;" type="search"
+                                placeholder="Nhập tên sản phẩm" aria-label="Nhập tên sản phẩm" aria-describedby="browser"
+                                list="browsers" name="browser" id="browser">
+                            <datalist id="browsers">
+                                <option :value="book" v-for="book in bookList" :key="book"></option>
+                            </datalist>
+                            <button class="btn btn-primary text-white" @click="search" type="submit">Tìm
                                 kiếm</button>
                         </div>
                     </form>
                 </div>
 
-                <!-- <div class="col-sm " style="max-width: 50%;">
-                <v-text-field list="datalistOptions" variant="solo" append-inner-icon="mdi-magnify" class="  me-2"
-                    label="Tìm kiếm theo tên sách..." @input="search"></v-text-field>
-        </div> -->
                 <div class="my-2">
                     <router-link class="text-decoration-none link-dark btn-cart" to="/Cart">
                     </router-link>
@@ -138,6 +137,13 @@ export default {
         //this.user = useDataStore().getUser
     },
     methods: {
+
+        // Tìm kiếm sản phẩm
+        search() {
+            useDataStore().setSearch(this.value)
+            this.$router.push('/Search')
+        },
+
         // Đăng xuất 
         async logout() {
             try {

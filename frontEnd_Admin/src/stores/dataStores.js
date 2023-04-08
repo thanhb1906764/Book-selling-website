@@ -16,33 +16,16 @@ export const useDataStore = defineStore('data', {
         orderList: [],
         receiptList: [],
         tagList: [],
-        itemsPayPal: [
-            // {
-            //     name: "T-Shirt",
-            //     description: "Green XL",
-            //     quantity: "1",
-            //     unit_amount: {
-            //         currency_code: "USD",
-            //         value: "1.00"
-            //     }
-            // },
-            // {
-            //     name: "a-Shirt",
-            //     description: "Green XL",
-            //     quantity: "1",
-            //     unit_amount: {
-            //         currency_code: "USD",
-            //         value: "12.00"
-            //     }
-            // }
-        ],
+        itemsPayPal: [],
         order: undefined,
         orderTotal: 0,
         BookInCart: undefined,
         Cart: undefined,
+        search: '',
     }),
 
     getters: {
+        getSearch: state => state.search,
         getImages: state => state.Images,
         getUser: state => state.user,
         getAdmin: state => state.admin,
@@ -65,6 +48,11 @@ export const useDataStore = defineStore('data', {
     },
 
     actions: {
+        setSearch(data) {
+            this.$patch((state) => {
+                state.search = data;
+            })
+        },
         setBookInCart(data) {
             this.$patch((state) => {
                 state.BookInCart = data;

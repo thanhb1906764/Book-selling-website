@@ -112,7 +112,7 @@ const routes = [
     {
         path: "/Search",
         name: "Search",
-        component: () => import("@/views/Search.vue"),
+        component: () => import("../components/Search.vue"),
         meta: {
             title: 'Tìm kiếm sản phẩm',
         },
