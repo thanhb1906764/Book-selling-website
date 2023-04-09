@@ -1,5 +1,8 @@
 <template>
-    <div class="">
+    <!-- Các thành phần - nội dung chính trong trang   -->
+    <div class="container text-center fs-4 text-danger rounded-2 pb-4" style="background-color: #ffffff;">
+        <div class="m-2 p-2">Kết quả tìm kiếm: {{ search }}</div>
+        <div class="m-2 p-2" v-if="book.length === 0">Không tìm thấy sản phẩm</div>
         <div style="display: none;">{{ searchValue }}</div>
         <v-row :equal="{ sm: true, md: false }" v-if="show">
             <v-col v-for="item in searchValue" :key="item._id" class="d-flex align-center justify-center">
@@ -21,7 +24,8 @@ export default {
     data() {
         return {
             book: [],
-            show: false
+            show: false,
+            search: ''
         }
     },
     methods: {
@@ -63,12 +67,23 @@ export default {
         },
         searchValue() {
             var value = useDataStore().getSearch
-            this.book = useDataStore().getBooks.filter(item => item.author !== undefined)
-            this.book = this.book.filter(item => {
-                var normalizedBookName = this.removeVietnameseTones(item.bookName).toLowerCase()
-                const searchTerm = this.removeVietnameseTones(value).toLowerCase()
-                return normalizedBookName.includes(searchTerm)
-            })
+            let Supplisher = useDataStore().getSearchByNameSupplisher;
+            if (Supplisher !== '') {
+                this.search = Supplisher
+                this.book = useDataStore().getBooks.filter(item => item.author !== undefined)
+                this.book = this.book.filter(item => item.supplisherName === Supplisher)
+                useDataStore().setSearchByNameSupplisher('');
+            }
+            else if (value !== '') {
+                this.search = value
+                this.book = useDataStore().getBooks.filter(item => item.author !== undefined)
+                this.book = this.book.filter(item => {
+                    var normalizedBookName = this.removeVietnameseTones(item.bookName).toLowerCase()
+                    const searchTerm = this.removeVietnameseTones(value).toLowerCase()
+                    return normalizedBookName.includes(searchTerm)
+                })
+                // useDataStore().setSearch('');
+            }
             this.show = true
             return this.book
         },

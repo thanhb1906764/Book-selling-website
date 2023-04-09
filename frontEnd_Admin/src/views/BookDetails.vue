@@ -18,7 +18,9 @@
                 <div class="row gx-5">
                     <p class="col">
                         Nhà cung cấp:
-                        <a class="text-decoration-none fw-bold link-primary" href="#">{{ Book.supplisherName }}</a>
+                        <span class="text-decoration-none fw-bold link-primary" @click="searchByNameSupplisher">{{
+                            Book.supplisherName
+                        }}</span>
                     </p>
                     <p class="col">Nhà xuất bản: <strong>{{ Book.publisher }}</strong></p>
                 </div>
@@ -158,6 +160,13 @@ export default {
     computed: {
     },
     methods: {
+        // Tìm kiếm theo tên Supplisher
+        async searchByNameSupplisher() {
+            await useDataStore().setSearchByNameSupplisher(this.Book.supplisherName);
+            console.log(useDataStore().getSearchByNameSupplisher);
+            this.$router.push('/Search')
+        },
+
         // Lấy bình luận của một quyển sách
         async getComment() {
             let doc = await CommentsService.getAll()

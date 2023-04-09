@@ -27,9 +27,9 @@
                             <input class="form-control" v-model="value" style="border-color: #0d6efd;" type="search"
                                 placeholder="Nhập tên sản phẩm" aria-label="Nhập tên sản phẩm" aria-describedby="browser"
                                 list="browsers" name="browser" id="browser">
-                            <datalist id="browsers">
+                            <!-- <datalist id="browsers">
                                 <option :value="book" v-for="book in bookList" :key="book"></option>
-                            </datalist>
+                            </datalist> -->
                             <button class="btn btn-primary text-white" @click="search" type="submit">Tìm
                                 kiếm</button>
                         </div>
@@ -120,7 +120,8 @@ export default {
         return {
             login: false,
             user: [],
-            userName: ""
+            userName: "",
+            value: ''
         }
     },
     updated() {
