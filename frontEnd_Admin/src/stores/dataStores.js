@@ -16,6 +16,7 @@ export const useDataStore = defineStore('data', {
         orderList: [],
         receiptList: [],
         tagList: [],
+        categorySelected:[]
     }),
     getters: {
         getImages: state => state.Images,
@@ -32,6 +33,7 @@ export const useDataStore = defineStore('data', {
         getAddress: state => state.address,
         getGenreSelected: state => state.genreSelected,
         getSnackbar: state => state.snackbar,
+        getCategorySelected: state => state.categorySelected,
     },
     actions: {
         setBooks(data) {
@@ -101,5 +103,10 @@ export const useDataStore = defineStore('data', {
                 state.snackbar = data
             })
         },
+        setCategorySelected(data){
+            this.$patch((state)=>{
+                state.categorySelected=data
+            })
+        }
     }
 })

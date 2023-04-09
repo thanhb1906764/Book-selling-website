@@ -17,9 +17,11 @@
                 ĐỊA CHỈ
                 <div>
                     <div class="input-group form-group flex-nowrap my-3">
-                        <input type="text" class="form-control" placeholder="Đường, số nhà"
-                            aria-describedby="addon-wrapping" v-model="streetName">
+                        <Field name="street" type="text" class="form-control" placeholder="Đường, số nhà"
+                            aria-describedby="addon-wrapping" v-model="streetName"/>
+                        
                     </div>
+                    <ErrorMessage name="street" class="error-feedback" />
                     <div>
 
                         <div class="form-group form-floating mb-2 my-3 flex-nowrap">
@@ -27,9 +29,10 @@
                                 <option value="-1" selected>Chọn Tỉnh/Thành Phố </option>
                                 <option v-for="(city, index) in citys" :value="index">{{ city.Name }}</option>
                             </select>
-                            <label class="fs-6" for="floatingInput">Tỉnh/Thành Phố</label>                     
+                            <label class="fs-6" for="floatingInput">Tỉnh/Thành Phố</label>      
+                            <ErrorMessage name="selection" />               
                         </div>
-                        <ErrorMessage name="selection" />
+                        
                         <div class="form-group form-floating mb-2 my-3 flex-nowrap">
                             <select  v-model="indexDistrict" class="form-select" aria-label="Default select example">
                                 <option  value="-1" selected>Chọn Quận/Huyện</option>
@@ -79,6 +82,8 @@ import * as yup from "yup";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { useDataStore } from "@/stores/dataStores";
 import addressesService from "../services/addresses.service";
+
+
 export default {
     components: {
         Form,
@@ -107,8 +112,13 @@ export default {
                 .matches(
                     /((09|03|07|08|05)+([0-9]{8})\b)/g,
                     "Số điện thoại không hợp lệ."),
-            selection: yup
-                .string().min(0, 'Bạn phải chọn Tỉnh/Thành Phố')
+            street: yup
+                .string()
+                .required("Đường số nhà phải có giá trị")
+                .min(5, "Ít nhất 5 ký tự")
+                .max(50, "Nhiều nhất 50 ký tự."),
+            // selection: yup.number().required("Bạn phải chọn một Tỉnh/Thành Phố").integer("Giá trị phải là số nguyên").min(0, "Giá trị phải lớn hơn hoặc bằng 0")
+            // selection: yup.string().trim().required("Bạn phải chọn một Tỉnh/Thành Phố").min(1, "Bạn phải chọn một Tỉnh/Thành Phố nafo dd")
                 
         });
         return {

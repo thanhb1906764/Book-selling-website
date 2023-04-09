@@ -20,17 +20,19 @@ export default {
             addressEdit: useDataStore().getAddress.filter(address => address._id == this.$route.params.id),
             default: null,
             idDefault: useDataStore().getAddress.filter(i => i.default == true),
-            showButton: true,
             hidenCheck: false,
-            checked: false
 
         }
     },
     async mounted() {
-        
+        if(this.addressEdit==""){
+             useDataStore().getAPIAddress(await AddressesService.getAll())
+            this.addressEdit = useDataStore().getAddress.filter(address => address._id == this.$route.params.id)
+            this.idDefault= useDataStore().getAddress.filter(i => i.default == true),
+            console.log("axios addressEdit")
+        }                               
         if ( this.addressEdit.find(address => address.default == true)) {
             this.hidenCheck = true
-            this.checked = true
         }
         else this.check = false
         // Gọi phương thức của component con gán dữ liệu lên form
@@ -46,12 +48,7 @@ export default {
             childComponent.setData(this.$route.params.id);
         },
         async editAddress(formData) {
-            if(this.addressEdit==""){
-             useDataStore().getAPIAddress(await AddressesService.getAll())
-            this.AddressAccEdit = useDataStore().getAddress.filter(address => address._id == this.$route.params.id)
-            this.idDefault= useDataStore().getAddress.filter(i => i.default == true),
-            console.log("axios addressEdit")
-        }
+            
             //Nêu chọn địa chỉ mặc định
             if (formData.default == true) {
                 //Đếm xem có bao nhiêu địa chỉ mặc đinh (đề phòng lỗi)

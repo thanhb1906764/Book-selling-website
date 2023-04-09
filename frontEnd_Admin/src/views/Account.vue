@@ -49,6 +49,7 @@ import Order from "../components/Order.vue";
 import AddressVue from "../components/AddressAcc.vue";
 import axios from "axios";
 import { useDataStore } from "@/stores/dataStores";
+import { watch } from "vue";
 export default {
     components: {
         Info,
@@ -59,6 +60,7 @@ export default {
         return {
             items: ["Thông tin tài khoản", "Sổ địa chỉ", "Đơn hàng của tôi"],
             selectedIndex: 0,
+            link: window.location.href
         };
     },
     methods: {
@@ -73,14 +75,27 @@ export default {
             this.$router.push({ name: "LoginUser" })
 
     },
-    mounted() {
-        // axios
-        //     .get("http://localhost:3000/api/books")
-        //     .then((response) => {
-        //         useDataStore().setBooks(response.data)
-        //         this.book = useDataStore().getBooks
+    // watch:{
+    //     $route(to, from) {
+    //     if(to.path=='/acc/order')
+    //         this.selectedIndex=2
+    //     if(to.path=='/acc/address')
+    //         this.selectedIndex=1
+    //     if(to.path=='/acc/info')
+    //         this.selectedIndex=0
+    //     console.log("Route changed from", from.path, "to", to.path);
+    //     }
 
-        //     })
+    // },
+    mounted() {
+        //Bắt đường link, nếu đúng thì tô màu cho menu tương ứng
+        if(this.$route.path.startsWith('/acc/order'))
+            this.selectedIndex=2
+        if(this.$route.path.startsWith('/acc/address'))
+            this.selectedIndex=1
+        if(this.$route.path.startsWith('/acc/info'))
+            this.selectedIndex=0
+    
     }
 };
 </script>

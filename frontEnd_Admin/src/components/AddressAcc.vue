@@ -71,7 +71,7 @@
         </div>
     </div>
     <v-snackbar v-model="snackbar" :timeout="timeout">
-        cập nhật thành công
+        Cập nhật thành công
 
         <template v-slot:actions>
             <v-btn color="blue" variant="text" @click="snackbar = false">
@@ -100,12 +100,23 @@ export default {
     computed: {
 
     },
-    // updated(){
-    //     this.address = useDataStore().getAddress.filter(item => item.default == false);
-    //    this.addressDefault = useDataStore().getAddress.filter(item => item.default == true);
-    // },
     mounted() {
         this.getAddress1()
+        if(useDataStore().getSnackbar==true){
+            let seconds = this.timeout/1000;
+            // hiển thị số giây ban đầu
+            console.log(seconds);
+            // thiết lập hàm đếm ngược
+            const intervalId = setInterval(() => {
+                // giảm số giây đi 1
+                seconds--;
+                // kiểm tra nếu số giây bằng 0 thì dừng hàm đếm ngược
+                if (seconds === 0) {
+                clearInterval(intervalId);
+                useDataStore().setSnackbar(false)
+                }
+            })
+        }
     },
     methods: {
         async getAddress1() {

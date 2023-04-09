@@ -39,11 +39,15 @@ export default {
                 //console.log(data.genreName)
                 //console.log(data.subGenre)
                 useDataStore().setGenreSelected(data.subGenre)
+                useDataStore().setCategorySelected(data.genreName)
                 //console.log(useDataStore().getGenreSelected)
             }
             else {
                 //console.log(data)
-                var a = [data]
+                let a = [data]
+                let CategorySelected=useDataStore().getGenes.find(genre => genre.subGenre.includes(a[0]));
+                //console.log(CategorySelected.genreName);
+                useDataStore().setCategorySelected(CategorySelected.genreName)
                 useDataStore().setGenreSelected(a)
             }
 
