@@ -23,6 +23,7 @@ export const useDataStore = defineStore('data', {
         Cart: undefined,
         search: '',
         searchByNameSupplisher: '',
+        categorySelected: [],
     }),
 
     getters: {
@@ -47,9 +48,15 @@ export const useDataStore = defineStore('data', {
         getBookInCart: state => state.BookInCart,
         getCart: state => state.Cart,
         getSearchByNameSupplisher: state => state.searchByNameSupplisher,
+        getCategorySelected: state => state.categorySelected,
     },
 
     actions: {
+        setCategorySelected(data) {
+            this.$patch((state) => {
+                state.categorySelected = data
+            })
+        },
         setSearchByNameSupplisher(data) {
             this.$patch((state) => {
                 state.searchByNameSupplisher = data;

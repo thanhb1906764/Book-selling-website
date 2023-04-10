@@ -1,7 +1,7 @@
 <template>
-    <v-menu open-on-hover open-delay="0" close-delay="50">
+    <v-menu open-on-hover>
         <template v-slot:activator="{ props }">
-            <div v-bind="props" class="fw-bold fs-6 category">
+            <div v-bind="props">
                 Danh mục sản phẩm
             </div>
         </template>
@@ -11,9 +11,11 @@
                 <v-menu :location="location" open-on-hover>
                     <template v-slot:activator="{ props }">
                         <router-link to="/category"><v-list-item-title v-bind="props" class="hover-item">
+
                                 {{ category.genreName }}
-                            </v-list-item-title>
-                        </router-link>
+
+
+                            </v-list-item-title> </router-link>
                     </template>
                     <v-list>
                         <v-list-item v-for="(subGenre, index) in category.subGenre" :key="index" :value="index"
@@ -37,11 +39,15 @@ export default {
                 //console.log(data.genreName)
                 //console.log(data.subGenre)
                 useDataStore().setGenreSelected(data.subGenre)
+                useDataStore().setCategorySelected(data.genreName)
                 //console.log(useDataStore().getGenreSelected)
             }
             else {
                 //console.log(data)
-                var a = [data]
+                let a = [data]
+                let CategorySelected = useDataStore().getGenes.find(genre => genre.subGenre.includes(a[0]));
+                //console.log(CategorySelected.genreName);
+                useDataStore().setCategorySelected(CategorySelected.genreName)
                 useDataStore().setGenreSelected(a)
             }
 
@@ -82,11 +88,4 @@ export default {
 .v-sheet {
     background-color: transparent;
 }
-
-.v-list-item,
-.v-list-item-title {
-    color: #000000;
-}
-
-@media (min-width: 576px) {}
 </style>

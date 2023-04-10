@@ -3,7 +3,6 @@
         <div class="row m-2">
             <div class="col-10 d-flex align-items-center">Sổ địa chỉ</div>
             <RouterLink class="col-2 btn btn-danger" to="/acc/address/add"><button>Thêm địa chỉ mới</button></RouterLink>
-
         </div>
         <div class="row m-2">
             <div class="col">
@@ -32,7 +31,8 @@
 
             </div>
             <div class="col">
-                <div v-for="address in address">
+                <div v-for="address in addresses" :key="address._id">
+
                     <div>{{ address.name }}</div>
 
                     <div>{{ address.streetName }}</div>
@@ -46,31 +46,31 @@
                         <div class="col-3 border-end text-danger "><router-link
                                 :to="{ name: 'AddressEditVue', params: { id: address._id } }">Sửa địa chỉ </router-link>
                         </div>
-                        <div class="col-3 text-secondary" @click="openDialog">Xóa địa chỉ</div>
-                        <div>
-
-                            <v-dialog v-model="dialog" persistent max-width="400">
-                                <v-card>
-                                    <v-card-title class="headline">Are you sure?</v-card-title>
-                                    <v-card-text>
-                                        This action cannot be undone.
-                                    </v-card-text>
-                                    <v-card-actions>
-                                        <v-btn color="green darken-1" text
-                                            @click="dialog = false; deleteAddress(address._id)">Yes</v-btn>
-                                        <v-btn color="red darken-1" text @click="dialog = false">No</v-btn>
-                                    </v-card-actions>
-                                </v-card>
-                            </v-dialog>
-                        </div>
+                        <div class="col-3 text-secondary" @click="openDialog(address._id)">Xóa địa chỉ</div>
                     </div>
+
+                    <v-dialog v-model="dialog" persistent max-width="400">
+                        <v-card>
+                            <v-card-title class="headline">Are you sure?</v-card-title>
+                            <v-card-text>
+                                This action cannot be undone.
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-btn color="green darken-1"
+                                    @click="dialog = false; deleteAddress(this.selectedAddressId)">Yes</v-btn>
+                                <v-btn color="red darken-1" text @click="dialog = false">No</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+
+
                 </div>
             </div>
 
         </div>
     </div>
     <v-snackbar v-model="snackbar" :timeout="timeout">
-        cập nhật thành công
+        Cập nhật thành công
 
         <template v-slot:actions>
             <v-btn color="blue" variant="text" @click="snackbar = false">
@@ -89,40 +89,53 @@ export default {
     data: () => {
         return {
             addressDefault: [],
-            address: [],
+            addresses: [],
             dialog: false,
             snackbar: useDataStore().getSnackbar,
             timeout: 2000,
+            selectedAddressId: null,
         };
     },
     computed: {
 
     },
-    // updated(){
-    //     this.address = useDataStore().getAddress.filter(item => item.default == false);
-    //    this.addressDefault = useDataStore().getAddress.filter(item => item.default == true);
-    // },
     mounted() {
         this.getAddress1()
+        if (useDataStore().getSnackbar == true) {
+            let seconds = this.timeout / 1000;
+            // hiển thị số giây ban đầu
+            console.log(seconds);
+            // thiết lập hàm đếm ngược
+            const intervalId = setInterval(() => {
+                // giảm số giây đi 1
+                seconds--;
+                // kiểm tra nếu số giây bằng 0 thì dừng hàm đếm ngược
+                if (seconds === 0) {
+                    clearInterval(intervalId);
+                    useDataStore().setSnackbar(false)
+                }
+            })
+        }
     },
     methods: {
         async getAddress1() {
-            this.address = await addressService.getAll()
+            this.addresses = await addressService.getAll()
             // useDataStore().getAPIAddress(this.address.filter(item => item._idUser == useDataStore().getUser._id));
-            useDataStore().getAPIAddress(this.address.filter(item => item._idUser == localStorage.getItem('_id')));
-            this.address = useDataStore().getAddress.filter(item => item.default == false);
+            useDataStore().getAPIAddress(this.addresses.filter(item => item._idUser == localStorage.getItem('_id')));
+            this.addresses = useDataStore().getAddress.filter(item => item.default == false);
             this.addressDefault = useDataStore().getAddress.filter(item => item.default == true);
         },
         async deleteAddress(id) {
             await addressService.delete(id);
-            this.address = await addressService.getAll()
-            // useDataStore().getAPIAddress(this.address.filter(item => item._idUser == useDataStore().getUser._id));
-            useDataStore().getAPIAddress(this.address.filter(item => item._idUser == localStorage.getItem('_id')));
-            this.address = useDataStore().getAddress.filter(item => item.default == false);
+
+            this.addresses = await addressService.getAll()
+            useDataStore().getAPIAddress(this.addresses.filter(item => item._idUser == localStorage.getItem('_id')));
+            this.addresses = useDataStore().getAddress.filter(item => item.default == false);
             this.addressDefault = useDataStore().getAddress.filter(item => item.default == true);
 
         },
-        openDialog() {
+        openDialog(addressId) {
+            this.selectedAddressId = addressId;
             this.dialog = true;
         },
     },

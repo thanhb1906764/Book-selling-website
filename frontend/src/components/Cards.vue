@@ -132,7 +132,7 @@ export default {
 
         var link = useDataStore().getImages.find(image => image._idBook === this.book._id)
         console.log(link);
-        this.linkImage = link.linkImage
+        this.linkImage = link?.linkImage
     }
 }
 </script>

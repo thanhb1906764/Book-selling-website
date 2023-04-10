@@ -1,5 +1,5 @@
 <template>
-    <table class="table table-hover container">
+    <table class="table table-hover container bg-white rounded-2 m-4r">
         <thead class="user-select-none">
             <tr class="align-middle">
                 <th v-if="BookInCart.length !== 0" class="fs-2 fw-bold text-danger text-center" colspan="6">Giỏ hàng</th>
