@@ -101,7 +101,7 @@
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                     <CommentForm :idBook="this.id" @submitComment="getComment" />
                     <div v-for="item in commentList" :key="item._id">
-                        <Comments :comment="item" />
+                        <Comments :comment="item" @commentDelete="getComment" />
                     </div>
                 </div>
             </div>

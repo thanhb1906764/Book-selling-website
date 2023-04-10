@@ -230,7 +230,7 @@ export default {
     margin: 8px 0 !important;
 }
 
-@media (min-width: 576px) {
+@media (min-width: 992px) {
     .category {
         padding-left: 16px;
     }
