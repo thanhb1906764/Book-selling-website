@@ -1,9 +1,9 @@
 <template>
-    <div class="container" v-if="show">
+    <div class="container" >
         
         <div class="row">
             <div class="col-sm-2">
-                <div>Tất cả sản phẩm</div>
+                <div @click="showAll">Tất cả sản phẩm</div>
                 <div class="content fw-bold" @click="showgenre(genreList)">{{ show }}</div>
                 <div v-for="item in genreList.subGenre" :key="item" class="genre-item">
                     <div @click="showSubGenre(item)">{{ item}}</div>
@@ -28,10 +28,16 @@ export default {
         Cards,
     },
 
+    updated(){
+        if(this.genreList)
+            this.showUI=true
+    },
     mounted() {
         this.genreSelected = useDataStore().getGenreSelected
-        this.bookList = useDataStore().getBooks,
+        this.bookList = useDataStore().getBooks
         this.bookList = this.bookList.filter(book => this.genreSelected.some(item => item == book.genreName))
+        
+        
     },
     data() {
         return {
@@ -42,30 +48,26 @@ export default {
             openIndex: null,
             selectedItems: [],
             categorySelected: useDataStore().getCategorySelected,
-            show:false
+            showUI:false,
+            showfull:0,
         }
     },
     methods: {
-        // showAll(){
-
-        // },
+        showAll(){
+            
+            this.showfull+=1
+        },
         showgenre(data) {
             useDataStore().setGenreSelected(data.subGenre)
             this.genreSelected = useDataStore().getGenreSelected
             console.log(data.subGenre)
+            
         },
         showSubGenre(data) {
             useDataStore().setGenreSelected([data])
             this.genreSelected = useDataStore().getGenreSelected
             console.log(data)
         },
-        toggle(index) {
-            if (this.openIndex === index) {
-                this.openIndex = null;
-            } else {
-                this.openIndex = index;
-            }
-        }
     },
     computed: {
         show() {
@@ -73,16 +75,11 @@ export default {
             this.genreList=this.genreList[0]
             this.categorySelected=useDataStore().getCategorySelected
             this.genreSelected = useDataStore().getGenreSelected
-            this.bookList = useDataStore().getBooks,
+            this.bookList = useDataStore().getBooks
             this.bookList = this.bookList.filter(book => this.genreSelected.some(item => item == book.genreName))
             return this.categorySelected
 
         },
-        isOpen() {
-            return (index) => {
-                return this.openIndex === index;
-            };
-        }
 
     },
     watch: {
@@ -90,7 +87,7 @@ export default {
             console.log(newValue)
             // Thực hiện các tác vụ cập nhật giao diện ở đây
             this.genreSelected = useDataStore().getGenreSelected
-            this.bookList = useDataStore().getBooks,
+            this.bookList = useDataStore().getBooks
             this.bookList = this.bookList.filter(book => this.genreSelected.some(item => item == book.genreName))
             
         },
@@ -98,7 +95,12 @@ export default {
             console.log(newValue)
             this.genreList=useDataStore().getGenes.filter(item=> item.genreName === this.categorySelected)[0]
            
-        }
+        },
+        showfull: function (newValue,oldValue){
+            this.bookList = useDataStore().getBooks
+            
+            console.log(newValue)
+        } 
 
     }
 }
