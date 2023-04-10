@@ -96,20 +96,41 @@ export default {
 }
 </script>
 <template>
-    <header>
-        <HeaderVue />
-    </header>
-    <main v-if="show">
-        <!-- <HomePage /> -->
-        <LoginUser />
-        <RegisterUser />
-        <router-view />
-    </main>
-    <FooterVue />
+    <div class="containerFlex">
+        <header v-show="$route.path !== '/AdminLogin'">
+            <HeaderVue />
+        </header>
+        <main v-if="show">
+            <!-- <HomePage /> -->
+            <LoginUser />
+            <RegisterUser />
+            <router-view />
+        </main>
+        <footer v-show="$route.path !== '/AdminLogin'">
+            <FooterVue />
+        </footer>
+    </div>
 </template>
 <style scoped>
+body {
+    margin: 0;
+}
+
+.containerFlex {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
 main {
+    flex-grow: 1;
     background-color: #f0f2f5;
-    padding: 16px 0;
+    /* padding: 16px 0; */
+}
+
+footer {
+    margin-top: auto;
+    background-color: #f8f9fa;
+    padding: 20px;
 }
 </style>

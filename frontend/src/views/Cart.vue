@@ -2,9 +2,10 @@
     <table class="table table-hover container">
         <thead class="user-select-none">
             <tr class="align-middle">
-                <th class="fs-2 fw-bold text-danger text-center" colspan="6">Giỏ hàng</th>
+                <th v-if="BookInCart.length !== 0" class="fs-2 fw-bold text-danger text-center" colspan="6">Giỏ hàng</th>
+                <th v-else class="fs-2 fw-bold text-danger text-center" colspan="6">Giỏ hàng trống</th>
             </tr>
-            <tr>
+            <tr v-if="BookInCart.length !== 0">
                 <th style="width: 50%;" colspan="2" scope="col">Sản phẩm</th>
                 <th class="text-center" style="width: 15%;" scope="col">Đơn giá</th>
                 <th class="text-center" style="width: 15%;" scope="col">Số lượng</th>
@@ -12,7 +13,7 @@
                 <th class="text-center" style="width: 5%;" scope="col"></th>
             </tr>
         </thead>
-        <tbody>
+        <tbody v-if="BookInCart.length !== 0">
             <tr v-for="item in BookInCart" :key="item._id">
                 <CartCards :Book="item" :Cart="Cart" @updateCart="update" />
             </tr>
