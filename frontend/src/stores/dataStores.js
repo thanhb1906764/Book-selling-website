@@ -24,6 +24,7 @@ export const useDataStore = defineStore('data', {
         search: '',
         searchByNameSupplisher: '',
         categorySelected: [],
+        showFull:false
     }),
 
     getters: {
@@ -49,6 +50,7 @@ export const useDataStore = defineStore('data', {
         getCart: state => state.Cart,
         getSearchByNameSupplisher: state => state.searchByNameSupplisher,
         getCategorySelected: state => state.categorySelected,
+        getShowFull: state => state.showFull,
     },
 
     actions: {
@@ -157,6 +159,11 @@ export const useDataStore = defineStore('data', {
         setSnackbar(data) {
             this.$patch((state) => {
                 state.snackbar = data
+            })
+        },
+        setShowFull(data) {
+            this.$patch((state) => {
+                state.showFull = data
             })
         },
     }
