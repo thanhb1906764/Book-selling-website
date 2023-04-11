@@ -100,6 +100,8 @@ import * as yup from "yup";
 import UsersService from '@/services/users.service';
 import { useDataStore } from '../stores/dataStores';
 import axios from 'axios';
+import { toast } from 'vue3-toastify';
+
 export default {
     components: {
         Form,
@@ -175,7 +177,7 @@ export default {
                     this.notifyLoginError();
                 else {
                     this.cookies = await UsersService.getCookies();
-
+                    console.log(this.cookies);
                     // Kiểm tài khoản - có bị khoá hay không 
                     if (this.cookies.statusUser === false) {
                         this.notifyLoginBlock();

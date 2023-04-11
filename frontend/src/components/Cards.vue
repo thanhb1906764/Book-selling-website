@@ -8,26 +8,27 @@
         <v-hover v-slot="{ isHovering, props }" open-delay="10">
             <v-tooltip :text="book.bookName"></v-tooltip>
             <!-- Tag  -->
-            <v-card class="mx-auto text-center" width="17rem" :elevation="isHovering ? 16 : 2"
+            <v-card class="mx-auto text-center" width="13rem" :elevation="isHovering ? 16 : 2"
                 :class="{ 'on-hover': isHovering }" v-bind="props">
                 <span class="badge text-bg-danger"
                     style="position: absolute;z-index: 2;  margin: 5px; max-height: 30px; top: -5px; left: -8px; width: 50px;">
                     <h6 v-if="book.bookPrice !== book.originalPrice">Sale</h6>
                     <h6 v-else-if="!checkMonth(book.receiptDate)">New</h6>
                 </span>
-                <img v-if="linkImage !== null" class="" :src="linkImage" style="height: 355px;">
+                <img v-if="linkImage !== null" class="" :src="linkImage" style="max-height: 180px;">
                 <!-- Tên sách -->
-                <v-card-title class="py-0 fs-6 border-top border-danger-subtle border-2"
-                    style="text-overflow: ellipsis; border-color: #f1aeb5 !important;">{{
+                <v-card-title class="py-0 fw-bold"
+                    style="text-overflow: ellipsis; border-color: #f1aeb5 !important; font-size: 14px;">{{
                         book.bookName
                     }}</v-card-title>
                 <!-- Số lượng đánh giá sao của Book  -->
-                <v-card-subtitle class="py-0 fs-6"><span>{{ counterComement }} đánh giá</span></v-card-subtitle>
+                <v-card-subtitle class="py-0" style="font-size: 12px;"><span>{{ counterComement }} đánh
+                        giá</span></v-card-subtitle>
                 <!-- Giá  -->
-                <v-card-text class="py-1 fs-5">
+                <v-card-text class="py-1 fs-6">
                     <div v-if="book.originalPrice !== book.bookPrice">
                         <div class="card-text" style=" display: flex; align-items: center; justify-content: space-between;">
-                            <div class="fw-bold fs-5" style="color: orange; ">{{ (book.bookPrice).toLocaleString('vi-VN', {
+                            <div class="fw-bold fs-6" style="color: orange; ">{{ (book.bookPrice).toLocaleString('vi-VN', {
                                 style: 'currency', currency:
                                     'VND'
                             }) }}</div>
@@ -41,7 +42,7 @@
                         <testTime class="text-center" :time="book.promotionTime" @messageSent="handleMessage" />
                     </div>
                     <div v-else>
-                        <div class="fw-bold fs-5" style="color: red;">{{ (book.bookPrice).toLocaleString('vi-VN', {
+                        <div class="fw-bold fs-6" style="color: red;">{{ (book.bookPrice).toLocaleString('vi-VN', {
                             style: 'currency',
                             currency: 'VND'
                         }) }}</div>
@@ -129,7 +130,6 @@ export default {
     },
     created() {
         this.counterComment();
-
         var link = useDataStore().getImages.find(image => image._idBook === this.book._id)
         console.log(link);
         this.linkImage = link?.linkImage

@@ -1,8 +1,8 @@
 <template>
     <div v-if="countdownTime > 0">
         <!-- Còn: {{ countdown }} -->
-        <Countdown :deadlineDate="new Date(time)" style="position: absolute;z-index: 2;top: -11rem;width: max-content;"
-            countdownSize="1.5rem" :showLabels="false" />
+        <Countdown :deadlineDate="new Date(time)" style="position: absolute;z-index: 2;top: -6.6rem;width: max-content; "
+            countdownSize="1rem" :showLabels="false" />
     </div>
     <!-- <div v-else>
         Khuyến mãi đã kết thúc
@@ -58,12 +58,11 @@ export default {
             // bắt đầu đếm ngược
             this.startCountdown();
         }
-
-
     },
     beforeDestroy() {
         clearInterval(this.intervalId);
     },
 };
 </script>
-  
+
+<style></style>

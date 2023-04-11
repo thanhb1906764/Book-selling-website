@@ -145,6 +145,13 @@ export default {
             this.$router.push('/Search')
         },
 
+        async getUser() {
+            let status = UsersService.get(localStorage.getItem('_id'))
+            console.log(status);
+            console.log(localStorage.getItem('_id'));
+            return status
+        },
+
         // Đăng xuất 
         async logout() {
             try {
@@ -172,6 +179,8 @@ export default {
     },
     computed: {
         getNameUser() {
+
+
             this.userName = localStorage.getItem('name')
             if (this.userName !== undefined) {
                 this.login = true
@@ -182,13 +191,22 @@ export default {
             return localStorage.getItem('name')
         }
     },
-    created() {
+    async created() {
         // axios
         //     .get("http://localhost:3000/api/books")
         //     .then((response) => {
         //         useDataStore().setBooks(response.data)
         //         this.book = useDataStore().getBooks
         //     })
+
+        if (localStorage.getItem('_id')) {
+            let status = await this.getUser();
+            console.log(status.statusUser);
+            if (status.statusUser === false) {
+                this.logout()
+            }
+        }
+
     },
     updated() {
         if (localStorage.getItem('name')) {
