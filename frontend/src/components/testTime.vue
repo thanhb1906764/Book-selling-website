@@ -1,8 +1,9 @@
 <template>
     <div v-if="countdownTime > 0">
         <!-- Còn: {{ countdown }} -->
-        <Countdown :deadlineDate="new Date(time)" style="position: absolute;z-index: 2;top: -6.6rem;width: max-content; "
-            countdownSize="1rem" :showLabels="false" />
+        <Countdown :deadlineDate="new Date(time)"
+            style="position: relative; z-index: 2; top: -6.6rem; width: max-content; left: auto; right: auto;"
+            countdownSize="0.8rem" :showLabels="false" />
     </div>
     <!-- <div v-else>
         Khuyến mãi đã kết thúc
