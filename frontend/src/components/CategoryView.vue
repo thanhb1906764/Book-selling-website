@@ -3,7 +3,7 @@
 
         <div class="row">
             <div class="col-sm-3 category rounded m-3">
-                <div @click="showAll">Tất cả sản phẩm</div>
+                <div @click="showAll" class="genre-item fw-bold">Tất cả sản phẩm</div>
                 <div v-show="genreList && !showfull " class="genre-item fw-bold ml-2" @click="showgenre(genreList)">{{ show }}</div>
                 <div v-if="genreList && !showfull " v-for="item in genreList.subGenre" :key="item" class="genre-item ml-3">
                     <div  @click="showSubGenre(item)">{{ item }}</div>
