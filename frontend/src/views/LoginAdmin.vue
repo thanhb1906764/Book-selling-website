@@ -65,12 +65,13 @@
                                 <div class="d-flex justify-content-between align-items-center mb-6">
                                     <!-- Checkbox -->
                                     <div class="form-check mb-0">
-                                        <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
-                                        <label class="form-check-label" for="form2Example3">
+                                        <input class="form-check-input me-2" type="checkbox" value=""
+                                            id="remembermeAdmin" />
+                                        <label class="form-check-label" for="remembermeAdmin">
                                             Nhớ tôi
                                         </label>
                                     </div>
-                                    <a href="#!" class="text-body">Quên mật khẩu?</a>
+                                    <!-- <a href="#!" class="text-body">Quên mật khẩu?</a> -->
                                 </div>
 
                                 <!-- login -->

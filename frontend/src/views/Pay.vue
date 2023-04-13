@@ -1,9 +1,8 @@
 <template>
-    <title>Thông tin vận chuyển - Đặt hàng</title>
-    <div class="container-sm text-dark">
-        <div class="row">
+    <div class="container-sm my-4">
+        <div class="row rounded-2" style="background-color: #ffffff;">
             <!-- Nội dung bên trái: Thông tin khách hàng và địa chỉ giao hàng -->
-            <div class="col-auto col-sm-6">
+            <div class="col-auto col-sm-6 py-4">
                 <!-- Thanh điều hướng  -->
                 <nav class="navbar navbar-expand-lg bg-body-tertiary">
                     <div class="container-fluid">
@@ -50,7 +49,7 @@
                 <div v-if="name !== null" class="container">
                     <ul class="list-group px-2">
                         <li class="list-group-item fw-bolder">
-                            <div><a class="me-2 fa-solid fa-user pe-2"></a>{{ name }}
+                            <div><router-link class="me-2 fa-solid fa-user pe-2" to="#"></router-link>{{ name }}
                                 <!-- <a href="#" class="text-decoration-none mx-2 text-danger">Đăng xuất</a> -->
                             </div>
                         </li>
@@ -84,7 +83,7 @@
             </div>
 
             <!-- Nội dung bên phải: Thông tin thông tin sản phẩm, giảm giá -->
-            <div class="col-auto col-sm-6 border-start">
+            <div class="col-auto col-sm-6 border-start py-4">
 
                 <!-- Danh sách sản phẩm - sách  -->
                 <div v-for="item in BookInCart" :key="item._id" class="container">
@@ -156,36 +155,14 @@ export default {
 
         // Đinh nghĩa thông báo nổi 
         const notifyOrderComplete = () => { // Đặt hàng thành công
-            console.log(this.Cart);
-            if (this.Cart.find(item => item.idBook === this.id)) {
-                window.location.href = "/Cart";
-            }
             toast("Đã Đặt Hàng Thành Công", {
-                autoClose: 2000,
+                autoClose: 3000,
                 limit: 1,
                 type: toast.TYPE.SUCCESS,
                 multiple: false,
                 hideProgressBar: true
             });
             this.notify = function () {
-                window.location.href = "/Cart";
-                return 0;
-            };
-        };
-        const notifyOrderEmpty = () => { // Không có sản phẩm trong đơn hàng
-            console.log(this.Cart);
-            if (this.Cart.find(item => item.idBook === this.id)) {
-                window.location.href = "/Cart";
-            }
-            toast("Không có Sản phẩm nào trong Giỏ hàng, Click lần nữa để đến Trang Chủ", {
-                autoClose: 2000,
-                limit: 1,
-                type: toast.TYPE.ERROR,
-                multiple: false,
-                hideProgressBar: true
-            });
-            this.notifyOrderEmpty = function () {
-                window.location.href = "/";
                 return 0;
             };
         };
@@ -220,7 +197,6 @@ export default {
             indexWard: undefined,
             addressAxios: Object,
             notifyOrderComplete: notifyOrderComplete,
-            notifyOrderEmpty: notifyOrderEmpty,
             dropItem: undefined,
         }
     },

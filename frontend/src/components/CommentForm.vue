@@ -18,7 +18,7 @@
         <!-- Nút thêm bình luận  -->
         <div v-if="(tempComment.content !== '') || (tempComment.rateStar !== 0)"
             class="form-group fs-6 mb-2 d-flex justify-content-end">
-            <div @click="cancelComment" class="px-2"><a class="btn btn-outline-primary">Huỷ</a></div>
+            <div @click="cancelComment" class="px-2"><button class="btn btn-outline-primary">Huỷ</button></div>
             <button type="submit" class="btn btn-primary text-white">Bình luận</button>
         </div>
     </Form>

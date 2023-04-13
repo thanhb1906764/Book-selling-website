@@ -97,7 +97,7 @@ export default {
 </script>
 <template>
     <div class="containerFlex">
-        <header v-show="$route.path !== '/AdminLogin'">
+        <header v-show="!['/AdminLogin', '/UserLogin', '/UserRegister'].includes($route.path)">
             <HeaderVue />
         </header>
         <main v-if="show">
@@ -106,7 +106,7 @@ export default {
             <RegisterUser />
             <router-view />
         </main>
-        <footer v-show="$route.path !== '/AdminLogin'">
+        <footer v-show="!['/AdminLogin', '/UserLogin', '/UserRegister'].includes($route.path)">
             <FooterVue />
         </footer>
     </div>

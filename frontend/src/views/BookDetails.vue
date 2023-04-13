@@ -1,5 +1,5 @@
 <template>
-    <div class="container shadow-sm rounded-2" style="background-color: white;">
+    <div class="container shadow-sm rounded-2 my-4" style="background-color: white;">
         <!-- Chi tiết sản phẩm  -->
         <div class="row">
             <!-- Hiển thị Images của Book  -->
@@ -71,8 +71,8 @@
                 <!-- Button Mua Ngay, Thêm Vào Giỏ Hàng -->
                 <div v-if="Book.bookStock !== 0" class="py-3">
                     <span @click="PayClick" class="btn btn-danger">Mua Ngay</span>
-                    <a @click="addProductToCart" class="px-2 mx-4 btn btn-outline-danger">Thêm Vào
-                        Giỏ Hàng</a>
+                    <button @click="addProductToCart" class="px-2 mx-4 btn btn-outline-danger">Thêm Vào
+                        Giỏ Hàng</button>
                 </div>
                 <!-- Hết hàng  -->
                 <div v-if="Book.bookStock === 0" class="text-danger fs-3 fw-bold">
@@ -131,10 +131,6 @@ export default {
     data() {
         // Đinh nghĩa thông báo nổi 
         const notify = () => {
-            console.log(this.Cart);
-            if (this.Cart.find(item => item.idBook === this.id)) {
-                window.location.href = "/Cart";
-            }
             toast("Đã Thêm Sản Phẩm Vào Giỏ Hàng", {
                 autoClose: 1500,
                 limit: 1,
@@ -143,8 +139,6 @@ export default {
                 hideProgressBar: true
             });
             this.notify = function () {
-                // this.$router.replace('/Cart'); Lỗi
-                window.location.href = "/Cart";
                 return 0;
             };
         }
@@ -161,8 +155,8 @@ export default {
     },
     methods: {
         // Tìm kiếm theo tên Supplisher
-        async searchByNameSupplisher() {
-            await useDataStore().setSearchByNameSupplisher(this.Book.supplisherName);
+        searchByNameSupplisher() {
+            useDataStore().setSearchByNameSupplisher(this.Book.supplisherName);
             console.log(useDataStore().getSearchByNameSupplisher);
             this.$router.push('/Search')
         },
@@ -175,8 +169,8 @@ export default {
         },
 
         // Cập nhật dữ liệu vào store và chuyển sang trang Thông tin đơn hàng - Vận chuyển
-        PayClick() {
-            this.addProductToCart();
+        async PayClick() {
+            await this.addProductToCart();
             this.$router.push('/Inform');
         },
 
