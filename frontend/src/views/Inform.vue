@@ -453,8 +453,37 @@ export default {
                                 value: parseFloat(Number.parseFloat(this.order.productList[i].price / USDToVND).toFixed(2))
                             }
                         })
-                        orderTotal = Number.parseFloat(parseFloat(orderTotal) + parseFloat(this.dropItem[i].unit_amount.value)).toFixed(2)
+                        orderTotal = Number.parseFloat(parseFloat(orderTotal) + (parseFloat(this.dropItem[i].unit_amount.value) * this.order.productList[i].quantity)).toFixed(2)
+                        console.log(orderTotal);
                     }
+
+                    // Tính phí ship
+                    let fee = (30000 / USDToVND);
+                    console.log(fee);
+                    if ((parseFloat(orderTotal) * USDToVND) < 500000) {
+                        this.dropItem.push({
+                            name: 'Phí Ship',
+                            description: "30000VND",
+                            quantity: 1,
+                            unit_amount: {
+                                currency_code: "USD",
+                                value: parseFloat(Number.parseFloat(30000 / USDToVND).toFixed(2))
+                            }
+                        })
+                        orderTotal = Number.parseFloat(parseFloat(orderTotal) + parseFloat(30000 / USDToVND)).toFixed(2)
+                    }
+                    else {
+                        this.dropItem.push({
+                            name: 'Phí Ship',
+                            description: "Miễn phí",
+                            quantity: 1,
+                            unit_amount: {
+                                currency_code: "USD",
+                                value: 0
+                            }
+                        })
+                    }
+
                     // Cập nhật dữ liệu đơn hàng vào store
                     useDataStore().setOrderTotal(Number.parseFloat(orderTotal).toFixed(2))
                     console.log(Number.parseFloat(orderTotal).toFixed(2));
