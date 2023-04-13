@@ -138,7 +138,7 @@ export default {
     
 }
 .category {
-    height: auto;
+    height: max-content;
     background-color: #ffffff !important;
 }
 </style>
