@@ -8,6 +8,7 @@ class ShipFeeService {
     extractShipFeeData(payload) {
         const shipFee = {
             shipFee: payload.shipFee,
+            date: payload.date
         };
         // remove undefined fields. 
         Object.keys(shipFee).forEach(

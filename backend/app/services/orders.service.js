@@ -18,6 +18,7 @@ class OrdersService {
             phone: payload.phone,
             reAddress: payload.reAddress,
             userId: payload.userId,
+            enter: payload.enter,
             userName: payload.userName
         };
         // remove undefined fields. 

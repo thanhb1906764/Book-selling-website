@@ -3,14 +3,10 @@ const MongoDB = require("../utils/mongodb.util");
 const SuppliersService = require("../services/suppliers.service");
 
 exports.create = async (req, res, next) => {
-    if (!req.body?.supplierName) {
-        return next(new ApiError(400, "Name can not be empty"));
-    }
 
     try {
         const suppliersService = new SuppliersService(MongoDB.client);
         const document = await suppliersService.create(req.body);
-
         return res.send(document);
     }
     catch (error) {

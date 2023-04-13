@@ -13,8 +13,5 @@ router.route('/:id')
     .put(books.update)
     .delete(books.delete);
 
-
-
-
 // router.route('/drop/:name').post(books.dropCollection)
 module.exports = router;

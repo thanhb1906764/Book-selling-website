@@ -80,7 +80,7 @@ app.post('/api/uploads', upload.array('uploadsImg'), async function (req, res, n
     console.log(req.files)
     var imgs = []
     for (let index of req.files) {
-        var pathImg = "http://127.0.0.1:3000/uploads/" + index.filename
+        var pathImg = "http://localhost:3000/uploads/" + index.filename
         imgs.push({ nameImage: index.filename, linkImage: pathImg, _idBook: null })
         console.log(pathImg)
     }
