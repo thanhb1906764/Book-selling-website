@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row">
-            <div class="leftMenu col-sm-2">
+            <div class="leftMenu m-2 rounded col-sm-2">
                 <ul>
                     <li ng-click="Tile" class="Tile">
                         <p>TÀI KHOẢN</p>
@@ -37,7 +37,7 @@
         <div v-show="selectedIndex === 2" class="col-sm">Đơn hàng của tôi
             <Order />
         </div> -->
-            <div class="col-sm">
+            <div class="col-sm m-2 white rounded">
                 <RouterView></RouterView>
             </div>
         </div>
@@ -107,7 +107,8 @@ export default {
 }
 
 .leftMenu {
-    height: auto;
+    height: max-content;
+    background-color: white;
 }
 
 .leftMenu ul {
@@ -118,7 +119,7 @@ export default {
 
 .leftMenu li {
     text-align: left;
-    border-bottom: 1px solid #58626B;
+    border-bottom: 1px solid #ced2d5;
     padding-bottom: 18px;
     padding-top: 18px;
     cursor: pointer;
@@ -140,6 +141,10 @@ export default {
 .link {
     color: black;
     text-decoration: none;
+}
+.white{
+    background-color: white;
+    padding: 0px;
 }
 </style>
   

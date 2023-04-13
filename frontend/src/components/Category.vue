@@ -42,7 +42,7 @@ export default {
                 useDataStore().setGenreSelected(data.subGenre)
                 useDataStore().setCategorySelected(data.genreName)
                 useDataStore().setShowFull(false)
-                console.log(useDataStore().getCategorySelected)
+                
             }
             else {
                 //console.log(data)
@@ -51,14 +51,15 @@ export default {
                 //console.log(CategorySelected.genreName);
                 useDataStore().setCategorySelected(CategorySelected.genreName)
                 useDataStore().setGenreSelected(a)
+                useDataStore().setShowFull(false)
             }
 
 
         },
     },
-    mounted() {
-        axios
-            .get('http://localhost:3000/api/genres')
+    async mounted() {
+        await axios
+             .get('http://localhost:3000/api/genres')
             .then((response) => {
                 useDataStore().getAPIGenes(response.data)
 

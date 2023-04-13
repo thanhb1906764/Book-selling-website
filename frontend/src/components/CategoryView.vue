@@ -1,20 +1,20 @@
 <template>
-    <div class="container">
+    <div class="container ">
 
         <div class="row">
-            <div class="col-sm-3">
+            <div class="col-sm-3 category rounded m-3">
                 <div @click="showAll">Tất cả sản phẩm</div>
-                <div v-show="genreList && !showfull " class="genre-item fw-bold" @click="showgenre(genreList)">{{ show }}</div>
-                <div v-if="genreList && !showfull " v-for="item in genreList.subGenre" :key="item" class="genre-item ml-2">
+                <div v-show="genreList && !showfull " class="genre-item fw-bold ml-2" @click="showgenre(genreList)">{{ show }}</div>
+                <div v-if="genreList && !showfull " v-for="item in genreList.subGenre" :key="item" class="genre-item ml-3">
                     <div  @click="showSubGenre(item)">{{ item }}</div>
                 </div>
                 <div v-else v-for="item in category" >
-                    <div class="genre-item fw-bold" @click="showgenre(item)"> 
+                    <div class="genre-item fw-bold ml-2" @click="showgenre(item)"> 
                         {{ item.genreName }}
                     </div>
                 </div>
             </div>
-            <div class="col-sm">
+            <div class="col-sm category rounded m-3">
                 <v-row :equal="{ sm: true, md: false }">
                     <v-col v-for="item in bookList" :key="item._id" class="d-flex align-center justify-center">
                         <Cards :book="item" />
@@ -135,5 +135,10 @@ export default {
 .genre-item:hover {
     color: red;
     cursor: pointer;
+    
+}
+.category {
+    height: auto;
+    background-color: #ffffff !important;
 }
 </style>
