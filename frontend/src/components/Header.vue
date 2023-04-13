@@ -24,13 +24,14 @@
                 <div class="bd-search pe-2">
                     <form class="d-flex w-100" role="search" @submit.prevent="Submit">
                         <div class="input-group">
-                            <input class="form-control" v-model="value" style="border-color: #0d6efd;" type="search"
+                            <input class="form-control" v-model="value" style="" type="search"
                                 placeholder="Nhập tên sản phẩm" aria-label="Nhập tên sản phẩm" aria-describedby="browser"
                                 list="browsers" name="browser" id="browser">
                             <!-- <datalist id="browsers">
                                 <option :value="book" v-for="book in bookList" :key="book"></option>
                             </datalist> -->
-                            <button class="btn btn-primary text-white" @click="search" type="submit">Tìm
+                            <button id="searchbtn" class="btn border btn" @click="search"
+                                style="border-color: #ced4da!important;" type="submit">Tìm
                                 kiếm</button>
                         </div>
                     </form>
@@ -268,5 +269,14 @@ export default {
         font-family: 'Font Awesome 5 Free';
         font-weight: 900;
     }
+
+    #searchbtn:hover {
+        color: red;
+    }
+
+    #searchbtn {
+        color: #6c757d;
+    }
+
 }
 </style>

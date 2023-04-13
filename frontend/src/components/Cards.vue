@@ -71,7 +71,6 @@
 </template>
 
 <script>
-// Import here
 import moment from 'moment';
 import { useDataStore } from "../stores/dataStores";
 import testTime from '../components/testTime.vue'
@@ -150,10 +149,10 @@ export default {
         var link = useDataStore().getImages.find(image => image._idBook === this.book._id)
         // console.log(link);
 
-        if (link.linkImage !== undefined) {
-            this.linkImage = link.linkImage
+        // Kiểm tra linkImage 
+        if (link?.linkImage !== undefined) {
+            this.linkImage = link?.linkImage
         }
-
     }
 }
 </script>

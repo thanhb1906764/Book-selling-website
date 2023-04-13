@@ -119,60 +119,71 @@ export default {
     methods: {
         async checkPromotion() {
             var proList = await PromotionsService.getAll()
-            var waitingList = []
-            for (var i of proList) {
-                const now = new Date();
-                if (now > new Date(i.promotionEnd)) {
-                    console.log("Đã kết thúc")
-                }
-                else if (now < new Date(i.promotionBegin)) {
-                    console.log("Yet")
-                    const promotionBegin = moment(i.promotionBegin)
-                    var duration = moment.duration(promotionBegin.diff(now)).asMinutes();
-                    if (duration < 30) {
-                        waitingList.push(i)
-                    }
-                    console.log(duration)
-                }
-                else {
-                    for (var id of i.productList) {
-                        useDataStore().updateProBook(id, i.promotionPrice, i.promotionEnd)
-                        console.log(id)
-                        console.log(this.Books.filter(i => i._id === id))
-                    }
-                }
-            }
-            // console.log(waitingList)
-            if (waitingList.length > 0) {
-                var waiting = setInterval(() => {
-                    // console.log(waitingList)
-                    for (var i of waitingList) {
-                        const now = moment();
-                        if (now >= new Date(i.promotionBegin) && now <= new Date(i.promotionEnd)) {
-                            for (var id of i.productList) {
-                                useDataStore().updateProBook(id, i.promotionPrice, i.promotionEnd)
+            console.log(proList[0].productList.length);
+            for (let tempj = 0; tempj < proList.length; tempj++) {
+
+                for (let tempi = 0; tempi < proList[tempj].productList.length; tempi++) {
+                    let book = this.Books.find(item => item._id === proList[tempj].productList[tempi])
+                    console.log(book); console.log(book.bookPrice);
+                    this.SaleBooks = useDataStore().getBooks.filter(itemBook => ((itemBook.author !== undefined) && (itemBook.bookPrice < itemBook.originalPrice)));
+
+                    if (book && book.bookPrice === book.originalPrice) {
+
+                        var waitingList = []
+                        for (var i of proList) {
+                            const now = new Date();
+                            if (now > new Date(i.promotionEnd)) {
+                                console.log("Đã kết thúc")
                             }
-                            waitingList = waitingList.filter(item => item._id !== i._id)
+                            else if (now < new Date(i.promotionBegin)) {
+                                console.log("Yet")
+                                const promotionBegin = moment(i.promotionBegin)
+                                var duration = moment.duration(promotionBegin.diff(now)).asMinutes();
+                                if (duration < 30) {
+                                    waitingList.push(i)
+                                }
+                                console.log(duration)
+                            }
+                            else {
+                                for (var id of i.productList) {
+                                    useDataStore().updateProBook(id, i.promotionPrice, i.promotionEnd)
+                                    console.log(id)
+                                    console.log(this.Books.filter(i => i._id === id))
+                                }
+                            }
                         }
-                        if (waitingList.length === 0) {
-                            clearInterval(waiting)
+                        // console.log(waitingList)
+                        if (waitingList.length > 0) {
+                            var waiting = setInterval(() => {
+                                // console.log(waitingList)
+                                for (var i of waitingList) {
+                                    const now = moment();
+                                    if (now >= new Date(i.promotionBegin) && now <= new Date(i.promotionEnd)) {
+                                        for (var id of i.productList) {
+                                            useDataStore().updateProBook(id, i.promotionPrice, i.promotionEnd)
+                                        }
+                                        waitingList = waitingList.filter(item => item._id !== i._id)
+                                    }
+                                    if (waitingList.length === 0) {
+                                        clearInterval(waiting)
+                                    }
+                                }
+                            }, 1000)
                         }
+                        this.SaleBooks = useDataStore().getBooks.filter(itemBook => ((itemBook.author !== undefined) && (itemBook.bookPrice < itemBook.originalPrice)));
                     }
-                }, 1000)
+                    else {
+                        return
+                    }
+                }
             }
-            this.SaleBooks = useDataStore().getBooks.filter(itemBook => ((itemBook.author !== undefined) && (itemBook.bookPrice < itemBook.originalPrice)));
         }
     },
 
     created() {
         this.checkPromotion();
-        for (let i = 0; i < this.Books.length; i++) {
-            console.log('book price ' + this.Books[i].bookPrice);
-            console.log('book origin ' + this.Books[i].originalPrice);
-        }
         // this.SaleBooks = this.Books.filter(itemBook => ((itemBook.author !== undefined) && (itemBook.bookPrice < itemBook.originalPrice))); // Sao chép cạn trong js 
         this.NewBooks = this.Books.filter(itemBook => ((itemBook.author !== undefined) && ((Date.now() - Date.parse(itemBook.receiptDate)) <= 1000 * 60 * 60 * 24 * 30)));
     }
-
 }
 </script>
