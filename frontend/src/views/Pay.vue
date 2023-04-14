@@ -77,7 +77,6 @@
                                 v-if="order.payment === 'Thanh toán khi nhận hàng'">Đặt
                                 hàng</button>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -169,7 +168,7 @@ export default {
 
         return {
             ImageArray: [],
-            name: localStorage, // Tên user, nếu người dùng có đăng nhập 
+            name: localStorage.getItem('name'), // Tên user, nếu người dùng có đăng nhập 
             shipFee: this.getShipFee(),
             tempCost: 0,
             bookList: [],
@@ -180,15 +179,16 @@ export default {
             addressuser: -1, // index của addressList
             addressEmit: {},
 
-            order: {
-                type: Object,
-                required: true,
-                reDate: new Date(0),
-                orderDate: new Date(),
-                orderStatus: 'Chờ xác nhận',
-                userId: localStorage.getItem('_id'),
-                payment: null
-            },
+            // order: {
+            //     type: Object,
+            //     required: true,
+            //     reDate: new Date(0),
+            //     orderDate: new Date(),
+            //     orderStatus: 'Chờ xác nhận',
+            //     userId: localStorage.getItem('_id'),
+            //     payment: null
+            // },
+            order: {},
 
             addressIndex: -1,
             // Giá trị drop vào component AddressVue
@@ -371,8 +371,8 @@ export default {
                     this.notifyOrderEmpty()
                     return 0;
                 }
-                console.log(this.order);
                 this.order.orderTotal = this.orderTotal(this.tempCost, this.shipFee);
+                console.log(this.order);
                 let total = await OrdersService.create(this.order)
                 if (total === undefined)
                     alert('Tạo đơn hàng không thành công');
@@ -422,6 +422,7 @@ export default {
     },
 
     created() {
+        this.order = useDataStore().getOrder;
         // Nếu chưa có đơn hàng trong store, trở về trang inform
         if (useDataStore().getOrderTotal === 0) {
             this.$router.push('/Inform');
