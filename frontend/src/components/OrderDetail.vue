@@ -6,9 +6,9 @@
                 <div class="col">
                     <div>Mã đơn hàng: {{ getIdOrder }}</div>
                     <div>{{ this.orderDetail[0].orderStatus }}</div>
-
-                    <div>Ngày mua: {{ showDate(this.orderDetail[0].orderDate) }}</div>
-                    <div v-show="show">Ngày nhận: {{ showDate(this.orderDetail[0].reDate) }}</div>
+                    
+                    <div>Ngày mua: {{ showDate(this.orderDetail[0].orderDate) }} {{ showTime(this.orderDetail[0].orderDate) }}</div>
+                    <div v-show="show">Ngày nhận: {{ showDate(this.orderDetail[0].reDate) }} {{ showTime(this.orderDetail[0].reDate) }}</div>
                     <div>Tổng tiền: {{ this.orderDetail[0].orderTotal.toLocaleString('vi-VN',
                 { style: 'currency', currency: 'VND' })  }}</div>
                 </div>
@@ -141,7 +141,18 @@ export default {
 
             if (yearString == '1970')
                 this.show = false
+            
             return dateString
+        },
+        showTime(data){
+            var time = new Date(data)
+            const formatter = new Intl.DateTimeFormat('vi-VN', {
+                hour: 'numeric',
+                minute: 'numeric',
+                
+            }); // Định dạng thời gian thành dạng "12:34:56 PM"
+
+            return formatter.format(time); // Lấy thời gian đã được định dạng
         },
 
         getImageArray(id) {
