@@ -1,20 +1,13 @@
-<template class=" col-sm">
-    <div class="container border rounded">
+<template >
+    <div class="container rounded">
         <div class="row m-2">
             <div class="col-10 d-flex align-items-center">Sổ địa chỉ</div>
-            <RouterLink class="col-2 btn btn-danger" to="/acc/address/add"><button>Thêm địa chỉ mới</button></RouterLink>
+            <RouterLink class="col-sm btn btn-danger" to="/acc/address/add"><button>Thêm địa chỉ mới</button></RouterLink>
         </div>
         <div class="row m-2">
-            <div class="col">
+            <div class="col-sm">
                 <div class="text-uppercase fw-semibold">Địa chỉ mặc định</div>
-            </div>
-            <div class="col">
-                <div class="text-uppercase fw-semibold">Địa chỉ khác</div>
-            </div>
-        </div>
-        <div class="row m-4">
-            <div class="col">
-                <div v-for="addressDefault in addressDefault">
+                <div class="m-2" v-for="addressDefault in addressDefault">
                     <div>{{ addressDefault.name }}</div>
 
                     <div>{{ addressDefault.streetName }}</div>
@@ -30,8 +23,9 @@
                 </div>
 
             </div>
-            <div class="col">
-                <div v-for="address in addresses" :key="address._id">
+            <div class="col-sm">
+                <div class="text-uppercase fw-semibold">Địa chỉ khác</div>
+                <div class="m-2" v-for="address in addresses" :key="address._id">
 
                     <div>{{ address.name }}</div>
 
@@ -42,11 +36,12 @@
                         {{ address.city }}
                     </div>
                     <div>{{ address.phone }}</div>
-                    <div class="row mb-2 fw-semibold">
-                        <div class="col-3 border-end text-danger "><router-link
+                    <div class="fw-semibold d-flex flex-row ">
+                        <div class="text-danger border-end pe-2"><router-link
                                 :to="{ name: 'AddressEditVue', params: { id: address._id } }">Sửa địa chỉ </router-link>
                         </div>
-                        <div class="col-3 text-secondary" @click="openDialog(address._id)">Xóa địa chỉ</div>
+                        <div class=" ps-2" @click="openDialog(address._id)">Xóa địa
+                            chỉ</div>
                     </div>
 
                     <v-dialog v-model="dialog" persistent max-width="400">
@@ -66,7 +61,6 @@
 
                 </div>
             </div>
-
         </div>
     </div>
     <v-snackbar v-model="snackbar" :timeout="timeout">
@@ -79,7 +73,22 @@
         </template>
     </v-snackbar>
 </template>
-
+<style>
+/* @media screen and (max-width: 767px) {
+   .test:not(.mobile) {
+      
+      color: blue !important;
+      display: block;
+   }
+} */
+/* Media query cho điện thoại */
+/* @media (max-width: 576px) {
+  
+  .address-buttons .col-3 {
+    flex-basis: 50%;
+  }
+} */
+</style>
 <script >
 import axios from "axios";
 import { useDataStore } from '@/stores/dataStores';
@@ -97,7 +106,9 @@ export default {
         };
     },
     computed: {
-
+        isMobile() {
+            return window.innerWidth <= 767;
+        }
     },
     mounted() {
         this.getAddress1()

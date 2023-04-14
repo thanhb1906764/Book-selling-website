@@ -10,17 +10,18 @@
                 @click="getGenreClick(0, category)">
                 <v-menu :location="location" open-on-hover>
                     <template v-slot:activator="{ props }">
-                        <router-link to="/category"><v-list-item-title v-bind="props" class="hover-item">
-
+                        <router-link to="/category">
+                            <v-list-item-title v-bind="props" class="hover-item">
                                 {{ category.genreName }}
-
-
-                            </v-list-item-title> </router-link>
+                            </v-list-item-title>
+                        </router-link>
                     </template>
                     <v-list>
                         <v-list-item v-for="(subGenre, index) in category.subGenre" :key="index" :value="index"
                             @click="getGenreClick(1, subGenre)">
-                            <v-list-item-title>{{ subGenre }}</v-list-item-title>
+                            <router-link to="/category">
+                                <v-list-item-title>{{ subGenre }}</v-list-item-title>
+                            </router-link>
                         </v-list-item>
                     </v-list>
                 </v-menu>
@@ -40,7 +41,8 @@ export default {
                 //console.log(data.subGenre)
                 useDataStore().setGenreSelected(data.subGenre)
                 useDataStore().setCategorySelected(data.genreName)
-                //console.log(useDataStore().getGenreSelected)
+                useDataStore().setShowFull(false)
+
             }
             else {
                 //console.log(data)
@@ -49,13 +51,14 @@ export default {
                 //console.log(CategorySelected.genreName);
                 useDataStore().setCategorySelected(CategorySelected.genreName)
                 useDataStore().setGenreSelected(a)
+                useDataStore().setShowFull(false)
             }
 
 
         },
     },
-    mounted() {
-        axios
+    async mounted() {
+        await axios
             .get('http://localhost:3000/api/genres')
             .then((response) => {
                 useDataStore().getAPIGenes(response.data)

@@ -1,5 +1,5 @@
 <template >
-    <div v-if="load" class="container border rounded">
+    <div v-if="load" class="container rounded">
         <Form @submit="submitContact" :validation-schema="contactFormSchema">
             <div class="row g-3 m-2 form-group">
                 <div class="col-2">
@@ -43,8 +43,8 @@
                 </div>
             </div>
             <div class="form-group row align-items-cente">
-                <div class="align-items-center col">
-                    <button style="background-color: red; border: none; margin: auto; " class="btn btn-primary">Lưu thay
+                <div class="align-items-center d-flex justify-content-center ">
+                    <button style="background-color: red; border: none; margin: auto; " class="btn btn-primary m-2">Lưu thay
                         đổi</button>
                 </div>
             </div>
@@ -61,6 +61,19 @@
         </template>
     </v-snackbar>
 </template>
+<style>
+@media (max-width: 912px) {
+
+    .col-2 {
+        flex-basis: 100%;
+    }
+
+    .col-7 {
+        flex-basis: 100%;
+
+    }
+}
+</style>
 <script>
 import UsersService from "../services/users.service"
 import * as yup from "yup";
