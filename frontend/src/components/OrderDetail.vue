@@ -1,6 +1,6 @@
 <template >
     <div v-if="this.load">
-        <div class="container border rounded ps-5">
+        <div class="container mb-3 rounded ps-5">
             <div class="text-uppercase fw-semibold"> Chi tiết đơn hàng</div>
             <div class="row">
                 <div class="col">
@@ -31,7 +31,7 @@
 
         </div>
 
-        <div class="container border rounded ps-5">
+        <div class="container mb-3 rounded ps-5">
             <div class="row">
                 <div class="col-sm">Thông tin người nhận
                     <div>{{ this.orderDetail[0].userName }}</div>
@@ -44,7 +44,7 @@
                 </div>
             </div>
         </div>
-        <div class="container border rounded ps-5">
+        <div class="container  rounded ps-5">
             <v-table>
                 <thead>
                     <tr>
