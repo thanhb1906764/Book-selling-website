@@ -9,10 +9,8 @@ router.route('/')
     .delete(carts.deleteAll);
 
 router.route('/:id')
-    // .get(carts.findOne)
     .get(carts.add)
     .put(carts.update)
-    // .post(carts.add)
     .delete(carts.delete);
 
 router.route('/bookList/:id')

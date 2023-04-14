@@ -120,6 +120,7 @@ exports.pushGenres = async (req, res, next) => {
         if (!document) {
             return next(new ApiError(404, "Product not found"));
         }
+        console.log(req.body)
         return res.send({ message: "Product was updated successfully" });
     } catch (error) {
         return next(
@@ -139,6 +140,7 @@ exports.removeGenres = async (req, res, next) => {
         if (!document) {
             return next(new ApiError(404, "Product not found"));
         }
+        console.log(req.body)
         return res.send({ message: "Product was updated successfully" });
     } catch (error) {
         return next(

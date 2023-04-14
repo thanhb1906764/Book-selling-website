@@ -25,12 +25,14 @@ const ApiError = require("./app/api-error");
 const multer = require('multer')
 const app = express();
 var fs = require('fs');
+const { db } = require("./app/config");
+const { client } = require("./app/utils/mongodb.util");
 
 app.use(cookieParser());
 app.set("trust proxy", 1);
 
 app.use(cors({
-    origin: "http://localhost:3001",
+    origin: "http://localhost:3001" || 'http://127.0.0.1:3001' || 'http://127.0.0.1:3002' || 'http://localhost:3002',
     credentials: true,
 }));
 app.use(express.json());
@@ -69,24 +71,34 @@ const upload = multer({ storage: storage })
 
 // });
 
-app.post('/api/uploads', upload.array('uploadsImg', 3), async function (req, res, next) {
+app.post('/api/uploads', upload.array('uploadsImg'), async function (req, res, next) {
     // req.files is array of `photos` files
     // req.body will contain the text fields, if there were any
-    let files = req.body.uploadsImg
+    // let files = req.body.uploadsImg
     const obj = JSON.parse(JSON.stringify(req.body))
-    console.log(obj)
+    // console.log(obj)
     console.log(req.files)
-    // const document = await BooksService.create(req.body);
+    var imgs = []
+    for (let index of req.files) {
+        var pathImg = "http://localhost:3000/uploads/" + index.filename
+        imgs.push({ nameImage: index.filename, linkImage: pathImg, _idBook: null })
+        console.log(pathImg)
+    }
 
-    // var filePath = "C:\\Users\\Thanh_2z\\Desktop\\Nien_Luan_Nganh\\Back_End\\uploads\\" + "....";
-    // console.log(filePath)
-    // fs.unlinkSync(filePath);
-    // for (let index = 0; index <= files.length; ++index) {
-    //     var pathImg = "http://127.0.0.1:3000/uploads/" + files[index].filename
-    // console.log(pathImg)
+    return res.send(imgs)
 })
 
-app.all("/", (req, res) => {
+app.post('/api/removeImg', (req, res) => {
+
+    const { name } = req.body
+    var filePath = "C:\\Users\\Thanh_2z\\Desktop\\Nien_Luan_Nganh\\Back_End\\uploads\\" + name;
+    console.log(name)
+    // console.log(filePath)
+    fs.unlinkSync(filePath);
+    // return res.send(filePath)
+})
+
+app.get("/", (req, res) => {
     res.json({ message: "Welcome to BooksStore." });
 });
 

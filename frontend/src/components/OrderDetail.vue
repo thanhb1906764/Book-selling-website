@@ -12,7 +12,7 @@
                     <div>Tổng tiền: {{ this.orderDetail[0].orderTotal }}</div>
                 </div>
                 <div class="col">
-                    <button type="button" class="btn btn-danger " @click="openDialog" :disabled="isDisable">Huỷ đơn
+                    <button  class="btn btn-danger " @click="openDialog" :disabled="cancelButtonOrder(this.orderDetail[0].orderStatus)">Huỷ đơn
                         hàng</button>
                 </div>
                 <v-dialog v-model="dialog" persistent max-width="400">
@@ -162,9 +162,13 @@ export default {
             }
             this.orderDetail = useDataStore().getOrderList
             console.log("get ok")
-            this.load = true
-            if (this.orderDetail[0].orderStatus !== "Chờ xác nhận")
+            
+            if (this.orderDetail[0].orderStatus != "Chờ xác nhận"){
                 this.isDisable = true
+                console.log("alo");
+            }
+            this.load = true
+                
 
         },
         findBookNameById(id) {
@@ -191,6 +195,12 @@ export default {
 
             }
             await this.$route.push({ name: "addressAcc" })
+        },
+        cancelButtonOrder(data){
+            if(data=="Chờ xác nhận")
+                return false
+            else 
+                return true
         }
     },
 

@@ -164,7 +164,7 @@ export default {
                 'Content-Type': 'multipart/form-data'
             }
 
-            await axios.post('http://127.0.0.1:3000/api/uploads', this.files, config).then(
+            await axios.post('http://localhost:3000/api/uploads', this.files, config).then(
                 response => {
                     this.img = response.data
                     console.log(response.data);
@@ -181,7 +181,7 @@ export default {
                 console.log(field[0] + ': ' + field[1]);
             }
             console.log(e)
-            await axios.post('http://127.0.0.1:3000/api/removeImg', { name: e }).then(
+            await axios.post('http://localhost:3000/api/removeImg', { name: e }).then(
                 response => {
 
                     console.log(response.data);

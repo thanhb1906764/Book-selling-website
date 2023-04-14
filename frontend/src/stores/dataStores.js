@@ -24,7 +24,7 @@ export const useDataStore = defineStore('data', {
         search: '',
         searchByNameSupplisher: '',
         categorySelected: [],
-        showFull:false
+        showFull: false
     }),
 
     getters: {

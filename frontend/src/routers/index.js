@@ -48,12 +48,6 @@ const routes = [
         },
     },
     {
-        path: "/Test",
-        name: "Test",
-        component: () => import("@/views/Test.vue"),
-        // props: true
-    },
-    {
         path: "/UserLogin",
         name: "LoginUser",
         component: () => import("@/views/LoginUserPage.vue"),
@@ -102,14 +96,6 @@ const routes = [
         },
     },
     {
-        path: "/Products",
-        name: "Products",
-        component: () => import("@/views/Product_Management.vue"),
-        meta: {
-            title: 'Sản phẩm',
-        },
-    },
-    {
         path: "/Search",
         name: "Search",
         component: () => import("../components/Search.vue"),
@@ -117,50 +103,12 @@ const routes = [
             title: 'Tìm kiếm sản phẩm',
         },
     },
-
-
-    // {
-    //     path: "/:pathMatch(.*)*",
-    //     name: "notfound",
-    //     component: () => import("@/views/NotFound.vue"),
-    // },
-    // {
-    //     path: "/Diary/:id",
-    //     name: "diary.edit",
-    //     component: () => import("@/views/DiaryEdit.vue"),
-    //     props: true // Truyền các biến trong $route.params vào làm props
-    // },
-    {
-        path: "/Clients",
-        name: "Clients",
-        component: () => import("@/views/Clients_Management.vue"),
-    },
-    {
-        path: "/Catalog",
-        name: "Catalog",
-        component: () => import("@/views/Catalog_Management.vue"),
-    },
-    {
-        path: "/Promotion",
-        name: "Promotion",
-        component: () => import("@/views/Promotion_Managemnet.vue"),
-    },
-    {
-        path: "/Orders",
-        name: "Orders",
-        component: () => import("@/views/Order_Management.vue"),
-    },
-    {
-        path: "/Receipts",
-        name: "Receipts",
-        component: () => import("@/views/Receipt_Management.vue"),
-    },
-
 ];
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes,
 });
+
 // Xử lý truy cập trái phép - Chưa đăng nhập 
 router.beforeEach(async (to, from, next) => {
     // Đặt tiêu đề động cho từng trang 
@@ -169,12 +117,14 @@ router.beforeEach(async (to, from, next) => {
         next('/')
     }
 
+    // Khởi tạo 
     const id = to.params.id;
-    const publicPagesUser = ['/acc'];
+    const privatePagesUser = ['/acc'];
     const PagesAdmin = ["/Receipts", "/Orders", "/Promotion", "/Catalog", "/Clients", "/Products", "/receipts", "/orders", "/promotion", "/catalog", "/clients", "/products"]
-    const authRequiredUser = publicPagesUser.includes(to.path);
+    const authRequiredUser = privatePagesUser.includes(to.path);
     const authRequiredAdmin = PagesAdmin.includes(to.path);
 
+    // Xử lý
     if (authRequiredUser && !localStorage.getItem('_id')) {
         // redirect the user to the login page
         next('/UserLogin');

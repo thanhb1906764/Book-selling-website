@@ -14,7 +14,7 @@
                             <v-list-item-title v-bind="props" class="hover-item">
                                 {{ category.genreName }}
                             </v-list-item-title>
-                         </router-link>
+                        </router-link>
                     </template>
                     <v-list>
                         <v-list-item v-for="(subGenre, index) in category.subGenre" :key="index" :value="index"
@@ -42,7 +42,7 @@ export default {
                 useDataStore().setGenreSelected(data.subGenre)
                 useDataStore().setCategorySelected(data.genreName)
                 useDataStore().setShowFull(false)
-                
+
             }
             else {
                 //console.log(data)
@@ -59,7 +59,7 @@ export default {
     },
     async mounted() {
         await axios
-             .get('http://localhost:3000/api/genres')
+            .get('http://localhost:3000/api/genres')
             .then((response) => {
                 useDataStore().getAPIGenes(response.data)
 

@@ -63,14 +63,15 @@
 </template>
 <style>
 @media (max-width: 912px) {
-  
-  .col-2 {
-    flex-basis: 100%;
-  }
-  .col-7 {
-    flex-basis: 100%;
-    
-  }
+
+    .col-2 {
+        flex-basis: 100%;
+    }
+
+    .col-7 {
+        flex-basis: 100%;
+
+    }
 }
 </style>
 <script>

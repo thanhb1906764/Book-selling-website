@@ -54,6 +54,22 @@ exports.getCookies = async (req, res, next) => {
     res.send(user)
 }
 
+exports.checkLogin = async (req, res, next) => {
+    try {
+        const usersService = new UsersService(MongoDB.client);
+        const document = await usersService.check(req.body);
+        // if(document=== undefined){
+        //     return res.send("Successful")
+        // }
+        return res.send(document);
+    }
+    catch (error) {
+        return next(
+            new ApiError(500, "Err name or password incorrect")
+        );
+    }
+};
+
 exports.login = async (req, res, next) => {
     try {
         const usersService = new UsersService(MongoDB.client);

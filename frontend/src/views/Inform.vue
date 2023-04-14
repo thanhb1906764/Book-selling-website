@@ -1,7 +1,6 @@
 <template>
-    <title>Thông tin vận chuyển - Đặt hàng</title>
-    <div class="container-sm text-dark">
-        <div class="row">
+    <div class="container my-4">
+        <div class="row rounded-2" style="background-color: #ffffff;">
             <!-- Nội dung bên trái: Thông tin khách hàng và địa chỉ giao hàng -->
             <div class="col-auto col-sm-6">
                 <!-- Thanh điều hướng  -->
@@ -39,7 +38,7 @@
                 <div v-if="name !== null" class="container mb-2">
                     <ul class="list-group px-2">
                         <li class="list-group-item fw-bolder">
-                            <div><a class="me-2 fa-solid fa-user pe-2"></a>{{ name }}
+                            <div><router-link to='#' class="me-2 fa-solid fa-user pe-2"></router-link>{{ name }}
                                 <!-- <a href="#" class="text-decoration-none mx-2 text-danger">Đăng xuất</a> -->
                             </div>
                         </li>
@@ -79,19 +78,6 @@
                                 addressEmit = address;
                                 addressSelect();
                             }" />
-                        <!-- Chọn phương thức thanh toán -->
-                        <!-- <div class="form-group form-floating my-4">
-                            <select required class="form-select" aria-label="" v-model="order.payment">
-                                <option value="Thanh toán khi nhận hàng">Thanh toán khi nhận hàng</option>
-                                <option value="Chuyển khoản">Chuyển khoản</option>
-                            </select>
-                            <label class="fs-6" for="payment">Phương thức thanh toán</label>
-                            <PayPalVue :item="dropItem" class="mt-4" v-if="order.payment === 'Chuyển khoản'" />
-                        </div> -->
-                        <!-- Nút Giỏ hàng và Chọn phương thức thanh toán -->
-                        <div class="d-flex justify-content-end mt-4">
-                            <button @click="paymentClick" class="btn btn-primary">Đặt hàng</button>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -101,6 +87,7 @@
                 <div v-for="item in BookInCart" :key="item._id" class="container">
                     <PayCardsVue :Book="item" :Cart="Cart" />
                 </div>
+
                 <!-- Tạm tính, Phi Ship -->
                 <div v-if="Cart.length !== 0" class="container px-5">
                     <div class="d-flex justify-content-between py-2">
@@ -110,6 +97,7 @@
                             currency: 'VND'
                         }) }}</small>
                     </div>
+
                     <!-- Phí Ship  -->
                     <div class="d-flex justify-content-between">
                         <small class="text-muted">Phí Ship</small>
@@ -128,6 +116,7 @@
                 <div class="container px-5 text-danger py-4 fw-bold" v-else>
                     Không có Sản phẩm nào trong Giỏ hàng
                 </div>
+
                 <!-- Tổng tiền -->
                 <div v-if="Cart.length !== 0" class="container px-5">
                     <hr />
@@ -139,6 +128,11 @@
                         }) }}</div>
                     </div>
                 </div>
+
+                <!-- Nút Giỏ hàng-->
+                <div v-if="Cart.length !== 0" class="d-flex justify-content-end mt-4 px-5 py-4">
+                    <button style="font-size: 14px;" @click="paymentClick" class="btn btn-primary">Thanh toán</button>
+                </div>
             </div>
         </div>
     </div>
@@ -148,10 +142,8 @@ import AddressVue from '../components/Address.vue';
 import PayCardsVue from '../components/PayCards.vue';
 import PayPalVue from '../components/PayPal.vue';
 import { useDataStore } from '../stores/dataStores';
-import BooksService from '@/services/books.service';
 import ShipFeeService from '@/services/shipFee.service';
 import AddressesService from '@/services/addresses.service';
-import OrdersService from '@/services/orders.service';
 import axios from 'axios';
 import { toast } from 'vue3-toastify';
 export default {
@@ -424,8 +416,8 @@ export default {
                 this.order.orderTotal = this.orderTotal(this.tempCost, this.shipFee);
 
                 // Lưu vào store
-                await useDataStore().setOrder(this.order);
-                let order = await useDataStore().getOrder
+                useDataStore().setOrder(this.order);
+                let order = useDataStore().getOrder
                 if (order === undefined)
                     alert('Lỗi khi chuyển đến thanh toán');
                 else {
@@ -461,12 +453,41 @@ export default {
                                 value: parseFloat(Number.parseFloat(this.order.productList[i].price / USDToVND).toFixed(2))
                             }
                         })
-                        orderTotal = Number.parseFloat(parseFloat(orderTotal) + parseFloat(this.dropItem[i].unit_amount.value)).toFixed(2)
+                        orderTotal = Number.parseFloat(parseFloat(orderTotal) + (parseFloat(this.dropItem[i].unit_amount.value) * this.order.productList[i].quantity)).toFixed(2)
+                        console.log(orderTotal);
                     }
+
+                    // Tính phí ship
+                    let fee = (30000 / USDToVND);
+                    console.log(fee);
+                    if ((parseFloat(orderTotal) * USDToVND) < 500000) {
+                        this.dropItem.push({
+                            name: 'Phí Ship',
+                            description: "30000VND",
+                            quantity: 1,
+                            unit_amount: {
+                                currency_code: "USD",
+                                value: parseFloat(Number.parseFloat(30000 / USDToVND).toFixed(2))
+                            }
+                        })
+                        orderTotal = Number.parseFloat(parseFloat(orderTotal) + parseFloat(30000 / USDToVND)).toFixed(2)
+                    }
+                    else {
+                        this.dropItem.push({
+                            name: 'Phí Ship',
+                            description: "Miễn phí",
+                            quantity: 1,
+                            unit_amount: {
+                                currency_code: "USD",
+                                value: 0
+                            }
+                        })
+                    }
+
                     // Cập nhật dữ liệu đơn hàng vào store
-                    await useDataStore().setOrderTotal(Number.parseFloat(orderTotal).toFixed(2))
+                    useDataStore().setOrderTotal(Number.parseFloat(orderTotal).toFixed(2))
                     console.log(Number.parseFloat(orderTotal).toFixed(2));
-                    await useDataStore().setItemsPayPal(this.dropItem);
+                    useDataStore().setItemsPayPal(this.dropItem);
                     console.log(useDataStore().getItemsPayPal);
                     // Chuyển hướng đến trang Thanh toán
                     this.$router.push('/Pay');

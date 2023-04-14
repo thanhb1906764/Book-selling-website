@@ -14,7 +14,7 @@
             name: 'BookDetails',
             params: { id: Book._id },
         }">
-            <div class="fs-6 fw-bold text-danger">{{ Book.bookName }}</div>
+            <div style="font-size: 14px;" class="fw-bold text-danger">{{ Book.bookName }}</div>
             <!-- Thông tin khuyến mãi  -->
             <small>{{ }}</small>
             <small class="d-block">Còn lại: {{ Book.bookStock }}</small>
@@ -74,6 +74,7 @@ export default {
             if (this.BookQuantity < this.Book.bookStock) {
                 this.BookQuantity++;
                 this.updateProductInCart(this.Book._id, this.BookQuantity);
+                this.$emit('updateQuantity', '')
             }
         },
 
@@ -82,6 +83,7 @@ export default {
             if (this.BookQuantity > 1) {
                 this.BookQuantity--;
                 this.updateProductInCart(this.Book._id, this.BookQuantity);
+                this.$emit('updateQuantity', '')
             }
         },
         // Cập nhật số lượng của một sản phẩm giỏ hàng trên cookies 
@@ -174,7 +176,7 @@ export default {
 </script>
 <style scoped>
 .imgCart {
-    width: 100px;
+    height: 120px;
 }
 
 /* Chrome, Safari, Edge, Opera */

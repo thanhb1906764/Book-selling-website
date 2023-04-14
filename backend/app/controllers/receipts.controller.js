@@ -3,9 +3,6 @@ const MongoDB = require("../utils/mongodb.util");
 const ReceiptsService = require("../services/receipts.service");
 
 exports.create = async (req, res, next) => {
-    if (!req.body?.genreName) {
-        return next(new ApiError(400, "Name can not be empty"));
-    }
 
     try {
         const receiptsService = new ReceiptsService(MongoDB.client);

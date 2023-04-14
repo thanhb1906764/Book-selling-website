@@ -1,42 +1,49 @@
 <template>
-    <table class="table table-hover container bg-white rounded-2 m-4r">
-        <thead class="user-select-none">
-            <tr class="align-middle">
-                <th v-if="BookInCart.length !== 0" class="fs-2 fw-bold text-danger text-center" colspan="6">Giỏ hàng</th>
-                <th v-else class="fs-2 fw-bold text-danger text-center" colspan="6">Giỏ hàng trống</th>
-            </tr>
-            <tr v-if="BookInCart.length !== 0">
-                <th style="width: 50%;" colspan="2" scope="col">Sản phẩm</th>
-                <th class="text-center" style="width: 15%;" scope="col">Đơn giá</th>
-                <th class="text-center" style="width: 15%;" scope="col">Số lượng</th>
-                <th class="text-center" style="width: 15%;" scope="col">Tổng</th>
-                <th class="text-center" style="width: 5%;" scope="col"></th>
-            </tr>
-        </thead>
-        <tbody v-if="BookInCart.length !== 0">
-            <tr v-for="item in BookInCart" :key="item._id">
-                <CartCards :Book="item" :Cart="Cart" @updateCart="update" />
-            </tr>
-            <!-- Thanh toán  -->
-            <tr class="fs-6 fw-bold text-danger">
-                <td colspan="3"></td>
-                <td class="align-middle text-center">Tính tạm</td>
-                <td class="align-middle text-center">{{ (tempCost).toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND'
-                }) }}</td>
-                <td></td>
-            </tr>
-            <tr class="fs-6 fw-bold text-danger">
-                <td colspan="3"></td>
-                <td class="align-middle text-center"></td>
-                <td class="align-middle text-center">
-                    <a class="link-light btn btn-danger" href="/Inform">Thanh toán</a>
-                </td>
-                <td colspan=""></td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="container">
+        <table class="table table-hover bg-white rounded-2 my-4">
+            <thead class="user-select-none">
+                <tr class="align-middle">
+                    <th v-if="BookInCart.length !== 0" class="fs-4 fw-bold text-danger text-center" colspan="6">Giỏ hàng
+                    </th>
+                    <th v-else class="fs-4 fw-bold text-danger text-center" colspan="6">Giỏ hàng trống
+                        <div class="fs-5">Trở về <router-link class="text-decoration-underline" to="/">Trang
+                                Chủ</router-link>
+                        </div>
+                    </th>
+                </tr>
+                <tr v-if="BookInCart.length !== 0" class="bg-light">
+                    <th style="width: 50%;" colspan="2" scope="col" class="fw-bold">Sản phẩm</th>
+                    <th class="text-center fw-bold" style="width: 15%;" scope="col">Đơn giá</th>
+                    <th class="text-center fw-bold" style="width: 15%;" scope="col">Số lượng</th>
+                    <th class="text-center fw-bold" style="width: 15%;" scope="col">Tổng</th>
+                    <th class="text-center fw-bold" style="width: 5%;" scope="col"></th>
+                </tr>
+            </thead>
+            <tbody v-if="BookInCart.length !== 0">
+                <tr v-for="item in BookInCart" :key="item._id">
+                    <CartCards :Book="item" :Cart="Cart" @updateCart="update" />
+                </tr>
+                <!-- Thanh toán  -->
+                <tr class="fs-6 text-danger border-white">
+                    <td colspan="3"></td>
+                    <td class="align-middle text-center fw-bold">Tính tạm</td>
+                    <td class="align-middle text-center fw-bold">{{ (tempCost).toLocaleString('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND'
+                    }) }}</td>
+                    <td></td>
+                </tr>
+                <tr class="fs-6 fw-bold text-danger">
+                    <td colspan="3"></td>
+                    <td class="align-middle text-center"></td>
+                    <td class="align-middle text-center">
+                        <router-link to="/Inform" class="link-light btn btn-danger">Thanh toán</router-link>
+                    </td>
+                    <td colspan=""></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </template>
 <script>
 import { useDataStore } from '../stores/dataStores';

@@ -142,7 +142,8 @@ export default {
     color: black;
     text-decoration: none;
 }
-.white{
+
+.white {
     background-color: white;
     padding: 0px;
 }

@@ -58,7 +58,7 @@
                                             Nhớ tôi
                                         </label>
                                     </div>
-                                    <a href="#!" class="text-body">Quên mật khẩu?</a>
+                                    <router-link class="text-body" to="#">Quên mật khẩu?</router-link>
                                 </div>
 
                                 <!-- login -->

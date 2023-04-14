@@ -36,11 +36,11 @@
                         {{ address.city }}
                     </div>
                     <div>{{ address.phone }}</div>
-                    <div class="fw-semibold d-flex flex-row "  >
-                        <div class="text-danger border-end pe-2" ><router-link
+                    <div class="fw-semibold d-flex flex-row ">
+                        <div class="text-danger border-end pe-2"><router-link
                                 :to="{ name: 'AddressEditVue', params: { id: address._id } }">Sửa địa chỉ </router-link>
                         </div>
-                        <div class=" ps-2"  @click="openDialog(address._id)">Xóa địa
+                        <div class=" ps-2" @click="openDialog(address._id)">Xóa địa
                             chỉ</div>
                     </div>
 
@@ -88,7 +88,6 @@
     flex-basis: 50%;
   }
 } */
-
 </style>
 <script >
 import axios from "axios";

@@ -8,11 +8,12 @@ class ReceiptsService {
     extractReceiptsData(payload) {
         const receipts = {
             dateReceipt: payload.dateReceipt,
-            _idSupplier: payload._idSupplier,
+            supplierName: payload.supplierName,
             listProduct: payload.listProduct,
             owe: payload.owe,
             paid: payload.paid,
             totalMoneyReceipt: payload.totalMoneyReceipt,
+            totalNumber: payload.totalNumber
         };
         // remove undefined fields. 
         Object.keys(receipts).forEach(

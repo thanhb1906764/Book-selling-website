@@ -57,18 +57,20 @@ exports.findOne = async (req, res, next) => {
 }
 
 exports.update = async (req, res, next) => {
-    if (Object.keys(req.body).length === 0) {
-        return next(new ApiError(400, "Data to update can not be empty"));
-    }
+    // if (Object.keys(req.body).length === 0) {
+    //     return next(new ApiError(400, "Data to update can not be empty"));
+    // }
 
     try {
         const booksService = new BooksService(MongoDB.client);
         const document = await booksService.update(req.params.id, req.body);
+        console.log(req.body)
         if (!document) {
             return next(new ApiError(404, "Product not found"));
         }
         return res.send({ message: "Product was updated successfully" });
     } catch (error) {
+        console.log(req.body)
         return next(
             new ApiError(500, `Error updating product with id=${req.params.id}`)
         );

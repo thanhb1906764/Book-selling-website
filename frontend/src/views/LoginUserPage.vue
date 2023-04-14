@@ -70,12 +70,12 @@
                                 <div class="d-flex justify-content-between align-items-center mb-6">
                                     <!-- Checkbox -->
                                     <div class="form-check mb-0">
-                                        <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
-                                        <label class="form-check-label" for="form2Example3">
+                                        <input class="form-check-input me-2" type="checkbox" value="" id="remembermeUser" />
+                                        <label class="form-check-label" for="remembermeUser">
                                             Nhớ tôi
                                         </label>
                                     </div>
-                                    <a href="#!" class="text-body">Quên mật khẩu?</a>
+                                    <a href="#" class="text-body">Quên mật khẩu?</a>
                                 </div>
 
                                 <!-- login -->
@@ -100,6 +100,8 @@ import * as yup from "yup";
 import UsersService from '@/services/users.service';
 import { useDataStore } from '../stores/dataStores';
 import axios from 'axios';
+import { toast } from 'vue3-toastify';
+
 export default {
     components: {
         Form,
@@ -125,7 +127,7 @@ export default {
         // Đinh nghĩa thông báo nổi 
         const notifyLoginError = () => {
             toast("Mật khẩu hoặc số điện thoại không đúng", {
-                autoClose: 1500,
+                autoClose: 3000,
                 limit: 1,
                 type: toast.TYPE.ERROR,
                 multiple: false,
@@ -135,7 +137,7 @@ export default {
 
         const notifyLoginBlock = () => {
             toast("Tài khoản này đã bị khoá, liên hệ Quản trị viên để được hỗ trợ", {
-                autoClose: 1500,
+                autoClose: 3000,
                 limit: 1,
                 type: toast.TYPE.ERROR,
                 multiple: false,
@@ -175,7 +177,7 @@ export default {
                     this.notifyLoginError();
                 else {
                     this.cookies = await UsersService.getCookies();
-
+                    console.log(this.cookies);
                     // Kiểm tài khoản - có bị khoá hay không 
                     if (this.cookies.statusUser === false) {
                         this.notifyLoginBlock();
