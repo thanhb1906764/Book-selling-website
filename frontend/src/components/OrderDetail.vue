@@ -9,7 +9,8 @@
 
                     <div>Ngày mua: {{ showDate(this.orderDetail[0].orderDate) }}</div>
                     <div v-show="show">Ngày nhận: {{ showDate(this.orderDetail[0].reDate) }}</div>
-                    <div>Tổng tiền: {{ this.orderDetail[0].orderTotal }}</div>
+                    <div>Tổng tiền: {{ this.orderDetail[0].orderTotal.toLocaleString('vi-VN',
+                { style: 'currency', currency: 'VND' })  }}</div>
                 </div>
                 <div class="col">
                     <button  class="btn btn-danger " @click="openDialog" :disabled="cancelButtonOrder(this.orderDetail[0].orderStatus)">Huỷ đơn
@@ -17,13 +18,13 @@
                 </div>
                 <v-dialog v-model="dialog" persistent max-width="400">
                     <v-card>
-                        <v-card-title class="headline">Are you sure?</v-card-title>
+                        <v-card-title class="headline">Bạn có muốn hủy đơn hàng không?</v-card-title>
                         <v-card-text>
-                            This action cannot be undone.
+                            Hành động này không thể hoàn trả
                         </v-card-text>
                         <v-card-actions>
-                            <v-btn color="green darken-1" text @click="dialog = false; cancelOrder()">Yes</v-btn>
-                            <v-btn color="red darken-1" text @click="dialog = false">No</v-btn>
+                            <v-btn color="green darken-1" text @click="dialog = false; cancelOrder()">Vâng</v-btn>
+                            <v-btn color="red darken-1" text @click="dialog = false">Không</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
@@ -72,7 +73,10 @@
                         <td>{{ findBookNameById(items._idBook) }}</td>
 
 
-                        <td>{{ items.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) }}</td>
+                        <td >{{ items.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) }}
+                            <div v-show="false"> {{ calcDisconnt(items.price,findOriginalPrice(items._idBook),items.quantity) }} </div>
+                            <div class="text-decoration-line-through fw-light" style="font-size: small;" v-if="items.price!=findOriginalPrice(items._idBook)"> {{ findOriginalPrice(items._idBook).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })  }}</div>
+                        </td>
                         <td>{{ items.quantity }}</td>
                         <td>{{ calc(items.price, items.quantity).toLocaleString('vi-VN', {
                             style: 'currency', currency:
@@ -89,7 +93,8 @@
                     { style: 'currency', currency: 'VND' }) }}</div>
             <div class="d-flex justify-content-end">Phí vận chuyển {{ this.orderDetail[0].shipFee.toLocaleString('vi-VN',
                 { style: 'currency', currency: 'VND' }) }}</div>
-            <div class="d-flex justify-content-end">Chiết khấu</div>
+            <div class="d-flex justify-content-end">Chiết khấu {{ (discount/100).toLocaleString('vi-VN',
+                { style: 'currency', currency: 'VND' }) }}</div>
             <div class="d-flex justify-content-end">Tổng số tiền {{ this.orderDetail[0].orderTotal.toLocaleString('vi-VN',
                 { style: 'currency', currency: 'VND' }) }}</div>
         </div>
@@ -99,7 +104,6 @@
 
 import axios from 'axios'
 import { useDataStore } from '@/stores/dataStores'
-import ImagesService from '@/services/images.service'
 import orderService from "../services/orders.service"
 import BooksService from '@/services/books.service'
 
@@ -115,7 +119,8 @@ export default {
             show: true,
             dialog: false,
             orderList: null,
-            load: false
+            load: false,
+            discount: 0-0,
         }
     },
     mounted() {
@@ -155,19 +160,14 @@ export default {
             //     console.log("ko co hinh")
             // }
             if (useDataStore().getOrderList == "") {
-                this.orderList = await orderService.get(this.id);
-                console.log(this.id)
+                this.orderList = await orderService.getAll();
                 useDataStore().getAPIOrder(this.orderList);
                 console.log("phai axios")
             }
             this.orderDetail = useDataStore().getOrderList
             console.log("get ok")
-            
-            if (this.orderDetail[0].orderStatus != "Chờ xác nhận"){
-                this.isDisable = true
-                console.log("alo");
-            }
             this.load = true
+            console.log(this.orderList)
                 
 
         },
@@ -201,7 +201,24 @@ export default {
                 return false
             else 
                 return true
+        },
+        findOriginalPrice(data){
+            const foundBook = this.book.find(item => item._id === data);
+            //  console.log(foundBook)
+            if (foundBook) {
+                return foundBook.originalPrice
+            }
+            return "Book not found";
+        },
+        calcDisconnt(price,originalPrice,quantity){
+                console.log(typeof this.discount);
+                console.log(typeof originalPrice);
+                console.log(typeof price);
+                this.discount=(originalPrice-price)*quantity + this.discount
+                return this.discount 
         }
+       
+        
     },
 
     computed: {
