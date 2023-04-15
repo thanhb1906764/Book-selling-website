@@ -53,7 +53,7 @@
         </Form>
     </div>
     <v-snackbar v-model="snackbar" :timeout="timeout">
-        cập nhật thành công
+        Cập nhật thành công
 
         <template v-slot:actions>
             <v-btn color="blue" variant="text" @click="snackbar = false">
