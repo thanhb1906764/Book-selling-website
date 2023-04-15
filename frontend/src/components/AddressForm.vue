@@ -179,7 +179,16 @@ export default {
         },
 
         submitAddress() {
-
+            
+            // if(this.citys[this.indexCity]==undefined){
+            //     alert("Vui lòng chọn thành phố");
+            //     if  (this.citys[this.indexCity].Districts[this.indexDistrict].Name==undefined){
+            //         alert("Vui lòng chọn thành phố 2");
+            //         return
+            //     }
+            //     return
+            // }
+            
             this.$emit("form-submitted", {
                 // _idUser: useDataStore().getUser._id,
                 _idUser: localStorage.getItem('_id'),
