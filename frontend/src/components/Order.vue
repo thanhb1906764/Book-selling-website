@@ -1,4 +1,6 @@
-<template class=" col-sm">
+<template >
+    <div class="bg-white mt-2">
+    <div class=" pt-2 text-uppercase fs-6 ps-2 fw-bold">Đơn hàng của tôi </div>
     <v-sheet elevation="1">
         <v-tabs bg-color="" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline"
             show-arrows fixed-tabs>
@@ -6,9 +8,6 @@
                 {{ item }}
             </v-tab>
         </v-tabs>
-
-
-
     </v-sheet>
     <v-table fixed-header height="300px" class="xs">
         <thead>
@@ -32,6 +31,7 @@
             </tr>
         </tbody>
     </v-table>
+</div>
 </template>
 <script >
 import axios from 'axios';

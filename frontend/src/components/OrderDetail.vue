@@ -1,6 +1,6 @@
 <template >
-    <div v-if="this.load">
-        <div class="container mb-3 rounded ps-5">
+    <div v-if="this.load" class="mt-2">
+        <div class="container mb-2 bg-white rounded ps-5">
             <div class="text-uppercase fw-semibold"> Chi tiết đơn hàng</div>
             <div class="row">
                 <div class="col">
@@ -32,20 +32,21 @@
 
         </div>
 
-        <div class="container mb-3 rounded ps-5">
+        <div class="container mb-2 bg-white rounded ps-5">
             <div class="row">
-                <div class="col-sm">Thông tin người nhận
+                <div class="col-sm">
+                    <div class="text-uppercase fw-semibold">Thông tin người nhận</div>
                     <div>{{ this.orderDetail[0].userName }}</div>
                     <div>{{ this.orderDetail[0].phone }}</div>
                     <div>{{ this.orderDetail[0].reAddress }}</div>
-
                 </div>
-                <div class="col-sm">Phương thúc thanh toán
+                <div class="col-sm">
+                    <div class="text-uppercase fw-semibold">Phương thúc thanh toán</div>
                     <div>{{ this.orderDetail[0].payment }}</div>
                 </div>
             </div>
         </div>
-        <div class="container  rounded ps-5">
+        <div class="container bg-white rounded ps-5">
             <v-table>
                 <thead>
                     <tr>
@@ -164,12 +165,6 @@ export default {
 
         },
         async loadOrderData() {
-            console.log(useDataStore().getImages)
-            // if(useDataStore().getImages=""){
-            //     this.ImgaeArray = await ImagesService.getAll();
-            //     useDataStore().setImages(this.ImgaeArray);
-            //     console.log("ko co hinh")
-            // }
             if (useDataStore().getOrderList == "") {
                 this.orderList = await orderService.getAll();
                 useDataStore().getAPIOrder(this.orderList);
@@ -205,7 +200,12 @@ export default {
                 console.log(undoStock)
 
             }
-            await this.$route.push({ name: "addressAcc" })
+            this.load=false
+            this.orderList = await orderService.getAll();
+            useDataStore().getAPIOrder(this.orderList);
+            this.orderDetail = useDataStore().getOrderList
+            this.load=true
+            // this.$router.push({ name: "order" })
         },
         cancelButtonOrder(data){
             if(data=="Chờ xác nhận")
@@ -222,9 +222,6 @@ export default {
             return "Book not found";
         },
         calcDisconnt(price,originalPrice,quantity){
-                console.log(typeof this.discount);
-                console.log(typeof originalPrice);
-                console.log(typeof price);
                 this.discount=(originalPrice-price)*quantity + this.discount
                 return this.discount 
         }

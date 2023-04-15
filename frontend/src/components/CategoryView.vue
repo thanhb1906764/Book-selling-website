@@ -2,7 +2,7 @@
     <div class="container ">
 
         <div class="row">
-            <div class="col-sm-3 category rounded m-3">
+            <div class="col-sm-3 category rounded  mt-2">
                 <div @click="showAll" class="genre-item fw-bold">Tất cả sản phẩm</div>
                 <div v-show="genreList && !showfull" class="genre-item fw-bold ml-2" @click="showgenre(genreList)">{{ show
                 }}</div>
@@ -15,7 +15,17 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm category rounded m-3">
+            <div class="col-sm category rounded ms-2 mt-2">
+                <div class="d-flex flex-row m-2">
+                    <div class="" style="margin: 2px;">Sắp xếp theo: </div>
+                    <select class="  form-select form-select-sm mobile" aria-label=".form-select-sm example" style="width: 15%;" v-model="this.selectedSort">
+                        
+                        <option value="1">Tên A-Z </option>
+                        <option value="2">Tên Z-A </option>
+                        <option value="3">Giá tăng dần </option>
+                        <option value="4">Giá giảm dần </option>
+                    </select>
+                </div>
                 <v-row :equal="{ sm: true, md: false }">
                     <v-col v-for="item in bookList" :key="item._id" class="d-flex align-center justify-center">
                         <Cards :book="item" />
@@ -37,13 +47,8 @@ export default {
         this.genreSelected = useDataStore().getGenreSelected
         this.bookList = useDataStore().getBooks
         this.bookList = this.bookList.filter(book => this.genreSelected.some(item => item == book.genreName))
-
-
     },
-    updated() {
-        this.categorySelected = useDataStore().getCategorySelected
-        console.log("adsasd ")
-    },
+    
     data() {
         return {
             category: useDataStore().getGenes,
@@ -54,6 +59,7 @@ export default {
             categorySelected: useDataStore().getCategorySelected,
             showUI: false,
             showfull: useDataStore().getShowFull,
+            selectedSort:1
         }
     },
     methods: {
@@ -63,6 +69,30 @@ export default {
             this.showfull = useDataStore().getShowFull
             this.bookList = useDataStore().getBooks
 
+        },
+         compare(a, b) {
+            const bookA = a.bookName[0].toUpperCase();
+            const bookB = b.bookName[0].toUpperCase();
+
+            let comparison = 0;
+            if (bookA > bookB) {
+                comparison = 1;
+            } else if (bookA < bookB) {
+                comparison = -1;
+            }
+            return comparison;
+        },
+         compare2(b, a) {
+            const bookA = a.bookName[0].toUpperCase();
+            const bookB = b.bookName[0].toUpperCase();
+
+            let comparison = 0;
+            if (bookA > bookB) {
+                comparison = 1;
+            } else if (bookA < bookB) {
+                comparison = -1;
+            }
+            return comparison;
         },
         //Show sach thuoc danh muc cha
         showgenre(data) {
@@ -97,6 +127,22 @@ export default {
             console.log(this.categorySelected)
             this.genreSelected = useDataStore().getGenreSelected
             this.bookList = useDataStore().getBooks
+            if(this.selectedSort==1){
+               this.bookList.sort(this.compare)
+            }
+            if(this.selectedSort==2){
+               this.bookList.sort(this.compare2)
+            }
+            if(this.selectedSort==3){
+                this.bookList.sort(function(a, b) {
+                    return a.bookPrice - b.bookPrice;
+                })
+            }
+            if(this.selectedSort==4){
+                this.bookList.sort(function(b, a) {
+                    return a.bookPrice - b.bookPrice;
+                })
+            }
             if (!this.showfull)
                 //neu bam vao tat ca san pham thi dong nay khong chay
                 //loc danh sach san pham theo danh muc da chon
@@ -122,6 +168,25 @@ export default {
             //     this.bookList = this.bookList.filter(book => this.genreSelected.some(item => item == book.genreName))}
             // this.showfull=true
         },
+        // selectedSort : function(newValue){
+        //     console.log(newValue);
+        //     if(newValue==1){
+        //        this.bookList.sort(this.compare)
+        //     }
+        //     if(newValue==2){
+        //        this.bookList.sort(this.compare2)
+        //     }
+        //     if(newValue==3){
+        //         this.bookList.sort(function(a, b) {
+        //             return a.bookPrice - b.bookPrice;
+        //         })
+        //     }
+        //     if(newValue==4){
+        //         this.bookList.sort(function(b, a) {
+        //             return a.bookPrice - b.bookPrice;
+        //         })
+        //     }
+        // }
 
 
 
@@ -131,6 +196,13 @@ export default {
 </script>
 
 <style>
+@media (max-width: 912px) {
+
+.mobile  {
+    width: 30% !important;
+} 
+
+}
 .genre-item:hover {
     color: red;
     cursor: pointer;
