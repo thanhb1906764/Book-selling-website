@@ -3,15 +3,15 @@
         <div class="fw-bold" @click="showCategory()">Danh mục sản phẩm</div>
         <div>
             <div v-if="showCategory1" v-for="(category, index) in category" :key="index">
-                    <div class="ms-2 fw-semibold" @click="toggle(index)">{{ category.genreName }}</div>
+                    <div class="ms-2 fw-semibold category" @click="toggle(index)">{{ category.genreName }}</div>
                 <div v-if="isOpen(index)">
-                    <div class="ms-4" v-for="(subGenre, subIndex) in category.subGenre" :key="subIndex" :class="test">
+                    <div class="ms-4 " v-for="(subGenre, subIndex) in category.subGenre" :key="subIndex" >
                         <router-link to="/category">
                             <div  @click="getGenreClick(1, subGenre)">{{ subGenre }}</div>
                         </router-link>
                     </div>
                     <router-link to="/category">
-                        <div class="ms-4" @click="getGenreClick(0, category)">Xem tất cả</div>
+                        <div class="ms-4 blue" @click="getGenreClick(0, category)">Xem tất cả</div>
                     </router-link>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                     <v-menu :location="location" open-on-hover>
                         <template v-slot:activator="{ props }">
                             <router-link to="/category">
-                                <v-list-item-title v-bind="props" class="hover-item">
+                                <v-list-item-title v-bind="props" class="hover-item" >
                                     {{ category.genreName }}
                                 </v-list-item-title>
                             </router-link>
@@ -132,11 +132,14 @@ export default {
 
 
 <style>
-.test{
-    color: black !important;
+.blue{
+    color: blue ;
+}
+.category:hover{
+    color: red;
 }
 .v-list-item:hover {
-    color: red;
+    color: red !important;
 }
 
 .v-sheet {
