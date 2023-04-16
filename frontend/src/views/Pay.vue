@@ -1,8 +1,8 @@
 <template>
-    <div class="container-sm my-4">
+    <div class="container my-4">
         <div class="row rounded-2" style="background-color: #ffffff;">
             <!-- Nội dung bên trái: Thông tin khách hàng và địa chỉ giao hàng -->
-            <div class="col-auto col-sm-6 py-4">
+            <div class="col col-sm-6 py-4">
                 <!-- Thanh điều hướng  -->
                 <nav class="navbar navbar-expand-lg bg-body-tertiary">
                     <div class="container-fluid">
@@ -82,7 +82,7 @@
             </div>
 
             <!-- Nội dung bên phải: Thông tin thông tin sản phẩm, giảm giá -->
-            <div class="col-auto col-sm-6 border-start py-4">
+            <div class="col col-sm-6 border-start py-4">
 
                 <!-- Danh sách sản phẩm - sách  -->
                 <div v-for="item in BookInCart" :key="item._id" class="container">
@@ -291,7 +291,7 @@ export default {
                 let temp = await ShipFeeService.getAll();
                 this.shipFee = temp[0].shipFee;
                 console.log('shipFee ' + this.shipFee)
-                this.order.shipFee = this.shipFee
+                // this.order.shipFee = this.shipFee
                 return this.shipFee
             }
             catch (error) {
@@ -425,7 +425,9 @@ export default {
         this.order = useDataStore().getOrder;
         // Nếu chưa có đơn hàng trong store, trở về trang inform
         if (useDataStore().getOrderTotal === 0) {
-            this.$router.push('/Inform');
+            // this.$router.push('/Inform');
+            window.location.href = "http://localhost:3001/Inform";
+
         }
         this.name = localStorage.getItem('name');
         this.Cart = this.getCartOnCookie();

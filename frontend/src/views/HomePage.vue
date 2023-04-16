@@ -38,7 +38,7 @@
 
         <!-- Các thành phần - nội dung chính trong trang   -->
         <div id="content">
-            <div class="p-2 fw-semibold fs-5 text-center">
+            <div class="p-2 fs-5 text-center">
                 <a href="#sale-product" class="text-danger text-decoration-none px-2 btn">Khuyến mãi</a>
                 <a href="#new-product" class="text-danger text-decoration-none px-2 btn">Sản phẩm mới</a>
                 <a href="#product" class="text-danger text-decoration-none px-2 btn">Sản Phẩm</a>
@@ -47,8 +47,8 @@
 
         <!-- Sale  -->
         <div id="sale-product" class="">
-            <div class="p-2 fw-semibold fs-5 rounded-2 text-center" style="background-color: #e55e5e;">
-                <div class="text-white text-decoration-none">Sản Phẩm khuyến mãi</div>
+            <div class="p-2 fs-5 rounded-2 text-center" style="background-color: #e55e5e;">
+                <div class="text-white text-decoration-none fw-bold">Sản Phẩm khuyến mãi</div>
             </div>
             <div class="px-0 py-2" v-if="SaleBooks">
                 <v-row class="p-0 m-0" :equal="{ sm: true, md: false }">
@@ -63,8 +63,8 @@
 
         <!-- New  -->
         <div id="new-product" class="">
-            <div class="p-2 fw-semibold fs-5 rounded-2 text-center" style="background-color:  #e3fcf7;">
-                <div class="text-decoration-none" style="color: #162f28;">Sản phẩm mới</div>
+            <div class="p-2 fs-5 rounded-2 text-center" style="background-color:  #e3fcf7;">
+                <div class="text-decoration-none fw-bold" style="color: #162f28;">Sản phẩm mới</div>
             </div>
             <div class="px-0 py-2" v-if="NewBooks">
                 <v-row class="m-0 p-0" :equal="{ sm: true, md: false }">
@@ -79,8 +79,8 @@
 
         <!-- Sản phẩm -->
         <div id="product" class="">
-            <div class="p-2 fw-semibold fs-5 rounded-2 text-center" style="background-color:  #55a1e7;">
-                <div class="text-white text-decoration-none">Sản Phẩm</div>
+            <div class="p-2 fs-5 rounded-2 text-center" style="background-color:  #55a1e7;">
+                <div class="text-white text-decoration-none fw-bold">Sản Phẩm</div>
             </div>
             <div class="px-0 py-2" v-if="Books">
                 <v-row class="p-0 m-0" :equal="{ sm: true, md: false }">
@@ -187,3 +187,14 @@ export default {
     }
 }
 </script>
+<style>
+#content a:hover {
+    background-color: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: 100px;
+}
+
+#content a {
+    border-radius: 100px;
+}
+</style>

@@ -3,11 +3,16 @@
         <table class="table table-hover bg-white rounded-2 my-4">
             <thead class="user-select-none">
                 <tr class="align-middle">
-                    <th v-if="BookInCart.length !== 0" class="fs-4 fw-bold text-danger text-center" colspan="6">Giỏ hàng
-                    </th>
-                    <th v-else class="fs-4 fw-bold text-danger text-center" colspan="6">Giỏ hàng trống
-                        <div class="fs-5">Trở về <router-link class="text-decoration-underline" to="/">Trang
-                                Chủ</router-link>
+                    <th class="fs-4 fw-bold text-danger text-center" colspan="6">Giỏ hàng
+                        <span class="fs-6">({{
+                            BookInCart.length }} sản phẩm)</span>
+                        <div v-if="BookInCart.length === 0" class="fs-5"><img
+                                src="https://assets.materialup.com/uploads/66fb8bdf-29db-40a2-996b-60f3192ea7f0/preview.png">
+                            <div class="text-muted p-2" style="font-size: 12px;">Chưa có sản phẩm trong giỏ hàng của bạn.
+                            </div>
+                            <div>
+                                <router-link class="text-decoration-underline btn btn-danger" to="/">Mua sắm</router-link>
+                            </div>
                         </div>
                     </th>
                 </tr>

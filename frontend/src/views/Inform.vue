@@ -2,7 +2,7 @@
     <Form @submit="paymentClick" :validation-schema="orderSchema" class="container my-4">
         <div class="row rounded-2" style="background-color: #ffffff;">
             <!-- Nội dung bên trái: Thông tin khách hàng và địa chỉ giao hàng -->
-            <div class="col-auto col-sm-6">
+            <div class="col col-sm-6">
                 <!-- Thanh điều hướng  -->
                 <nav class="navbar navbar-expand-lg bg-body-tertiary">
                     <div class="container-fluid">
@@ -89,7 +89,7 @@
                 </div>
             </div>
             <!-- Nội dung bên phải: Thông tin thông tin sản phẩm, giảm giá -->
-            <div class="col-auto col-sm-6 border-start">
+            <div class="col col-sm-6 border-start">
                 <!-- Danh sách sản phẩm - sách  -->
                 <div v-for="item in BookInCart" :key="item._id" class="container">
                     <PayCardsVue :Book="item" :Cart="Cart" />
