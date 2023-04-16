@@ -1,5 +1,5 @@
 <template>
-    <div class="container my-4">
+    <Form @submit="paymentClick" :validation-schema="orderSchema" class="container my-4">
         <div class="row rounded-2" style="background-color: #ffffff;">
             <!-- Nội dung bên trái: Thông tin khách hàng và địa chỉ giao hàng -->
             <div class="col-auto col-sm-6">
@@ -44,6 +44,7 @@
                         </li>
                     </ul>
                 </div>
+
                 <!-- Input thông tin người dùng -->
                 <div class="container">
                     <div class="p-2">
@@ -58,19 +59,25 @@
                             <label class="fs-6" for="floatingInput">Địa chỉ</label>
                         </div>
                         <!-- Tên khách hàng -->
-                        <div class="form-floating my-4">
-                            <input type="email" class="form-control" v-model="order.userName">
-                            <label class="fs-6" for="floatingInput">Họ tên</label>
+                        <div class="form-group form-floating mb-6">
+                            <Field type="email" name="userName" class="form-control" placeholder="Họ tên"
+                                v-model="order.userName" />
+                            <label class="fs-6" for="useName">Họ tên</label>
+                            <ErrorMessage name="userName" class="error-feedback" />
                         </div>
                         <!-- Số điện thoại  -->
-                        <div class="form-floating my-4">
-                            <input type="text" class="form-control" v-model="order.phone">
-                            <label class="fs-6" for="floatingInput">Số điện thoại</label>
+                        <div class="form-group form-floating mb-6">
+                            <Field type="text" name="phone" class="form-control" placeholder="Số điện thoại"
+                                v-model="order.phone" />
+                            <label class="fs-6" for="phone">Số điện thoại</label>
+                            <ErrorMessage name="phone" class="error-feedback" />
                         </div>
                         <!-- Địa chỉ - input-->
-                        <div class="form-floating my-4">
-                            <input type="text" class="form-control" v-model="order.reAddress">
-                            <label class="fs-6" for="floatingInput">Địa chỉ</label>
+                        <div class="form-group form-floating mb-6">
+                            <Field type="text" name="reAddress" class="form-control" placeholder="Địa chỉ"
+                                v-model="order.reAddress" />
+                            <label class="fs-6" for="reAddress">Địa chỉ</label>
+                            <ErrorMessage name="reAddress" class="error-feedback" />
                         </div>
                         <!-- Chọn Tỉnh, Quận, Huyện theo Select -->
                         <AddressVue class="my-4" :drop-index-city="indexCity" :drop-index-district="indexDistrict"
@@ -131,13 +138,15 @@
 
                 <!-- Nút Giỏ hàng-->
                 <div v-if="Cart.length !== 0" class="d-flex justify-content-end mt-4 px-5 py-4">
-                    <button style="font-size: 14px;" @click="paymentClick" class="btn btn-primary">Thanh toán</button>
+                    <button style="font-size: 14px;" @click="paymentClick" class="btn btn-primary">Thanh
+                        toán</button>
                 </div>
             </div>
         </div>
-    </div>
+    </Form>
 </template>
 <script>
+import { Form, Field, ErrorMessage } from "vee-validate";
 import AddressVue from '../components/Address.vue';
 import PayCardsVue from '../components/PayCards.vue';
 import PayPalVue from '../components/PayPal.vue';
@@ -146,14 +155,37 @@ import ShipFeeService from '@/services/shipFee.service';
 import AddressesService from '@/services/addresses.service';
 import axios from 'axios';
 import { toast } from 'vue3-toastify';
+import * as yup from "yup";
 export default {
     components: {
         AddressVue,
         PayCardsVue,
         PayPalVue,
+        Form,
+        Field,
+        ErrorMessage,
     },
     data() {
-
+        const orderSchema = yup.object().shape({
+            userName: yup
+                .string()
+                .required('Họ tên bắt buộc phải có')
+                .min(3, 'Họ tên phải có ít nhất 3 ký tự')
+                .max(24, 'Họ tên chứa nhiều nhất 24 ký tự'),
+            phone: yup
+                .string()
+                .max(10, 'Số điện thoại có 10 số')
+                .min(10, 'Số điện thoại có 10 số')
+                .required("Số điện thoại bắt buộc phải có")
+                .matches(
+                    // /((09|03|07|08|05)+([0-9]{8})\b)/g,
+                    /((0)+([0-9])+([0-9]{8})\b)/g,
+                    "Số điện thoại không hợp lệ."
+                ),
+            reAddress: yup
+                .string()
+                .required("Địa chỉ người nhận bắt buộc phải có"),
+        });
         // Đinh nghĩa thông báo nổi 
         const notifyOrderComplete = () => { // Đặt hàng thành công
             console.log(this.Cart);
@@ -189,8 +221,18 @@ export default {
                 return 0;
             };
         };
+        const notifyOrderInformError = () => { // Không có sản phẩm trong đơn hàng
+            toast("Thiếu thông tin về đơn hàng", {
+                autoClose: 3000,
+                limit: 1,
+                type: toast.TYPE.ERROR,
+                multiple: false,
+                hideProgressBar: true,
+            });
+        };
 
         return {
+            orderSchema,
             ImageArray: [],
             name: localStorage, // Tên user, nếu người dùng có đăng nhập 
             shipFee: this.getShipFee(),
@@ -220,6 +262,7 @@ export default {
             addressAxios: Object,
             notifyOrderComplete: notifyOrderComplete,
             notifyOrderEmpty: notifyOrderEmpty,
+            notifyOrderInformError: notifyOrderInformError,
             dropItem: undefined,
         }
     },
@@ -411,9 +454,27 @@ export default {
                 if (this.BookInCart.length === 0) {
                     // alert('Không có sản phẩm nào trong giỏ');
                     this.notifyOrderEmpty()
-                    return;
+                    return 0;
                 }
                 this.order.orderTotal = this.orderTotal(this.tempCost, this.shipFee);
+
+                // Kiểm tra số điện thoại
+                if (this.order.phone) {
+                    const paragraph = this.order.phone;
+                    const regex = /((0)+([0-9])+([0-9]{8})\b)/g;
+                    const found = paragraph.match(regex);
+
+                    console.log(found);
+                    if (found === null || this.order.phone.length > 10) {
+                        return 0;
+                    }
+                }
+
+                // Nếu thiều thông tin đơn hàng thì thông báo
+                if (this.order.userName === undefined || this.order.phone === undefined || this.order.reAddress === undefined) {
+                    this.notifyOrderInformError()
+                    return 0;
+                }
 
                 // Lưu vào store
                 useDataStore().setOrder(this.order);

@@ -114,7 +114,7 @@ export default {
                 .string()
                 .required("Mật khẩu bắt buộc phải có")
                 .min(3, "Mật khẩu phải có ít nhất 3 ký tự")
-                .max(24, "Mật khẩu chứa nhiều nhất 30 ký tự"),
+                .max(24, "Mật khẩu chứa nhiều nhất 24 ký tự"),
             phone: yup
                 .string()
                 .required("Số điện thoại bắt buộc phải có")
