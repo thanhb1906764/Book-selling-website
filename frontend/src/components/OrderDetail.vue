@@ -1,29 +1,33 @@
 <template >
-    <div v-if="this.load">
-        <div class="container mb-3 rounded ps-5">
+    <div v-if="this.load" class="mt-2">
+        <div class="container mb-2 bg-white rounded ps-5">
             <div class="text-uppercase fw-semibold"> Chi tiết đơn hàng</div>
             <div class="row">
                 <div class="col">
                     <div>Mã đơn hàng: {{ getIdOrder }}</div>
                     <div>{{ this.orderDetail[0].orderStatus }}</div>
 
-                    <div>Ngày mua: {{ showDate(this.orderDetail[0].orderDate) }}</div>
-                    <div v-show="show">Ngày nhận: {{ showDate(this.orderDetail[0].reDate) }}</div>
-                    <div>Tổng tiền: {{ this.orderDetail[0].orderTotal }}</div>
+                    <div>Ngày mua: {{ showDate(this.orderDetail[0].orderDate) }} {{ showTime(this.orderDetail[0].orderDate)
+                    }}</div>
+                    <div v-show="show">Ngày nhận: {{ showDate(this.orderDetail[0].reDate) }} {{
+                        showTime(this.orderDetail[0].reDate) }}</div>
+                    <div>Tổng tiền: {{ this.orderDetail[0].orderTotal.toLocaleString('vi-VN',
+                        { style: 'currency', currency: 'VND' }) }}</div>
                 </div>
                 <div class="col">
-                    <button type="button" class="btn btn-danger " @click="openDialog" :disabled="isDisable">Huỷ đơn
+                    <button class="btn btn-danger " @click="openDialog"
+                        :disabled="cancelButtonOrder(this.orderDetail[0].orderStatus)">Huỷ đơn
                         hàng</button>
                 </div>
                 <v-dialog v-model="dialog" persistent max-width="400">
                     <v-card>
-                        <v-card-title class="headline">Are you sure?</v-card-title>
+                        <v-card-title class="headline">Bạn có muốn hủy đơn hàng không?</v-card-title>
                         <v-card-text>
-                            This action cannot be undone.
+                            Hành động này không thể hoàn trả
                         </v-card-text>
                         <v-card-actions>
-                            <v-btn color="green darken-1" text @click="dialog = false; cancelOrder()">Yes</v-btn>
-                            <v-btn color="red darken-1" text @click="dialog = false">No</v-btn>
+                            <v-btn color="green darken-1" text @click="dialog = false; cancelOrder()">Vâng</v-btn>
+                            <v-btn color="red darken-1" text @click="dialog = false">Không</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
@@ -31,20 +35,21 @@
 
         </div>
 
-        <div class="container mb-3 rounded ps-5">
+        <div class="container mb-2 bg-white rounded ps-5">
             <div class="row">
-                <div class="col-sm">Thông tin người nhận
+                <div class="col-sm">
+                    <div class="text-uppercase fw-semibold">Thông tin người nhận</div>
                     <div>{{ this.orderDetail[0].userName }}</div>
                     <div>{{ this.orderDetail[0].phone }}</div>
                     <div>{{ this.orderDetail[0].reAddress }}</div>
-
                 </div>
-                <div class="col-sm">Phương thúc thanh toán
+                <div class="col-sm">
+                    <div class="text-uppercase fw-semibold">Phương thúc thanh toán</div>
                     <div>{{ this.orderDetail[0].payment }}</div>
                 </div>
             </div>
         </div>
-        <div class="container  rounded ps-5">
+        <div class="container bg-white rounded ps-5">
             <v-table>
                 <thead>
                     <tr>
@@ -72,7 +77,16 @@
                         <td>{{ findBookNameById(items._idBook) }}</td>
 
 
-                        <td>{{ items.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) }}</td>
+                        <td>{{ items.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) }}
+                            <div v-show="false"> {{
+                                calcDisconnt(items.price, findOriginalPrice(items._idBook), items.quantity) }} </div>
+                            <div class="text-decoration-line-through fw-light" style="font-size: small;"
+                                v-if="items.price != findOriginalPrice(items._idBook)"> {{
+                                    findOriginalPrice(items._idBook).toLocaleString('vi-VN', {
+                                        style: 'currency', currency:
+                                            'VND'
+                                    }) }}</div>
+                        </td>
                         <td>{{ items.quantity }}</td>
                         <td>{{ calc(items.price, items.quantity).toLocaleString('vi-VN', {
                             style: 'currency', currency:
@@ -89,7 +103,8 @@
                     { style: 'currency', currency: 'VND' }) }}</div>
             <div class="d-flex justify-content-end">Phí vận chuyển {{ this.orderDetail[0].shipFee.toLocaleString('vi-VN',
                 { style: 'currency', currency: 'VND' }) }}</div>
-            <div class="d-flex justify-content-end">Chiết khấu</div>
+            <div class="d-flex justify-content-end">Chiết khấu {{ (discount / 100).toLocaleString('vi-VN',
+                { style: 'currency', currency: 'VND' }) }}</div>
             <div class="d-flex justify-content-end">Tổng số tiền {{ this.orderDetail[0].orderTotal.toLocaleString('vi-VN',
                 { style: 'currency', currency: 'VND' }) }}</div>
         </div>
@@ -99,7 +114,6 @@
 
 import axios from 'axios'
 import { useDataStore } from '@/stores/dataStores'
-import ImagesService from '@/services/images.service'
 import orderService from "../services/orders.service"
 import BooksService from '@/services/books.service'
 
@@ -115,7 +129,8 @@ export default {
             show: true,
             dialog: false,
             orderList: null,
-            load: false
+            load: false,
+            discount: 0 - 0,
         }
     },
     mounted() {
@@ -136,7 +151,18 @@ export default {
 
             if (yearString == '1970')
                 this.show = false
+
             return dateString
+        },
+        showTime(data) {
+            var time = new Date(data)
+            const formatter = new Intl.DateTimeFormat('vi-VN', {
+                hour: 'numeric',
+                minute: 'numeric',
+
+            }); // Định dạng thời gian thành dạng "12:34:56 PM"
+
+            return formatter.format(time); // Lấy thời gian đã được định dạng
         },
 
         getImageArray(id) {
@@ -148,23 +174,16 @@ export default {
 
         },
         async loadOrderData() {
-            console.log(useDataStore().getImages)
-            // if(useDataStore().getImages=""){
-            //     this.ImgaeArray = await ImagesService.getAll();
-            //     useDataStore().setImages(this.ImgaeArray);
-            //     console.log("ko co hinh")
-            // }
             if (useDataStore().getOrderList == "") {
-                this.orderList = await orderService.get(this.id);
-                console.log(this.id)
+                this.orderList = await orderService.getAll();
                 useDataStore().getAPIOrder(this.orderList);
                 console.log("phai axios")
             }
             this.orderDetail = useDataStore().getOrderList
             console.log("get ok")
             this.load = true
-            if (this.orderDetail[0].orderStatus !== "Chờ xác nhận")
-                this.isDisable = true
+            console.log(this.orderList)
+
 
         },
         findBookNameById(id) {
@@ -190,8 +209,33 @@ export default {
                 console.log(undoStock)
 
             }
-            await this.$route.push({ name: "addressAcc" })
+            this.load = false
+            this.orderList = await orderService.getAll();
+            useDataStore().getAPIOrder(this.orderList);
+            this.orderDetail = useDataStore().getOrderList
+            this.load = true
+            // this.$router.push({ name: "order" })
+        },
+        cancelButtonOrder(data) {
+            if (data == "Chờ xác nhận")
+                return false
+            else
+                return true
+        },
+        findOriginalPrice(data) {
+            const foundBook = this.book.find(item => item._id === data);
+            //  console.log(foundBook)
+            if (foundBook) {
+                return foundBook.originalPrice
+            }
+            return "Book not found";
+        },
+        calcDisconnt(price, originalPrice, quantity) {
+            this.discount = (originalPrice - price) * quantity + this.discount
+            return this.discount
         }
+
+
     },
 
     computed: {

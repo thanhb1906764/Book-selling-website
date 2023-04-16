@@ -1,5 +1,5 @@
 <template class="col-sm">
-    <div class="container border rounded ps-5">
+    <div class="container bg-white mt-2 rounded ps-5">
         <div class="text-uppercase fw-semibold"> Sửa địa chỉ </div>
         <AddressAccEdit @form-submitted="editAddress" :hidenCheck="this.hidenCheck" ref="myComponentRef" />
         <!-- <button class="btn" @click="submitForm">Submit</button> -->

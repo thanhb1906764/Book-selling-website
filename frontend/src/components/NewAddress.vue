@@ -1,5 +1,5 @@
 <template class="col-sm">
-    <div class="container border rounded ps-5">
+    <div class="container bg-white rounded ps-5">
         <div class="text-uppercase fw-semibold"> Thêm địa chỉ mới</div>
         <AddressAccEdit @form-submitted="addAddress" />
         <!-- <button class="btn" @click="submitForm">Submit</button> -->

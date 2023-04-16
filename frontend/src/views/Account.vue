@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row">
-            <div class="leftMenu m-2 rounded col-sm-2">
+            <div class="leftMenu mt-2 rounded col-2">
                 <ul>
                     <li ng-click="Tile" class="Tile">
                         <p>TÀI KHOẢN</p>
@@ -37,7 +37,7 @@
         <div v-show="selectedIndex === 2" class="col-sm">Đơn hàng của tôi
             <Order />
         </div> -->
-            <div class="col-sm m-2 white rounded">
+            <div class="col-sm rounded">
                 <RouterView></RouterView>
             </div>
         </div>
@@ -100,6 +100,14 @@ export default {
 };
 </script>
 <style>
+@media (max-width: 912px) {
+
+    .col-2 {
+        flex-basis: 100%;
+    }
+
+}
+
 .Tile {
     color: red;
     pointer-events: none;

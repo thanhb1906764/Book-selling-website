@@ -1,7 +1,7 @@
 <template >
-    <div class="container rounded">
+    <div class="container bg-white rounded">
         <div class="row m-2">
-            <div class="col-10 d-flex align-items-center">Sổ địa chỉ</div>
+            <div class="col-10 d-flex align-items-center text-uppercase fs-6 fw-bold">Sổ địa chỉ</div>
             <RouterLink class="col-sm btn btn-danger" to="/acc/address/add"><button>Thêm địa chỉ mới</button></RouterLink>
         </div>
         <div class="row m-2">

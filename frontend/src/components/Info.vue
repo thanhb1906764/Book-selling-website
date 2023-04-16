@@ -1,5 +1,6 @@
 <template >
-    <div v-if="load" class="container rounded">
+    <div v-if="load" class="container mt-2 bg-white rounded">
+        <div class=" pt-2 text-uppercase fs-6 fw-bold">Thông tin tài khoản </div>
         <Form @submit="submitContact" :validation-schema="contactFormSchema">
             <div class="row g-3 m-2 form-group">
                 <div class="col-2">
