@@ -61,6 +61,7 @@ export default {
         Book: Object, // get Book từ HomePage
         Cart: Object,
     },
+    emits: ['updateQuantity', 'updateCart'],
     data() {
         return {
             linkImage: null, // linkImage của Book lấy từ store
@@ -70,26 +71,26 @@ export default {
     },
     methods: {
         // Tăng số lượng sách, cập nhật giỏ hàng trên cookies 
-        BookQuantityIncrease() {
+        async BookQuantityIncrease() {
             if (this.BookQuantity < this.Book.bookStock) {
                 this.BookQuantity++;
-                this.updateProductInCart(this.Book._id, this.BookQuantity);
-                this.$emit('updateQuantity', '')
+                await this.updateProductInCart(this.Book._id, this.BookQuantity);
+                this.$emit('updateQuantity');
             }
         },
 
         // Giảm số lượng sách, cập nhật giỏ hàng trên cookies 
-        BookQuantityReduce() {
+        async BookQuantityReduce() {
             if (this.BookQuantity > 1) {
                 this.BookQuantity--;
-                this.updateProductInCart(this.Book._id, this.BookQuantity);
-                this.$emit('updateQuantity', '')
+                await this.updateProductInCart(this.Book._id, this.BookQuantity);
+                this.$emit('updateQuantity');
             }
         },
         // Cập nhật số lượng của một sản phẩm giỏ hàng trên cookies 
-        updateProductInCart(idBook, bookQuantity) {
+        async updateProductInCart(idBook, bookQuantity) {
             try {
-                axios
+                await axios
                     .get(`http://localhost:3000/cookies/set/${idBook}/${bookQuantity}`, {
                         withCredentials: true
                     })

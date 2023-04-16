@@ -11,7 +11,7 @@
                             <div class="text-muted p-2" style="font-size: 12px;">Chưa có sản phẩm trong giỏ hàng của bạn.
                             </div>
                             <div>
-                                <router-link class="text-decoration-underline btn btn-danger" to="/">Mua sắm</router-link>
+                                <router-link class="btn btn-danger" to="/">Mua sắm</router-link>
                             </div>
                         </div>
                     </th>
@@ -26,16 +26,17 @@
             </thead>
             <tbody v-if="BookInCart.length !== 0">
                 <tr v-for="item in BookInCart" :key="item._id">
-                    <CartCards :Book="item" :Cart="Cart" @updateCart="update" />
+                    <CartCards :Book="item" :Cart="Cart" @updateCart="update" @updateQuantity="updateTempCost" />
                 </tr>
                 <!-- Thanh toán  -->
                 <tr class="fs-6 text-danger border-white">
                     <td colspan="3"></td>
                     <td class="align-middle text-center fw-bold">Tính tạm</td>
-                    <td class="align-middle text-center fw-bold">{{ (tempCost).toLocaleString('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND'
-                    }) }}</td>
+                    <td class="align-middle text-center fw-bold">{{
+                        (tempCost).toLocaleString('vi-VN', {
+                            style: 'currency',
+                            currency: 'VND'
+                        }) }}</td>
                     <td></td>
                 </tr>
                 <tr class="fs-6 fw-bold text-danger">
@@ -58,36 +59,43 @@ export default {
     components: {
         CartCards
     },
-    // emits: ['updateCart'],
     data() {
         return {
             Cart: [],
             Books: [],
             BookInCart: [],
             tempCost: 0,
-            show: true
         }
     },
     methods: {
+        updateTempCost() {
+            this.getCartOnCookie();
+        },
         async retrieveBookOnCookies() {
             try {
                 // Lấy tất cả sách trên DataBase 
                 this.Books = useDataStore().getBooks;
+
                 // Lọc những sách có bookPrice, originalPrice và author
-                this.Books = this.Books.filter(itemBook => (itemBook.bookPrice && itemBook.originalPrice && itemBook.author))
+                this.Books = this.Books.filter(itemBook => (itemBook.bookPrice && itemBook.originalPrice && itemBook.author));
+
                 // Lấy sách trong có trong giỏ hàng 
                 console.log(this.Cart);
+
+                this.BookInCart = []
                 for (let i = 0; i < this.Cart.length; i++) {
-                    let temp = this.Books.find(Book => Book._id === this.Cart[i].idBook); console.log(temp);
+                    let temp = this.Books.find(Book => Book._id === this.Cart[i].idBook);
                     if (temp) {
                         this.BookInCart.push(temp)
                         console.log(temp);
                     }
                 }
+
                 console.log('BookList in cart');
                 console.log(this.BookInCart);
                 let quantity
                 // Tính tạm giá trị các Book trong Cart, chưa tính shipFee 
+                this.tempCost = 0
                 if (this.BookInCart.length !== 0) {
                     for (let i = 0; i < this.BookInCart.length; i++) {
                         quantity = this.Cart.find(item => item.idBook === this.BookInCart[i]._id).quantityBook
@@ -95,12 +103,13 @@ export default {
                         this.tempCost = this.tempCost + (this.BookInCart[i].bookPrice * parseInt(quantity, 10))
                         // In giá trị tính tạm 
                         console.log('TempCost');
-                        console.log(this.BookInCart[i].bookPrice);
+                        console.log(this.tempCost);
                     }
                 }
                 else {
                     this.tempCost = 0
                 }
+
                 console.log(this.tempCost);
             } catch (error) {
                 console.log(error);
@@ -115,34 +124,20 @@ export default {
                     })
                     .then((response) => {
                         this.Cart = response.data
+                        console.log(this.Cart);
                         this.retrieveBookOnCookies();
-                        console.log(this.Cart)
-                        return response.data
-
                     })
-                this.show = true
             } catch (error) {
                 console.log(error);
             }
         },
         // Update ui
         async update() {
-            // this.$emit('updateCart');
-            this.show = false
-            this.BookInCart = []
-            this.Cart = []
             this.getCartOnCookie();
-            this.retrieveBookOnCookies();
-            this.show = true
-            console.log();
         }
     },
-    updated() {
-    },
-    mounted() {
-    },
     created() {
-        this.getCartOnCookie()
+        this.getCartOnCookie();
     }
 }
 </script>
