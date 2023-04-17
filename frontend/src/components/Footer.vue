@@ -12,12 +12,12 @@
 </template>
 <style>
 footer li a {
-    border-radius: 16px;
+    border-radius: 4px;
 }
 
 footer li a:hover {
-    color: #5194e7 !important;
-    border-radius: 16px;
-    background-color: #f0f2f5;
+    color: #0169c2 !important;
+    border-radius: 4px;
+    background-color: #d7e8fd;
 }
 </style>

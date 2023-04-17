@@ -39,9 +39,9 @@
         <!-- Các thành phần - nội dung chính trong trang   -->
         <div id="content">
             <div class="p-2 fs-5 text-center">
-                <a href="#sale-product" class="text-danger text-decoration-none px-2 btn">Khuyến mãi</a>
-                <a href="#new-product" class="text-danger text-decoration-none px-2 btn">Sản phẩm mới</a>
-                <a href="#product" class="text-danger text-decoration-none px-2 btn">Sản Phẩm</a>
+                <a href="#sale-product" class="text-decoration-none px-2 btn">Khuyến mãi</a>
+                <a href="#new-product" class="text-decoration-none px-2 btn">Sản phẩm mới</a>
+                <a href="#product" class="text-decoration-none px-2 btn">Sản Phẩm</a>
             </div>
         </div>
 
@@ -189,12 +189,14 @@ export default {
 </script>
 <style>
 #content a:hover {
-    background-color: #ffffff;
-    border: 1px solid #ffffff;
-    border-radius: 100px;
+    color: #0169c2;
+    background-color: #d7e8fd;
+    border: 1px solid #d7e8fd;
+    border-radius: 4x;
 }
 
 #content a {
-    border-radius: 100px;
+    color: #4e4e4e;
+    border-radius: 4px;
 }
 </style>

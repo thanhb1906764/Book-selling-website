@@ -23,7 +23,10 @@
                 </span>
 
                 <!-- Image  -->
-                <img v-if="linkImage !== null" class="" :src="linkImage" style="max-height: 180px;">
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    <img v-if="linkImage !== null" class="" :src="linkImage" style="max-height: 180px;">
+                </div>
+
 
                 <!-- Tên sách -->
                 <v-card-title class="pb-0 pt-1 fw-bold"
