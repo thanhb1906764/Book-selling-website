@@ -15,7 +15,8 @@
             <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
                 <ul class="navbar-nav me-auto mb-lg-0">
                     <li class="nav-item">
-                        <router-link to="#" class="nav-link active px-3" style="width: max-content;">
+                        <router-link open-on-hover open-delay="10" close-delay="50" to="#" class="nav-link active px-3"
+                            style="width: max-content;">
                             <Category />
                         </router-link>
                     </li>
@@ -58,14 +59,12 @@
                             <!-- chưa đăng nhập -->
                             <v-list-item v-if="login === false">
                                 <v-list-item-title>
-                                    <router-link to="/UserLogin" class="nav-link" data-bs-toggle="modal"
-                                        data-bs-target="#LoginUserModal">
+                                    <router-link to="/UserLogin" data-bs-toggle="modal" data-bs-target="#LoginUserModal">
                                         Đăng nhập
                                     </router-link>
                                 </v-list-item-title>
                                 <v-list-item-title>
-                                    <router-link to="#" class="nav-link" data-bs-toggle="modal"
-                                        data-bs-target="#RegisterUserModal">
+                                    <router-link to="#" data-bs-toggle="modal" data-bs-target="#RegisterUserModal">
                                         Đăng ký
                                     </router-link>
                                 </v-list-item-title>
@@ -246,13 +245,13 @@ export default {
 
 .btn-acc::before {
     content: "Tài khoản";
-    font-weight: 500;
+    font-weight: 700;
     margin: 8px 0 !important;
 }
 
 .btn-cart::before {
     content: "Giỏ hàng";
-    font-weight: 500;
+    font-weight: 700;
     margin: 8px 0 !important;
 }
 

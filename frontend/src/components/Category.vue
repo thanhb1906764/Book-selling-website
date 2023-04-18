@@ -136,10 +136,6 @@ export default {
     color: blue;
 }
 
-.category:hover {
-    color: red;
-}
-
 .v-list-item:hover {
     color: red !important;
 }

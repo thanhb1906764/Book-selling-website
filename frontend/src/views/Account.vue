@@ -37,7 +37,7 @@
         <div v-show="selectedIndex === 2" class="col-sm">Đơn hàng của tôi
             <Order />
         </div> -->
-            <div class="col-sm rounded">
+            <div class="col-sm rounded px-0">
                 <RouterView></RouterView>
             </div>
         </div>

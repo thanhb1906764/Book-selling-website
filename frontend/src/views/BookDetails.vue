@@ -35,7 +35,10 @@
                 </div>
                 <!-- Giá sách... -->
                 <div style="display: flex; justify-content: start; align-items: center;">
-                    <h3 class="text-danger fw-bold">{{ Book.bookPrice }} &#8363;</h3>
+                    <h3 class="text-danger fw-bold">{{ Book.bookPrice.toLocaleString('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND'
+                    }) }}</h3>
                     <h6 v-if="Book.bookPrice !== Book.originalPrice" class="text-decoration-line-through px-2 text-muted">
                         {{ Book.originalPrice }} &#8363;</h6>
                     <h6><span class="badge bg-danger">New</span></h6>

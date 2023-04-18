@@ -2,8 +2,8 @@
     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner rounded-3">
             <div v-for="item in ImgaeArray" :key="item._id" class="carousel-item active text-center" data-bs-interval="3000"
-                style="max-width: 100%; max-height: 100%;">
-                <img :src="item.linkImage" style="width: 500px;" class="text-center" alt="...">
+                style="max-height: 500px; display: flex; justify-content: center; align-items: center;">
+                <img :src="item.linkImage" style="width: 450px;" class="text-center pt-2" alt="...">
             </div>
         </div>
         <button v-if="ImgaeArray.length > 1" class="carousel-control-prev" type="button"

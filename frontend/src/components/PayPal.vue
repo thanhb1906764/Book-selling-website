@@ -7,13 +7,24 @@ import { loadScript } from "@paypal/paypal-js";
 import OrdersService from '@/services/orders.service';
 import BooksService from '@/services/books.service';
 import { useDataStore } from "../stores/dataStores";
+import { toast } from 'vue3-toastify';
 import axios from 'axios';
 
 export default {
     data() {
+        const notifyOrderComplete = () => {
+            toast("Đặt hàng Thành Công", {
+                autoClose: 3000,
+                limit: 1,
+                type: toast.TYPE.SUCCESS,
+                multiple: false,
+                hideProgressBar: true
+            });
+        };
         return {
             Cart: useDataStore().getCart,
             BookInCart: useDataStore().getBookInCart,
+            notifyOrderComplete: notifyOrderComplete
         }
     },
     mounted() {
@@ -94,6 +105,17 @@ export default {
 
                             // Finalize the transaction after payer approval
                             onApprove: async function (data) {
+
+                                const notifyOrderComplete = () => {
+                                    toast("Đặt hàng Thành Công", {
+                                        autoClose: 3000,
+                                        limit: 1,
+                                        type: toast.TYPE.SUCCESS,
+                                        multiple: false,
+                                        hideProgressBar: true
+                                    });
+                                };
+
                                 // submit order
                                 async function submitOrder() {
                                     try {
@@ -124,12 +146,13 @@ export default {
                                                     bookStock: (parseInt(book.bookStock, 10) - parseInt(quantityBook, 10))
                                                 }
                                                 await BooksService.update(BookInCart[i]._id, book)
-                                                // Thông báo đặt hàng thành công
-                                                alert('Đặt hàng thành công')
                                             }
 
+                                            // Thông báo đặt hàng thành công
+                                            notifyOrderComplete();
+
                                             // Destroy cookies giỏ hàng - cart sau khi đặt hàng thành công
-                                            axios
+                                            await axios
                                                 .get(`http://localhost:3000/cookies/clear`, {
                                                     withCredentials: true
                                                 })
@@ -138,7 +161,12 @@ export default {
                                                 })
 
                                             // Chuyển hướng đến trang ...
-                                            this.$router.push('/Inform');
+                                            setTimeout(() => {
+                                                // this.$router.push('/Inform');
+                                                window.location.href = "http://localhost:3001/Inform";
+                                            }, "1000");
+
+
                                         }
                                     }
                                     catch (error) {
