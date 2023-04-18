@@ -7,7 +7,7 @@ router.route('/').get(genres.findAll).post(genres.create).delete(genres.deleteAl
 
 router.route('/:id').get(genres.findOne).put(genres.update).delete(genres.delete);
 
-router.route('/subGenre/:id').delete(genres.removeGenres).post(genres.pushGenres)
+router.route('/subGenre/:id').put(genres.removeGenres).post(genres.pushGenres)
 
 // router.route('/drop/:name').post(genres.dropCollection)
 module.exports = router;
