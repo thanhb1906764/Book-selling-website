@@ -1,6 +1,6 @@
 <template>
     <!-- Link đến trang Chi tiết sản phẩm  -->
-    <router-link :to="{
+    <router-link data-bs-toggle="tooltip" data-bs-placement="top" :title="book.bookName" :to="{
         name: 'BookDetails',
         params: { id: book._id },
     }">

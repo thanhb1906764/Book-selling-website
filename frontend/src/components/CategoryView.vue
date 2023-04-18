@@ -2,7 +2,7 @@
     <div class="container ">
 
         <div class="row">
-            <div class="col-sm-3 category rounded  mt-2">
+            <div class="col-sm-3 category rounded mt-2">
                 <div @click="showAll" class="genre-item fw-bold">Tất cả sản phẩm</div>
                 <div v-show="genreList && !showfull" class="genre-item fw-bold ml-2" @click="showgenre(genreList)">{{ show
                 }}</div>
@@ -15,7 +15,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm  rounded ms-2 mt-2">
+            <div class="col-sm category rounded ms-2 my-2 pb-2" style="height: auto;">
                 <div class="d-flex flex-row m-2">
                     <div style="margin: 2px;">Sắp xếp theo: </div>
                     <select class="  form-select form-select-sm mobile" aria-label=".form-select-sm example"
