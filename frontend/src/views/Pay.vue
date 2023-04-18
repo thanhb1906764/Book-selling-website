@@ -397,7 +397,12 @@ export default {
                     this.deleteCart();
                     // Chuyển hướng đến trang ...
                     // this.$router.push('/Inform');
-                    window.location.href = "/Inform"; // Do không có đủ thời gian nên tạm sử dụng load trang
+                    // window.location.href = "/Inform"; // Do không có đủ thời gian nên tạm sử dụng load trang
+
+                    setTimeout(() => {
+                        // this.$router.push('/Inform');
+                        window.location.href = "http://localhost:3001/Inform";
+                    }, "1000");
                 }
             }
             catch (error) {
