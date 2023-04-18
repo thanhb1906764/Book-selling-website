@@ -56,15 +56,15 @@
                         </template>
                         <v-list>
                             <!-- chưa đăng nhập -->
-                            <v-list-item v-if="login === false">
+                            <v-list-item v-if="login === false" >
                                 <v-list-item-title>
-                                    <router-link to="/UserLogin" class="nav-link" data-bs-toggle="modal"
+                                    <router-link to="/UserLogin"  data-bs-toggle="modal"
                                         data-bs-target="#LoginUserModal">
                                         Đăng nhập
                                     </router-link>
                                 </v-list-item-title>
                                 <v-list-item-title>
-                                    <router-link to="#" class="nav-link" data-bs-toggle="modal"
+                                    <router-link to="#"  data-bs-toggle="modal"
                                         data-bs-target="#RegisterUserModal">
                                         Đăng ký
                                     </router-link>
@@ -74,7 +74,7 @@
                             <v-list-item v-if="login === true">
                                 <v-hover>
                                     <template v-slot:default="{ isHovering, props }">
-                                        <router-link to='#' class="nav-link active">
+                                        <router-link to='/acc/info' class="nav-link active">
                                             <v-sheet class="pb-2" v-bind="props" :color="isHovering ? '#d4d7d9' : undefined"
                                                 :value="0">
                                                 <v-list-item :title=getNameUser subtitle="Thành viên BookStore">
@@ -239,7 +239,16 @@ export default {
         margin-left: -160px;
     }
 } */
-
+.test1{
+    display: flex;
+}
+.test1:hover v-list-item-title {
+  flex-grow: 1;
+  
+}
+.test:hover{
+    background-color: #55a1e7;
+}
 .category {
     padding-left: 16px;
 }

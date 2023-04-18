@@ -17,9 +17,9 @@
                         {{ addressDefault.city }}
                     </div>
                     <div>{{ addressDefault.phone }}</div>
-                    <div style="color: red; font-weight: bolder;"><router-link
+                    <router-link style="color: red ; font-weight: 500;"
                             :to="{ name: 'AddressEditVue', params: { id: addressDefault._id } }">Sửa địa chỉ </router-link>
-                    </div>
+                    
                 </div>
 
             </div>
@@ -37,10 +37,10 @@
                     </div>
                     <div>{{ address.phone }}</div>
                     <div class="fw-semibold d-flex flex-row ">
-                        <div class="text-danger border-end pe-2"><router-link
+                        <div class=" border-end pe-2"><router-link style="color: red !important; font-weight: 500;"
                                 :to="{ name: 'AddressEditVue', params: { id: address._id } }">Sửa địa chỉ </router-link>
                         </div>
-                        <div class=" ps-2" @click="openDialog(address._id)">Xóa địa
+                        <div class=" ps-2" @click="openDialog(address._id)" style="color: #646464; font-weight: 500;">Xóa địa
                             chỉ</div>
                     </div>
 
@@ -156,3 +156,6 @@ export default {
 
 
 </script>
+<style>
+
+</style>

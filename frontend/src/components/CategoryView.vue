@@ -15,9 +15,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm category rounded ms-2 mt-2">
+            <div class="col-sm  rounded ms-2 mt-2">
                 <div class="d-flex flex-row m-2">
-                    <div class="" style="margin: 2px;">Sắp xếp theo: </div>
+                    <div  style="margin: 2px;">Sắp xếp theo: </div>
                     <select class="  form-select form-select-sm mobile" aria-label=".form-select-sm example" style="width: 15%;" v-model="this.selectedSort">
                         
                         <option value="1">Tên A-Z </option>

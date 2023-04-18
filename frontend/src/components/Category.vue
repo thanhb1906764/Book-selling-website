@@ -3,7 +3,7 @@
         <div class="fw-bold" @click="showCategory()">Danh mục sản phẩm</div>
         <div>
             <div v-if="showCategory1" v-for="(category, index) in category" :key="index">
-                    <div class="ms-2 fw-semibold category" @click="toggle(index)">{{ category.genreName }}</div>
+                    <div class="ms-2 fw-semibold category1" @click="toggle(index)">{{ category.genreName }}</div>
                 <div v-if="isOpen(index)">
                     <div class="ms-4 " v-for="(subGenre, subIndex) in category.subGenre" :key="subIndex" >
                         <router-link to="/category">
@@ -134,9 +134,6 @@ export default {
 <style>
 .blue{
     color: blue ;
-}
-.category:hover{
-    color: red;
 }
 .v-list-item:hover {
     color: red !important;

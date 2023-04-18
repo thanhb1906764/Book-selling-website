@@ -87,7 +87,7 @@ export default {
     //     }
 
     // },
-    mounted() {
+    updated() {
         //Bắt đường link, nếu đúng thì tô màu cho menu tương ứng
         if (this.$route.path.startsWith('/acc/order'))
             this.selectedIndex = 2
