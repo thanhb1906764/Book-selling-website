@@ -37,7 +37,7 @@
         <div v-show="selectedIndex === 2" class="col-sm">Đơn hàng của tôi
             <Order />
         </div> -->
-            <div class="col-sm rounded px-0">
+            <div class="col-sm rounded">
                 <RouterView></RouterView>
             </div>
         </div>
@@ -87,7 +87,7 @@ export default {
     //     }
 
     // },
-    mounted() {
+    updated() {
         //Bắt đường link, nếu đúng thì tô màu cho menu tương ứng
         if (this.$route.path.startsWith('/acc/order'))
             this.selectedIndex = 2

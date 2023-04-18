@@ -73,7 +73,7 @@
                             <v-list-item v-if="login === true">
                                 <v-hover>
                                     <template v-slot:default="{ isHovering, props }">
-                                        <router-link to='#' class="nav-link active">
+                                        <router-link to='/acc/info' class="nav-link active">
                                             <v-sheet class="pb-2" v-bind="props" :color="isHovering ? '#d4d7d9' : undefined"
                                                 :value="0">
                                                 <v-list-item :title=getNameUser subtitle="Thành viên BookStore">
@@ -238,6 +238,18 @@ export default {
         margin-left: -160px;
     }
 } */
+.test1 {
+    display: flex;
+}
+
+.test1:hover v-list-item-title {
+    flex-grow: 1;
+
+}
+
+.test:hover {
+    background-color: #55a1e7;
+}
 
 .category {
     padding-left: 16px;
@@ -245,13 +257,13 @@ export default {
 
 .btn-acc::before {
     content: "Tài khoản";
-    font-weight: 700;
+    font-weight: 500;
     margin: 8px 0 !important;
 }
 
 .btn-cart::before {
     content: "Giỏ hàng";
-    font-weight: 700;
+    font-weight: 500;
     margin: 8px 0 !important;
 }
 

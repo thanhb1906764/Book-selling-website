@@ -17,9 +17,9 @@
                         {{ addressDefault.city }}
                     </div>
                     <div>{{ addressDefault.phone }}</div>
-                    <div style="color: red; font-weight: bolder;"><router-link
-                            :to="{ name: 'AddressEditVue', params: { id: addressDefault._id } }">Sửa địa chỉ </router-link>
-                    </div>
+                    <router-link style="color: red ; font-weight: 500;"
+                        :to="{ name: 'AddressEditVue', params: { id: addressDefault._id } }">Sửa địa chỉ </router-link>
+
                 </div>
 
             </div>
@@ -37,23 +37,24 @@
                     </div>
                     <div>{{ address.phone }}</div>
                     <div class="fw-semibold d-flex flex-row ">
-                        <div class="text-danger border-end pe-2"><router-link
+                        <div class=" border-end pe-2"><router-link style="color: red !important; font-weight: 500;"
                                 :to="{ name: 'AddressEditVue', params: { id: address._id } }">Sửa địa chỉ </router-link>
                         </div>
-                        <div class=" ps-2" @click="openDialog(address._id)">Xóa địa
+                        <div class=" ps-2" @click="openDialog(address._id)" style="color: #646464; font-weight: 500;">Xóa
+                            địa
                             chỉ</div>
                     </div>
 
                     <v-dialog v-model="dialog" persistent max-width="400">
                         <v-card>
-                            <v-card-title class="headline">Are you sure?</v-card-title>
+                            <v-card-title class="headline">Bạn có muốn xóa địa chỉ không?</v-card-title>
                             <v-card-text>
-                                This action cannot be undone.
+                                Hành động này không thể hoàn trả
                             </v-card-text>
                             <v-card-actions>
                                 <v-btn color="green darken-1"
-                                    @click="dialog = false; deleteAddress(this.selectedAddressId)">Yes</v-btn>
-                                <v-btn color="red darken-1" text @click="dialog = false">No</v-btn>
+                                    @click="dialog = false; deleteAddress(this.selectedAddressId)">Vâng</v-btn>
+                                <v-btn color="red darken-1" text @click="dialog = false">Không</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
@@ -156,3 +157,4 @@ export default {
 
 
 </script>
+<style></style>
