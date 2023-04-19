@@ -329,8 +329,10 @@ export default {
         },
         // Tổng giá trị đơn hàng 
         orderTotal(tempCost, shipFee) {
-            if (tempCost >= 500000)
+            if (tempCost >= 500000) {
+                this.shipFee = 0
                 return tempCost;
+            }
             else
                 return tempCost + shipFee;
         },
@@ -357,7 +359,6 @@ export default {
                 let temp = await ShipFeeService.getAll();
                 this.shipFee = temp[0].shipFee;
                 console.log('shipFee ' + this.shipFee)
-                this.order.shipFee = this.shipFee
                 return this.shipFee
             }
             catch (error) {
@@ -457,7 +458,7 @@ export default {
                     return 0;
                 }
                 this.order.orderTotal = this.orderTotal(this.tempCost, this.shipFee);
-
+                this.order.shipFee = this.shipFee
                 // Kiểm tra số điện thoại
                 if (this.order.phone) {
                     const paragraph = this.order.phone;
