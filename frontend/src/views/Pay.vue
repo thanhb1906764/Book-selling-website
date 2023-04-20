@@ -392,6 +392,7 @@ export default {
                         await BooksService.update(this.BookInCart[i]._id, book)
                         // Thông báo đặt hàng thành công
                         this.notifyOrderComplete()
+
                     }
                     // Destroy cookies giỏ hàng - cart sau khi đặt hàng thành công
                     this.deleteCart();
@@ -402,7 +403,7 @@ export default {
                     setTimeout(() => {
                         // this.$router.push('/Inform');
                         window.location.href = "http://localhost:3001/Inform";
-                    }, "1000");
+                    }, "3000");
                 }
             }
             catch (error) {
